@@ -19,6 +19,9 @@ namespace JungleTimers
 {
     public partial class Form1 : Form
     {        
+        // Set code revision...
+        string versionIs = "1.1";
+        
         // Declare Background Workers and other variables...
         BackgroundWorker b1 = new BackgroundWorker();
         BackgroundWorker b2 = new BackgroundWorker();
@@ -333,8 +336,12 @@ namespace JungleTimers
         // Get Server Connection Response...
         public void Connected(PacketHeader header, Connection connection, string message)
         {
+            // Set Form button and LED Image to Connected state...
             SetText(button7connect, "Disconnect");
             statusled.Image = Properties.Resources.greendot;
+
+            // Report our version to server to check for update...
+            foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("version", versionIs);            
         }
 
         // Delegate to allow me to set the Button text without cross-thread errors...
