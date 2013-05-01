@@ -10,16 +10,21 @@ namespace ServerApplication
 {
     class Program
     {   
+        // Old Test code for writing connections and messages to text file on hdd...
         public static string ConnectionFilePath;
         public static string MessagesFilePath;
+        
+        // Create Connectionlist HashSet...
         public static HashSet<string> ConnectionsList = new HashSet<string>();
         
-
+        // Set Latest available version of Client Software...
+        public static string LatestClientVersion = "1.1";        
+        
         public static void Main(string[] args)
         {
             // incoming Connection List...  
             ConnectionFilePath = @"c:\temp\JTConnectionList.txt";
-            MessagesFilePath = @"c:\temp\JTMessagesList.txt";   
+            MessagesFilePath = @"c:\temp\JTMessagesList.txt";
 
             // Precent unhandled Exceptions from rogue packet type receives...
             NetworkComms.IgnoreUnknownPacketTypes = true;
@@ -28,13 +33,21 @@ namespace ServerApplication
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("Connection", AddToConnectionList);
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("Disconnection", RemoveFromConnectionList);
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("Message", PrintIncomingMessage);
+            NetworkComms.AppendGlobalIncomingPacketHandler<string>("version", VersionCheck);
+
+            //foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b5");
 
             /* Start listening for incoming connections using Oiginal method for all IP's and random port number between 10000-65535...
             TCPConnection.StartListening(true);
             ...*/
 
             // Specify exactly the IP and Port to listen on...                     
-            IPEndPoint MyipLocalEndPoint = new IPEndPoint(IPAddress.Parse("192.168.1.11"), 11000);
+            
+            // Home...
+            // IPEndPoint MyipLocalEndPoint = new IPEndPoint(IPAddress.Parse("192.168.1.11"), 11000);
+
+            // Work...
+            IPEndPoint MyipLocalEndPoint = new IPEndPoint(IPAddress.Parse("172.16.69.69"), 11000);
 
             /* Prompt for IP and Port...
             Console.WriteLine("Enter the Server IP:port to listen on:");
@@ -105,7 +118,21 @@ namespace ServerApplication
                 Console.WriteLine("No Connected Clients.");
             }
             
-        }        
+        }
+        
+        // Check Client version and send update signal if needed.
+        public static void VersionCheck(PacketHeader header, Connection connection, string message)
+        {
+            Console.WriteLine(connection.ConnectionInfo.RemoteEndPoint.Address.ToString() + " is version " + message);
+            if (message == LatestClientVersion)
+            {
+                Console.WriteLine(connection.ConnectionInfo.RemoteEndPoint.Address.ToString() + " is up to date.");
+            }
+            else
+            {
+                Console.WriteLine(connection.ConnectionInfo.RemoteEndPoint.Address.ToString() + " needs updating.");
+            }           
+        }
 
         // Receive incoming messages to trigger Jungle Timers...
         public static void PrintIncomingMessage(PacketHeader header, Connection connection, string message)
