@@ -145,19 +145,19 @@
     <EmbeddedResource Include="Resources\baronbutton_bw.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\dragonbutton_bw.jpg" />
+    <EmbeddedResource Include="Resources\dragonbutton_bw.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\dragonbutton.jpg" />
+    <EmbeddedResource Include="Resources\dragonbutton.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\rengar.jpg" />
+    <EmbeddedResource Include="Resources\rengar.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\greendot.jpg" />
+    <EmbeddedResource Include="Resources\greendot.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\reddot.jpg" />
+    <EmbeddedResource Include="Resources\reddot.jpg" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">
@@ -178,6 +178,42 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="lolicon.ico" />
+    <Content Include="Resources\BaronAlive.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\BaronDead.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\BlueGolemAlive.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\BlueGolemDead.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\BlueLizardAlive.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\BlueLizardDead.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\DragonAlive.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\DragonDead.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\PurpleGolemAlive.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\PurpleGolemDead.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\PurpleLizardAlive.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\PurpleLizardDead.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

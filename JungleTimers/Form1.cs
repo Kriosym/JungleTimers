@@ -14,15 +14,18 @@ using System.Runtime.InteropServices;
 using MouseKeyboardActivityMonitor;
 using MouseKeyboardActivityMonitor.WinApi;
 using System.Diagnostics;
+using System.Resources;
 
 namespace JungleTimers
 {
     public partial class Form1 : Form
     {        
         // !! SET CODE REVISION !! 
-        public static string versionIs = "1.1";        
-        public bool FormCloseForUpdate;
+        public static string versionIs = "1.3";        
+        public bool FormCloseForUpdate;               
         
+        ResourceManager resources = new ResourceManager(typeof(Form1));
+
         // Declare Background Workers and other variables...
         BackgroundWorker b1 = new BackgroundWorker();
         BackgroundWorker b2 = new BackgroundWorker();
@@ -34,11 +37,51 @@ namespace JungleTimers
         KeyboardHookListener m_KeyboardHookManager = new KeyboardHookListener(new GlobalHooker());        
         string validAddress;
         int serverPort = 11000;
-        string ConnectButtonState = "Connect";                
+        string ConnectButtonState = "Connect";
+        string StartPath = Application.StartupPath;
+        bool SongBusy = false;
+        
+        int timerCurrent;
+        int timerLength;
+        
+        // Inialize Notification MP3 Play History...
+        bool b1_SongHasPlayed = false;
+        bool b2_SongHasPlayed = false;
+        bool b3_SongHasPlayed = false;
+        bool b4_SongHasPlayed = false;
+        bool b5_SongHasPlayed = false;
+        bool b6_SongHasPlayed = false;        
+
+        // Set Path to MP3 Files -                     
+        string PurpleGolemDead = Application.StartupPath + "\\Resources\\PurpleGolemDead.mp3";
+        string PurpleGolemAlive = Application.StartupPath + "\\Resources\\PurpleGolemAlive.mp3";
+
+        string PurpleLizardDead = Application.StartupPath + "\\Resources\\PurpleLizardDead.mp3";
+        string PurpleLizardAlive = Application.StartupPath + "\\Resources\\PurpleLizardAlive.mp3";
+
+        string BaronDead = Application.StartupPath + "\\Resources\\BaronDead.mp3";
+        string BaronAlive = Application.StartupPath + "\\Resources\\BaronAlive.mp3";
+
+        string DragonDead = Application.StartupPath + "\\Resources\\DragonDead.mp3";
+        string DragonAlive = Application.StartupPath + "\\Resources\\DragonAlive.mp3";
+
+        string BlueGolemDead = Application.StartupPath + "\\Resources\\BlueGolemDead.mp3";
+        string BlueGolemAlive = Application.StartupPath + "\\Resources\\BlueGolemAlive.mp3";
+
+        string BlueLizardDead = Application.StartupPath + "\\Resources\\BlueLizardDead.mp3";
+        string BlueLizardAlive = Application.StartupPath + "\\Resources\\BlueLizardAlive.mp3";
+        
+        // Import DLL for MP3 Playback...
+        public const int MM_MCINOTIFY = 0x3B9;
+        [DllImport("winmm.dll")]
+        private static extern long mciSendString(string command, StringBuilder returnString, int returnSize, IntPtr hwndCallback);
 
         // Declare Delegate to allow me to set button text without cross-thread errors...
         delegate void SetTextCallback(Control ctrl, string text);
         
+        // Declare Delegate to allow me to set button enabled state without cross-thread errors...
+        delegate void SetButtonStatus(Control ctrl, bool status);
+
         // Load Actions...
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -143,11 +186,53 @@ namespace JungleTimers
             {
                 button6_Click(null, null);
             }
+        }        
+
+        // Play MP3s override...        
+        protected override void DefWndProc(ref Message m)
+       {
+            base.DefWndProc(ref m);
+            if (m.Msg == MM_MCINOTIFY)
+            {
+                SongBusy = false;
+            }
         }
+
+        // Cross-thread delegate to play MP3s using mciSendString...
+        public delegate void delegatePlaySong(string file);
+        public void PlaySong(string file)
+        {   
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new delegatePlaySong(PlaySong), file);
+            }
+            else
+            {
+                SongBusy = true;
+                mciSendString("close media", null, 0, IntPtr.Zero);                
+                mciSendString("open \"" + file + "\" type mpegvideo alias media", null, 0, IntPtr.Zero);
+                mciSendString("play media notify", null, 0, this.Handle);
+            }
+        }
+
+        /* A little timer...
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (timerCurrent < timerLength)
+            {
+                timerCurrent++;
+            }
+            else
+            {             
+                button1.Enabled = true;
+                timer1.Stop();
+            }
+        }
+         */
 
         // BUTTON CLICK EVENTS -
         private void button1_Click(object sender, EventArgs e)
-        {
+        {                       
             // Start the Timer if it isn't already going, using Client/Server mechanism if connected...
             // note: button7connect.Text reads "Connect" prior to connecting, and reads "Disconnect" once connection has been established.
             if (b1.IsBusy != true && button7connect.Text != "Connect")
@@ -158,7 +243,7 @@ namespace JungleTimers
             // ...or using local mechanism if not connected...
             else if (b1.IsBusy != true && button7connect.Text != "Disconnect")
             {
-                b1.RunWorkerAsync();     
+                b1.RunWorkerAsync();                
             }
 
             // Otherwise cancel Timer using Client/Server mechanism if connected...
@@ -168,7 +253,7 @@ namespace JungleTimers
             }
 
             // ...or using local mechanism if not connected...
-            else if (b1.IsBusy != false && button7connect.Text != "Disconnect")
+            else if (b1.IsBusy == true && button7connect.Text != "Disconnect")
             {
                 b1.CancelAsync();
             }
@@ -177,18 +262,18 @@ namespace JungleTimers
         private void button2_Click(object sender, EventArgs e)
         {
             if (b2.IsBusy != true && button7connect.Text != "Connect")
-            {
+            {                
                 foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b2");
             }
             else if (b2.IsBusy != true && button7connect.Text != "Disconnect")
-            {                
+            {             
                 b2.RunWorkerAsync();     
             }
             else if (b2.IsBusy != false && button7connect.Text != "Connect")
             {
                 foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b2STOP");
             }
-            else if (b2.IsBusy != false && button7connect.Text != "Disconnect")
+            else if (b2.IsBusy == true && button7connect.Text != "Disconnect")
             {
                 b2.CancelAsync();
             }
@@ -261,7 +346,7 @@ namespace JungleTimers
                 foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b6");
             }
             else if (b6.IsBusy != true && button7connect.Text != "Disconnect")
-            {
+            {                
                 b6.RunWorkerAsync();
             }
             else if (b6.IsBusy != false && button7connect.Text != "Connect")
@@ -273,7 +358,6 @@ namespace JungleTimers
                 b6.CancelAsync();
             }
         }
-
 
         // CONNECT/DISCONNECT BUTTON -
         public void button7connect_Click(object sender, EventArgs e)
@@ -394,56 +478,83 @@ namespace JungleTimers
             }
         }
 
+        // Delegate to allow me to set Button Enabled Status without cross-thread errors...
+        void SetButton(Control ctrl, bool status)
+        {
+            if (ctrl.InvokeRequired)
+            {
+                ctrl.BeginInvoke(new SetButtonStatus(SetButton), ctrl, status);                
+            }
+            else
+            {
+                ctrl.Enabled = status;
+            }
+            
+        }
 
-        // BEGIN TIMERS...
-        public void TimerControl(PacketHeader header, Connection connection, string message)
+
+
+        // BEGIN TIMERS...        
+        private void TimerControl(PacketHeader packetHeader, Connection connection, string message)
         {            
             if (message.ToString() == "b1")
-            {                
+            {
+                b1_SongHasPlayed = false;
                 b1.RunWorkerAsync();                
             }
             else if(message.ToString() == "b2")
-            {                
+            {
+                b2_SongHasPlayed = false;
                 b2.RunWorkerAsync();
             }
             else if(message.ToString() == "b3")
             {
+                b3_SongHasPlayed = false;
                 b3.RunWorkerAsync();
             }
             else if(message.ToString() == "b4")
             {
+                b4_SongHasPlayed = false;
                 b4.RunWorkerAsync();
             }
             else if(message.ToString() == "b5")
             {
+                b5_SongHasPlayed = false;
                 b5.RunWorkerAsync();
             }
             else if(message.ToString() == "b6")
             {
+                b6_SongHasPlayed = false;
                 b6.RunWorkerAsync();
             }
             else if (message.ToString() == "b1STOP")
             {
+                b1_SongHasPlayed = false;
                 b1.CancelAsync();           
             }
             else if (message.ToString() == "b2STOP")
             {
+                b2_SongHasPlayed = false;
                 b2.CancelAsync();
             }
             else if (message.ToString() == "b3STOP")
             {
+                b3_SongHasPlayed = false;
                 b3.CancelAsync();
             }
             else if (message.ToString() == "b4STOP")
             {
+                b4_SongHasPlayed = false;
                 b4.CancelAsync();
             }
             else if (message.ToString() == "b5STOP")
             {
+                b5_SongHasPlayed = false;
                 b5.CancelAsync();
             }
             else if (message.ToString() == "b6STOP")
             {
+                b6_SongHasPlayed = false;
                 b6.CancelAsync();
             }
         }
@@ -452,7 +563,8 @@ namespace JungleTimers
         void b1_DoWork(object sender, DoWorkEventArgs b1)
         {            
             BackgroundWorker worker = sender as BackgroundWorker;
-            button1.Image = Properties.Resources.bluebutton_bw;
+            button1.Image = Properties.Resources.bluebutton_bw;                        
+            PlaySong(PurpleGolemDead);
             for (int a = 299; a > -1; a--)
             {
                 if (worker.CancellationPending != true)
@@ -466,7 +578,8 @@ namespace JungleTimers
         void b2_DoWork(object sender, DoWorkEventArgs b2)
         {            
             BackgroundWorker worker = sender as BackgroundWorker;
-            button2.Image = Properties.Resources.redbutton_bw;
+            button2.Image = Properties.Resources.redbutton_bw;                        
+            PlaySong(PurpleLizardDead);
             for (int b = 299; b > -1; b--)
             {
                 if (worker.CancellationPending != true)
@@ -481,6 +594,7 @@ namespace JungleTimers
         {
             BackgroundWorker worker = sender as BackgroundWorker;
             button3.Image = Properties.Resources.bluebutton_bw;
+            PlaySong(BlueGolemDead);
             for (int c = 299; c > -1; c--)
             {
                 if (worker.CancellationPending != true)
@@ -495,6 +609,7 @@ namespace JungleTimers
         {
             BackgroundWorker worker = sender as BackgroundWorker;
             button4.Image = Properties.Resources.redbutton_bw;
+            PlaySong(BlueLizardDead);
             for (int d = 299; d > -1; d--)
             {
                 if (worker.CancellationPending != true)
@@ -509,6 +624,7 @@ namespace JungleTimers
         {
             BackgroundWorker worker = sender as BackgroundWorker;
             button5.Image = Properties.Resources.baronbutton_bw;
+            PlaySong(BaronDead);
             for (int e = 419; e > -1; e--)
             {
                 if (worker.CancellationPending != true)
@@ -520,9 +636,10 @@ namespace JungleTimers
         }
 
         void b6_DoWork(object sender, DoWorkEventArgs b6)
-        {
+        {            
             BackgroundWorker worker = sender as BackgroundWorker;
             button6.Image = Properties.Resources.dragonbutton_bw;
+            PlaySong(DragonDead);
             for (int f = 359; f > -1; f--)
             {
                 if (worker.CancellationPending != true)
@@ -569,7 +686,7 @@ namespace JungleTimers
         // BACKGROUND WORKER TIMERS COMPLETE -
         void b1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs b1)
         {
-            
+            PlaySong(PurpleGolemAlive);            
             SetText(button1, "");
             button1.Image = Properties.Resources.bluebutton;
             SetText(button1, "");
@@ -577,13 +694,15 @@ namespace JungleTimers
 
         void b2_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs b2)
         {
+            PlaySong(PurpleLizardAlive);
             SetText(button2, "");
-            button2.Image = Properties.Resources.redbutton;
+            button2.Image = Properties.Resources.redbutton;            
             SetText(button2, "");
         }
 
         void b3_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs b3)
         {
+            PlaySong(BlueGolemAlive);
             SetText(button3, "");
             button3.Image = Properties.Resources.bluebutton;
             SetText(button3, "");
@@ -591,6 +710,7 @@ namespace JungleTimers
 
         void b4_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs b4)
         {
+            PlaySong(BlueLizardAlive);
             SetText(button4, "");
             button4.Image = Properties.Resources.redbutton;
             SetText(button4, "");
@@ -598,6 +718,7 @@ namespace JungleTimers
 
         void b5_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs b5)
         {
+            PlaySong(BaronAlive);
             SetText(button5, "");
             button5.Image = Properties.Resources.baronbutton;
             SetText(button5, "");
@@ -605,6 +726,7 @@ namespace JungleTimers
 
         void b6_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs b6)
         {
+            PlaySong(DragonAlive);
             SetText(button6, "");
             button6.Image = Properties.Resources.dragonbutton;
             SetText(button6, "");
