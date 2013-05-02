@@ -18,7 +18,7 @@ namespace ServerApplication
         public static HashSet<string> ConnectionsList = new HashSet<string>();
         
         // Set Latest available version of Client Software...
-        public static string LatestClientVersion = "1.1";        
+        public static string LatestClientVersion = "1.2";        
         
         public static void Main(string[] args)
         {
@@ -44,10 +44,10 @@ namespace ServerApplication
             // Specify exactly the IP and Port to listen on...                     
             
             // Home...
-            // IPEndPoint MyipLocalEndPoint = new IPEndPoint(IPAddress.Parse("192.168.1.11"), 11000);
+            IPEndPoint MyipLocalEndPoint = new IPEndPoint(IPAddress.Parse("192.168.1.11"), 11000);
 
             // Work...
-            IPEndPoint MyipLocalEndPoint = new IPEndPoint(IPAddress.Parse("172.16.69.69"), 11000);
+            // IPEndPoint MyipLocalEndPoint = new IPEndPoint(IPAddress.Parse("172.16.69.69"), 11000);
 
             /* Prompt for IP and Port...
             Console.WriteLine("Enter the Server IP:port to listen on:");
@@ -98,10 +98,7 @@ namespace ServerApplication
 
             // Respond to sender that they are succesfully connected.            
             connection.SendObject("Connected", "CONNECTED!");
-            Console.WriteLine(connection.ConnectionInfo.RemoteEndPoint.Address.ToString() + " has CONNECTED!");
-
-            // Display the Hashset List...
-            foreach (var item in ConnectionsList) Console.WriteLine("Current Clients:\n" + item);
+            Console.WriteLine(connection.ConnectionInfo.RemoteEndPoint.Address.ToString() + " has CONNECTED!");           
         }
 
         // When client closes, this Server should receive packet of string type "Disconnection", report to console and remove IP from ConnectionsList...
@@ -122,15 +119,19 @@ namespace ServerApplication
         
         // Check Client version and send update signal if needed.
         public static void VersionCheck(PacketHeader header, Connection connection, string message)
-        {
-            Console.WriteLine(connection.ConnectionInfo.RemoteEndPoint.Address.ToString() + " is version " + message);
+        {            
             if (message == LatestClientVersion)
             {
-                Console.WriteLine(connection.ConnectionInfo.RemoteEndPoint.Address.ToString() + " is up to date.");
+                Console.WriteLine(connection.ConnectionInfo.RemoteEndPoint.Address.ToString() + " is up to date.");                
+                // Display all connected Clients...
+                foreach (var item in ConnectionsList) Console.WriteLine("Current Clients:\n" + item);
             }
             else
             {
-                Console.WriteLine(connection.ConnectionInfo.RemoteEndPoint.Address.ToString() + " needs updating.");
+                Console.WriteLine(connection.ConnectionInfo.RemoteEndPoint.Address.ToString() + " is version " + message + ", and has been notified of available update.");
+                connection.SendObject("version", LatestClientVersion);
+                // Display all connected Clients...
+                foreach (var item in ConnectionsList) Console.WriteLine("Current Clients:\n" + item);
             }           
         }
 

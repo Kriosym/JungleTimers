@@ -45,6 +45,7 @@
             this.button8 = new System.Windows.Forms.Button();
             this.statusled = new System.Windows.Forms.PictureBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.label1 = new System.Windows.Forms.Label();
             this.TeamPurplzor.SuspendLayout();
             this.TeamBlue.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.statusled)).BeginInit();
@@ -190,6 +191,7 @@
             // 
             // comboHostAddressBox
             // 
+            this.comboHostAddressBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.comboHostAddressBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboHostAddressBox.Location = new System.Drawing.Point(527, 425);
             this.comboHostAddressBox.Name = "comboHostAddressBox";
@@ -197,6 +199,8 @@
             this.comboHostAddressBox.TabIndex = 1;
             this.comboHostAddressBox.Text = "krio.game-host.org";
             this.comboHostAddressBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.comboHostAddressBox.WordWrap = false;
+            this.comboHostAddressBox.TextChanged += new System.EventHandler(this.comboHostAddressBox_TextChanged);
             // 
             // labelhostnameorip
             // 
@@ -248,6 +252,18 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.Transparent;
+            this.label1.ForeColor = System.Drawing.Color.White;
+            this.label1.Location = new System.Drawing.Point(735, 12);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(26, 13);
+            this.label1.TabIndex = 16;
+            this.label1.Text = "vx.x";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -256,6 +272,7 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CausesValidation = false;
             this.ClientSize = new System.Drawing.Size(773, 464);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.statusled);
             this.Controls.Add(this.button8);
             this.Controls.Add(this.button7connect);
@@ -267,9 +284,12 @@
             this.Controls.Add(this.TeamPurplzor);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.button5);
+            this.DoubleBuffered = true;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Form1";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Jungle Timer by Kriosym";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.TeamPurplzor.ResumeLayout(false);
@@ -298,6 +318,7 @@
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.PictureBox statusled;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.Label label1;
     }
 }
 

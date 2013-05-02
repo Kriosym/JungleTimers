@@ -19,8 +19,9 @@ namespace JungleTimers
 {
     public partial class Form1 : Form
     {        
-        // Set code revision...
-        string versionIs = "1.1";
+        // !! SET CODE REVISION !! 
+        public static string versionIs = "1.1";        
+        public bool FormCloseForUpdate;
         
         // Declare Background Workers and other variables...
         BackgroundWorker b1 = new BackgroundWorker();
@@ -33,7 +34,7 @@ namespace JungleTimers
         KeyboardHookListener m_KeyboardHookManager = new KeyboardHookListener(new GlobalHooker());        
         string validAddress;
         int serverPort = 11000;
-        string ConnectButtonState = "Connect";        
+        string ConnectButtonState = "Connect";                
 
         // Declare Delegate to allow me to set button text without cross-thread errors...
         delegate void SetTextCallback(Control ctrl, string text);
@@ -41,7 +42,7 @@ namespace JungleTimers
         // Load Actions...
         private void Form1_Load(object sender, EventArgs e)
         {
-         
+            label1.Text = "v" + versionIs;
         }
         
         public Form1()
@@ -56,12 +57,15 @@ namespace JungleTimers
             // Trigger the methods when a packets are received from Server...    
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("Connected", Connected);
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("TimerControl", TimerControl);
-
+            NetworkComms.AppendGlobalIncomingPacketHandler<string>("version", VersionCheck);
+                        
             // Keyboard Hook Initialize...
-            m_KeyboardHookManager.KeyUp += m_KeyboardHookManager_KeyUp;
+            m_KeyboardHookManager.KeyUp += m_KeyboardHookManager_KeyUp;            
             m_KeyboardHookManager.Enabled = true;
+            this.comboHostAddressBox.GotFocus += OnFocus;
+            this.comboHostAddressBox.LostFocus += OnDefocus;
 
-            //Initialize the Background Workers...
+            // Initialize the Background Workers...
             b1.WorkerReportsProgress = true;
             b1.DoWork += new DoWorkEventHandler(b1_DoWork);
             b1.ProgressChanged += new ProgressChangedEventHandler(b1_ProgressChanged);
@@ -97,6 +101,18 @@ namespace JungleTimers
             b6.ProgressChanged += new ProgressChangedEventHandler(b6_ProgressChanged);
             b6.RunWorkerCompleted += new RunWorkerCompletedEventHandler(b6_RunWorkerCompleted);
             b6.WorkerSupportsCancellation = true;
+        }
+
+        // Disable Hotkeys if the Server/IP Textbox has focus...
+        private void OnFocus(object sender, EventArgs e)
+        {
+            m_KeyboardHookManager.Enabled = false;
+        }
+
+        // Re-enable it afterwards...
+        private void OnDefocus(object sender, EventArgs e)
+        {
+            m_KeyboardHookManager.Enabled = true;
         }
 
         // HOTKEY EVENTS...
@@ -344,6 +360,27 @@ namespace JungleTimers
             foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("version", versionIs);            
         }
 
+        // Get version response from server and prompt user for update if needed...
+        public void VersionCheck(PacketHeader header, Connection connection, string message)
+        {
+            if (message == versionIs)
+            {
+                MessageBox.Show("Jungle Timers is up to date (v" + message +").", "Version Check");
+            }
+            else
+            {
+                DialogResult result1 = MessageBox.Show("An updated installation package (v" + message + ") is available, Download now?", "Version Check", MessageBoxButtons.YesNo);
+                if (result1 == DialogResult.Yes)
+                {
+                    FormCloseForUpdate = true;                    
+                    Process.Start("https://www.dropbox.com/s/76harst0u0g2iuq/JungleTimers.exe?dl=1");
+                    // MessageBox.Show("Manually execute JungleTimers.exe installer once it finishes downloading", "NOTICE!");
+                    if (this.InvokeRequired)
+                        this.Invoke(new MethodInvoker(delegate { this.Close(); }), null);                                     
+                }
+            }            
+        }
+
         // Delegate to allow me to set the Button text without cross-thread errors...
         private void SetText(Control ctrl, string text)
         {
@@ -582,29 +619,32 @@ namespace JungleTimers
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             base.OnFormClosing(e);
-
             if (e.CloseReason == CloseReason.WindowsShutDown) return;
 
-            // Confirm user wants to close
-            switch (MessageBox.Show(this, "Are you sure you want to close?", "Closing", MessageBoxButtons.YesNo))
+            // Confirm user wants to close, or not...           
+            if (button7connect.Text == "Disconnect" && FormCloseForUpdate != true)
             {
-                case DialogResult.No:
+                DialogResult result2 = MessageBox.Show(this, "Are you sure you want to close?", "Closing", MessageBoxButtons.YesNo);
+                if (result2 == DialogResult.No)
+                {
                     e.Cancel = true;
-                    break;
-                default:
-                    if (button7connect.Text == "Disconnect")
+                }
+                else
+                {
+                    try
                     {
-                        try
-                        {
-                            foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Disconnection", "Bye!");
-                        }
-                        finally
-                        {
-
-                        }
+                        foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Disconnection", "Bye!");
                     }
-                    break;
+                    finally
+                    {
+
+                    }
+                }                    
             }
+            else if (button7connect.Text == "Disconect" && FormCloseForUpdate == true)
+            {
+                foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Disconnection", "Bye!");
+            }                           
         }
 
         // Cleanup on Close...
@@ -614,6 +654,11 @@ namespace JungleTimers
             GC.Collect();
             GC.WaitForPendingFinalizers();
             //System.Diagnostics.Process.GetCurrentProcess().Kill();
+        }
+
+        private void comboHostAddressBox_TextChanged(object sender, EventArgs e)
+        {
+            comboHostAddressBox.Enabled = true;
         }
 
     }
