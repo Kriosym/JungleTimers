@@ -79,6 +79,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Vendors\NetworkCommsDotNetComplete.dll</HintPath>
     </Reference>
+    <Reference Include="Nini">
+      <HintPath>..\Vendors\Nini.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

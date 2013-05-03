@@ -16,16 +16,21 @@ using MouseKeyboardActivityMonitor.WinApi;
 using System.Diagnostics;
 using System.Resources;
 using System.IO;
+using Nini.Config;
 
 namespace JungleTimers
 {
     public partial class Form1 : Form
     {        
         // !! SET CODE REVISION !! 
-        public static string versionIs = "1.3";        
+        public static string versionIs = "1.4";        
         public bool FormCloseForUpdate;               
         
+        //Resource manager for accessing embedded files...
         ResourceManager resources = new ResourceManager(typeof(Form1));
+
+        // Low level Keyboard Hook so that hotkeys work even while another fullscreen application has focus...
+        KeyboardHookListener m_KeyboardHookManager = new KeyboardHookListener(new GlobalHooker());
 
         // Declare Background Workers and other variables...
         BackgroundWorker b1 = new BackgroundWorker();
@@ -34,22 +39,11 @@ namespace JungleTimers
         BackgroundWorker b4 = new BackgroundWorker();
         BackgroundWorker b5 = new BackgroundWorker();
         BackgroundWorker b6 = new BackgroundWorker();
-        IPAddress ipaddr;
-        KeyboardHookListener m_KeyboardHookManager = new KeyboardHookListener(new GlobalHooker());        
+        IPAddress ipaddr;        
         string validAddress;
         int serverPort = 11000;
         string ConnectButtonState = "Connect";
         string StartPath = Application.StartupPath;
-        bool SongBusy = false;
-        bool Song2Busy = false;
-        bool Song3Busy = false;
-        bool Song4Busy = false;
-        bool Song5Busy = false;
-        bool Song6Busy = false;        
-        
-        // Test timer...
-        int timerCurrent;
-        int timerLength;
         
         // Inialize Notification MP3 Play History...
         bool b1_SongHasPlayed = false;
@@ -57,7 +51,25 @@ namespace JungleTimers
         bool b3_SongHasPlayed = false;
         bool b4_SongHasPlayed = false;
         bool b5_SongHasPlayed = false;
-        bool b6_SongHasPlayed = false;        
+        bool b6_SongHasPlayed = false;    
+        bool SongBusy = false;
+        bool Song2Busy = false;
+        bool Song3Busy = false;
+        bool Song4Busy = false;
+        bool Song5Busy = false;
+        bool Song6Busy = false;
+        
+        // Hotkey strings...
+        public string Hotkey1;
+        public string Hotkey2;
+        public string Hotkey3;
+        public string Hotkey4;
+        public string Hotkey5;
+        public string Hotkey6;
+
+        // Test timer...
+        int timerCurrent;
+        int timerLength;
 
         // Set Path to MP3 Files -                     
         public string PurpleGolemDead = Application.StartupPath + "\\Resources\\PurpleGolemDead.mp3";
@@ -90,10 +102,17 @@ namespace JungleTimers
         // Declare Delegate to allow me to set button enabled state without cross-thread errors...
         delegate void SetButtonStatus(Control ctrl, bool status);
 
-        // Load Actions...
+        // Other Load Actions...
         private void Form1_Load(object sender, EventArgs e)
         {
             label1.Text = "v" + versionIs;
+            IConfigSource source = new IniConfigSource("JTconfig.ini");
+            Hotkey1 = source.Configs["Hotkeys"].Get("Hotkey1");
+            Hotkey2 = source.Configs["Hotkeys"].Get("Hotkey2");
+            Hotkey3 = source.Configs["Hotkeys"].Get("Hotkey3");
+            Hotkey4 = source.Configs["Hotkeys"].Get("Hotkey4");
+            Hotkey5 = source.Configs["Hotkeys"].Get("Hotkey5");
+            Hotkey6 = source.Configs["Hotkeys"].Get("Hotkey6");
         }
         
         public Form1()
@@ -166,31 +185,31 @@ namespace JungleTimers
             m_KeyboardHookManager.Enabled = true;
         }
 
-        // HOTKEY EVENTS...
+        // HOTKEY ASSIGNMENT...
         void m_KeyboardHookManager_KeyUp(object sender, KeyEventArgs e)
         {
-            //Trace.WriteLine("Key: " + e.KeyCode);
-            if (e.KeyCode == Keys.NumPad1)
+            Trace.WriteLine("Key: " + e.KeyData.ToString());
+            if (e.KeyData.ToString() == Hotkey1) // note: old code for keys directly was (e.KeyCode == Keys.NumPad2).
             {
                 button1_Click(null, null);
             }
-            else if (e.KeyCode == Keys.NumPad2)
+            else if (e.KeyData.ToString() == Hotkey2)
             {
                 button2_Click(null, null);
             }
-            else if (e.KeyCode == Keys.NumPad3)
+            else if (e.KeyData.ToString() == Hotkey3)
             {
                 button3_Click(null, null);
             }
-            else if (e.KeyCode == Keys.NumPad4)
+            else if (e.KeyData.ToString() == Hotkey4)
             {
                 button4_Click(null, null);
             }
-            else if (e.KeyCode == Keys.NumPad5)
+            else if (e.KeyData.ToString() == Hotkey5)
             {
                 button5_Click(null, null);
             }
-            else if (e.KeyCode == Keys.NumPad6)
+            else if (e.KeyData.ToString() == Hotkey6)
             {
                 button6_Click(null, null);
             }
@@ -880,7 +899,8 @@ namespace JungleTimers
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Form2 frm = new Form2(this);
-            frm.Show();
+            frm.ShowDialog();
+            Form1_Load(null, null);
         }
 
     }
