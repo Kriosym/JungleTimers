@@ -15,6 +15,7 @@ using MouseKeyboardActivityMonitor;
 using MouseKeyboardActivityMonitor.WinApi;
 using System.Diagnostics;
 using System.Resources;
+using System.IO;
 
 namespace JungleTimers
 {
@@ -40,7 +41,13 @@ namespace JungleTimers
         string ConnectButtonState = "Connect";
         string StartPath = Application.StartupPath;
         bool SongBusy = false;
+        bool Song2Busy = false;
+        bool Song3Busy = false;
+        bool Song4Busy = false;
+        bool Song5Busy = false;
+        bool Song6Busy = false;        
         
+        // Test timer...
         int timerCurrent;
         int timerLength;
         
@@ -53,26 +60,27 @@ namespace JungleTimers
         bool b6_SongHasPlayed = false;        
 
         // Set Path to MP3 Files -                     
-        string PurpleGolemDead = Application.StartupPath + "\\Resources\\PurpleGolemDead.mp3";
-        string PurpleGolemAlive = Application.StartupPath + "\\Resources\\PurpleGolemAlive.mp3";
+        public string PurpleGolemDead = Application.StartupPath + "\\Resources\\PurpleGolemDead.mp3";
+        public string PurpleGolemAlive = Application.StartupPath + "\\Resources\\PurpleGolemAlive.mp3";
 
-        string PurpleLizardDead = Application.StartupPath + "\\Resources\\PurpleLizardDead.mp3";
-        string PurpleLizardAlive = Application.StartupPath + "\\Resources\\PurpleLizardAlive.mp3";
+        public string PurpleLizardDead = Application.StartupPath + "\\Resources\\PurpleLizardDead.mp3";
+        public string PurpleLizardAlive = Application.StartupPath + "\\Resources\\PurpleLizardAlive.mp3";
 
-        string BaronDead = Application.StartupPath + "\\Resources\\BaronDead.mp3";
-        string BaronAlive = Application.StartupPath + "\\Resources\\BaronAlive.mp3";
+        public string BaronDead = Application.StartupPath + "\\Resources\\BaronDead.mp3";
+        public string BaronAlive = Application.StartupPath + "\\Resources\\BaronAlive.mp3";
 
-        string DragonDead = Application.StartupPath + "\\Resources\\DragonDead.mp3";
-        string DragonAlive = Application.StartupPath + "\\Resources\\DragonAlive.mp3";
+        public string DragonDead = Application.StartupPath + "\\Resources\\DragonDead.mp3";
+        public string DragonAlive = Application.StartupPath + "\\Resources\\DragonAlive.mp3";
 
-        string BlueGolemDead = Application.StartupPath + "\\Resources\\BlueGolemDead.mp3";
-        string BlueGolemAlive = Application.StartupPath + "\\Resources\\BlueGolemAlive.mp3";
+        public string BlueGolemDead = Application.StartupPath + "\\Resources\\BlueGolemDead.mp3";
+        public string BlueGolemAlive = Application.StartupPath + "\\Resources\\BlueGolemAlive.mp3";
 
-        string BlueLizardDead = Application.StartupPath + "\\Resources\\BlueLizardDead.mp3";
-        string BlueLizardAlive = Application.StartupPath + "\\Resources\\BlueLizardAlive.mp3";
+        public string BlueLizardDead = Application.StartupPath + "\\Resources\\BlueLizardDead.mp3";
+        public string BlueLizardAlive = Application.StartupPath + "\\Resources\\BlueLizardAlive.mp3";
         
-        // Import DLL for MP3 Playback...
+        // Import DLL for MP3 Playback...        
         public const int MM_MCINOTIFY = 0x3B9;
+        
         [DllImport("winmm.dll")]
         private static extern long mciSendString(string command, StringBuilder returnString, int returnSize, IntPtr hwndCallback);
 
@@ -97,7 +105,7 @@ namespace JungleTimers
             //Prevent Unhandled Exception incase of rogue packet reception...
             NetworkComms.IgnoreUnknownPacketTypes = true;
 
-            // Trigger the methods when a packets are received from Server...    
+            // Trigger these when a packets are received from Server...    
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("Connected", Connected);
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("TimerControl", TimerControl);
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("version", VersionCheck);
@@ -162,11 +170,11 @@ namespace JungleTimers
         void m_KeyboardHookManager_KeyUp(object sender, KeyEventArgs e)
         {
             //Trace.WriteLine("Key: " + e.KeyCode);
-            if (e.KeyCode == Keys.NumPad2)
+            if (e.KeyCode == Keys.NumPad1)
             {
                 button1_Click(null, null);
             }
-            else if (e.KeyCode == Keys.NumPad1)
+            else if (e.KeyCode == Keys.NumPad2)
             {
                 button2_Click(null, null);
             }
@@ -188,7 +196,7 @@ namespace JungleTimers
             }
         }        
 
-        // Play MP3s override...        
+        // MP3 Finished return actions...(incomplete, need to figure out how to implement other song alias status checking (i.e. PlaySong2's media2 alias)...        
         protected override void DefWndProc(ref Message m)
        {
             base.DefWndProc(ref m);
@@ -198,7 +206,7 @@ namespace JungleTimers
             }
         }
 
-        // Cross-thread delegate to play MP3s using mciSendString...
+        // PlaySong starts alias media, via Cross-thread safe invoke delegate if needed...
         public delegate void delegatePlaySong(string file);
         public void PlaySong(string file)
         {   
@@ -207,15 +215,101 @@ namespace JungleTimers
                 this.Invoke(new delegatePlaySong(PlaySong), file);
             }
             else
-            {
+            {                
+                mciSendString("close media", null, 0, IntPtr.Zero);
                 SongBusy = true;
-                mciSendString("close media", null, 0, IntPtr.Zero);                
                 mciSendString("open \"" + file + "\" type mpegvideo alias media", null, 0, IntPtr.Zero);
                 mciSendString("play media notify", null, 0, this.Handle);
             }
         }
 
-        /* A little timer...
+        // PlaySong2 starts alias media2...
+        public delegate void delegatePlaySong2(string file);
+        public void PlaySong2(string file)
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new delegatePlaySong2(PlaySong2), file);
+            }
+            else
+            {
+                mciSendString("close media2", null, 0, IntPtr.Zero);
+                Song2Busy = true;
+                mciSendString("open \"" + file + "\" type mpegvideo alias media2", null, 0, IntPtr.Zero);
+                mciSendString("play media2 notify", null, 0, this.Handle);
+            }
+        }
+
+        // PlaySong3 starts alias media3...
+        public delegate void delegatePlaySong3(string file);
+        public void PlaySong3(string file)
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new delegatePlaySong3(PlaySong3), file);
+            }
+            else
+            {
+                mciSendString("close media3", null, 0, IntPtr.Zero);
+                Song3Busy = true;
+                mciSendString("open \"" + file + "\" type mpegvideo alias media3", null, 0, IntPtr.Zero);
+                mciSendString("play media3 notify", null, 0, this.Handle);
+            }
+        }
+
+        // PlaySong4 starts alias media4...
+        public delegate void delegatePlaySong4(string file);
+        public void PlaySong4(string file)
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new delegatePlaySong4(PlaySong4), file);
+            }
+            else
+            {
+                mciSendString("close media4", null, 0, IntPtr.Zero);
+                Song4Busy = true;
+                mciSendString("open \"" + file + "\" type mpegvideo alias media4", null, 0, IntPtr.Zero);
+                mciSendString("play media4 notify", null, 0, this.Handle);
+            }
+        }
+
+        // PlaySong5 starts alias media5...
+        public delegate void delegatePlaySong5(string file);
+        public void PlaySong5(string file)
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new delegatePlaySong5(PlaySong5), file);
+            }
+            else
+            {
+                mciSendString("close media5", null, 0, IntPtr.Zero);
+                Song5Busy = true;
+                mciSendString("open \"" + file + "\" type mpegvideo alias media5", null, 0, IntPtr.Zero);
+                mciSendString("play media5 notify", null, 0, this.Handle);
+            }
+        }
+
+        // PlaySong6 starts alias media6...
+        public delegate void delegatePlaySong6(string file);
+        public void PlaySong6(string file)
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new delegatePlaySong6(PlaySong6), file);
+            }
+            else
+            {
+                mciSendString("close media6", null, 0, IntPtr.Zero);
+                Song6Busy = true;
+                mciSendString("open \"" + file + "\" type mpegvideo alias media6", null, 0, IntPtr.Zero);
+                mciSendString("play media6 notify", null, 0, this.Handle);
+            }
+        }
+
+
+        /* A little test timer...
         private void timer1_Tick(object sender, EventArgs e)
         {
             if (timerCurrent < timerLength)
@@ -563,8 +657,8 @@ namespace JungleTimers
         void b1_DoWork(object sender, DoWorkEventArgs b1)
         {            
             BackgroundWorker worker = sender as BackgroundWorker;
-            button1.Image = Properties.Resources.bluebutton_bw;                        
-            PlaySong(PurpleGolemDead);
+            button1.Image = Properties.Resources.redbutton_bw;                        
+            PlaySong(PurpleLizardDead);
             for (int a = 299; a > -1; a--)
             {
                 if (worker.CancellationPending != true)
@@ -578,8 +672,8 @@ namespace JungleTimers
         void b2_DoWork(object sender, DoWorkEventArgs b2)
         {            
             BackgroundWorker worker = sender as BackgroundWorker;
-            button2.Image = Properties.Resources.redbutton_bw;                        
-            PlaySong(PurpleLizardDead);
+            button2.Image = Properties.Resources.bluebutton_bw;                        
+            PlaySong2(PurpleGolemDead);
             for (int b = 299; b > -1; b--)
             {
                 if (worker.CancellationPending != true)
@@ -594,7 +688,7 @@ namespace JungleTimers
         {
             BackgroundWorker worker = sender as BackgroundWorker;
             button3.Image = Properties.Resources.bluebutton_bw;
-            PlaySong(BlueGolemDead);
+            PlaySong3(BlueGolemDead);
             for (int c = 299; c > -1; c--)
             {
                 if (worker.CancellationPending != true)
@@ -609,7 +703,7 @@ namespace JungleTimers
         {
             BackgroundWorker worker = sender as BackgroundWorker;
             button4.Image = Properties.Resources.redbutton_bw;
-            PlaySong(BlueLizardDead);
+            PlaySong4(BlueLizardDead);
             for (int d = 299; d > -1; d--)
             {
                 if (worker.CancellationPending != true)
@@ -624,7 +718,7 @@ namespace JungleTimers
         {
             BackgroundWorker worker = sender as BackgroundWorker;
             button5.Image = Properties.Resources.baronbutton_bw;
-            PlaySong(BaronDead);
+            PlaySong5(BaronDead);
             for (int e = 419; e > -1; e--)
             {
                 if (worker.CancellationPending != true)
@@ -639,7 +733,7 @@ namespace JungleTimers
         {            
             BackgroundWorker worker = sender as BackgroundWorker;
             button6.Image = Properties.Resources.dragonbutton_bw;
-            PlaySong(DragonDead);
+            PlaySong6(DragonDead);
             for (int f = 359; f > -1; f--)
             {
                 if (worker.CancellationPending != true)
@@ -679,30 +773,30 @@ namespace JungleTimers
 
         void b6_ProgressChanged(object sender, ProgressChangedEventArgs b6)
         {
-            SetText(button6, b6.ProgressPercentage.ToString());
+            SetText(button6, b6.ProgressPercentage.ToString()); 
         }
 
 
         // BACKGROUND WORKER TIMERS COMPLETE -
         void b1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs b1)
         {
-            PlaySong(PurpleGolemAlive);            
+            PlaySong(PurpleLizardAlive);            
             SetText(button1, "");
-            button1.Image = Properties.Resources.bluebutton;
+            button1.Image = Properties.Resources.redbutton;
             SetText(button1, "");
         }
 
         void b2_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs b2)
         {
-            PlaySong(PurpleLizardAlive);
+            PlaySong2(PurpleGolemAlive);
             SetText(button2, "");
-            button2.Image = Properties.Resources.redbutton;            
+            button2.Image = Properties.Resources.bluebutton;            
             SetText(button2, "");
         }
 
         void b3_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs b3)
         {
-            PlaySong(BlueGolemAlive);
+            PlaySong3(BlueGolemAlive);
             SetText(button3, "");
             button3.Image = Properties.Resources.bluebutton;
             SetText(button3, "");
@@ -710,7 +804,7 @@ namespace JungleTimers
 
         void b4_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs b4)
         {
-            PlaySong(BlueLizardAlive);
+            PlaySong4(BlueLizardAlive);
             SetText(button4, "");
             button4.Image = Properties.Resources.redbutton;
             SetText(button4, "");
@@ -718,7 +812,7 @@ namespace JungleTimers
 
         void b5_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs b5)
         {
-            PlaySong(BaronAlive);
+            PlaySong5(BaronAlive);
             SetText(button5, "");
             button5.Image = Properties.Resources.baronbutton;
             SetText(button5, "");
@@ -726,7 +820,7 @@ namespace JungleTimers
 
         void b6_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs b6)
         {
-            PlaySong(DragonAlive);
+            PlaySong6(DragonAlive);
             SetText(button6, "");
             button6.Image = Properties.Resources.dragonbutton;
             SetText(button6, "");
@@ -734,8 +828,8 @@ namespace JungleTimers
 
         // hidden test button...
         private void button8_Click(object sender, EventArgs e)
-        {
-            NetworkComms.SendObject("Disconnection", validAddress, serverPort, "Bye!");
+        {            
+            
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -778,9 +872,15 @@ namespace JungleTimers
             //System.Diagnostics.Process.GetCurrentProcess().Kill();
         }
 
-        private void comboHostAddressBox_TextChanged(object sender, EventArgs e)
+        public void comboHostAddressBox_TextChanged(object sender, EventArgs e)
         {
             comboHostAddressBox.Enabled = true;
+        }
+
+        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form2 frm = new Form2(this);
+            frm.Show();
         }
 
     }

@@ -48,9 +48,12 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.label1 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TeamPurplzor.SuspendLayout();
             this.TeamBlue.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.statusled)).BeginInit();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // button6
@@ -110,13 +113,13 @@
             // button1
             // 
             this.button1.AutoEllipsis = true;
-            this.button1.BackColor = System.Drawing.Color.Blue;
-            this.button1.FlatAppearance.BorderColor = System.Drawing.Color.Blue;
+            this.button1.BackColor = System.Drawing.Color.Red;
+            this.button1.FlatAppearance.BorderColor = System.Drawing.Color.Red;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F);
             this.button1.ForeColor = System.Drawing.Color.Lime;
-            this.button1.Image = global::JungleTimers.Properties.Resources.bluebutton;
-            this.button1.Location = new System.Drawing.Point(131, 36);
+            this.button1.Image = global::JungleTimers.Properties.Resources.redbutton;
+            this.button1.Location = new System.Drawing.Point(15, 36);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(96, 96);
             this.button1.TabIndex = 3;
@@ -125,13 +128,13 @@
             // 
             // button2
             // 
-            this.button2.BackColor = System.Drawing.Color.Red;
-            this.button2.FlatAppearance.BorderColor = System.Drawing.Color.Red;
+            this.button2.BackColor = System.Drawing.Color.Blue;
+            this.button2.FlatAppearance.BorderColor = System.Drawing.Color.Blue;
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F);
             this.button2.ForeColor = System.Drawing.Color.Lime;
-            this.button2.Image = global::JungleTimers.Properties.Resources.redbutton;
-            this.button2.Location = new System.Drawing.Point(15, 36);
+            this.button2.Image = global::JungleTimers.Properties.Resources.bluebutton;
+            this.button2.Location = new System.Drawing.Point(131, 37);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(96, 96);
             this.button2.TabIndex = 2;
@@ -229,7 +232,7 @@
             // button8
             // 
             this.button8.Enabled = false;
-            this.button8.Location = new System.Drawing.Point(298, 429);
+            this.button8.Location = new System.Drawing.Point(686, 48);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(75, 23);
             this.button8.TabIndex = 14;
@@ -266,6 +269,20 @@
             this.label1.TabIndex = 16;
             this.label1.Text = "vx.x";
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.optionsToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(126, 26);
+            // 
+            // optionsToolStripMenuItem
+            // 
+            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
+            this.optionsToolStripMenuItem.Text = "Options...";
+            this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -274,6 +291,7 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CausesValidation = false;
             this.ClientSize = new System.Drawing.Size(773, 464);
+            this.ContextMenuStrip = this.contextMenuStrip1;
             this.Controls.Add(this.label1);
             this.Controls.Add(this.statusled);
             this.Controls.Add(this.button8);
@@ -297,6 +315,7 @@
             this.TeamPurplzor.ResumeLayout(false);
             this.TeamBlue.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.statusled)).EndInit();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -322,6 +341,8 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
     }
 }
 
