@@ -58,6 +58,8 @@
             // 
             // button6
             // 
+            this.button6.FlatAppearance.BorderColor = System.Drawing.Color.Yellow;
+            this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F);
             this.button6.ForeColor = System.Drawing.Color.Lime;
             this.button6.Image = global::JungleTimers.Properties.Resources.dragonbutton;
@@ -70,6 +72,8 @@
             // 
             // button5
             // 
+            this.button5.FlatAppearance.BorderColor = System.Drawing.Color.Lime;
+            this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F);
             this.button5.ForeColor = System.Drawing.Color.Lime;
             this.button5.Image = global::JungleTimers.Properties.Resources.baronbutton;

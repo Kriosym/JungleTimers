@@ -23,7 +23,7 @@ namespace JungleTimers
     public partial class Form1 : Form
     {        
         // !! SET CODE REVISION !! 
-        public static string versionIs = "1.4";        
+        public static string versionIs = "1.4b";        
         public bool FormCloseForUpdate;               
         
         //Resource manager for accessing embedded files...
@@ -71,12 +71,15 @@ namespace JungleTimers
         int timerCurrent;
         int timerLength;
 
-        // Set Path to MP3 Files -                     
+        // Sound Event Strings...  
+        //public string PurpleLizardDead = Application.StartupPath + "\\Resources\\PurpleLizardDead.mp3";
+        //public string PurpleLizardAlive = Application.StartupPath + "\\Resources\\PurpleLizardAlive.mp3";
+
+        public string PurpleLizardDead;
+        public string PurpleLizardAlive;
+
         public string PurpleGolemDead = Application.StartupPath + "\\Resources\\PurpleGolemDead.mp3";
         public string PurpleGolemAlive = Application.StartupPath + "\\Resources\\PurpleGolemAlive.mp3";
-
-        public string PurpleLizardDead = Application.StartupPath + "\\Resources\\PurpleLizardDead.mp3";
-        public string PurpleLizardAlive = Application.StartupPath + "\\Resources\\PurpleLizardAlive.mp3";
 
         public string BaronDead = Application.StartupPath + "\\Resources\\BaronDead.mp3";
         public string BaronAlive = Application.StartupPath + "\\Resources\\BaronAlive.mp3";
@@ -106,6 +109,7 @@ namespace JungleTimers
         private void Form1_Load(object sender, EventArgs e)
         {
             label1.Text = "v" + versionIs;
+            // Pull Hotkey Config...
             IConfigSource source = new IniConfigSource("JTconfig.ini");
             Hotkey1 = source.Configs["Hotkeys"].Get("Hotkey1");
             Hotkey2 = source.Configs["Hotkeys"].Get("Hotkey2");
@@ -113,6 +117,18 @@ namespace JungleTimers
             Hotkey4 = source.Configs["Hotkeys"].Get("Hotkey4");
             Hotkey5 = source.Configs["Hotkeys"].Get("Hotkey5");
             Hotkey6 = source.Configs["Hotkeys"].Get("Hotkey6");
+
+            // Pull Sound Events Config...
+            PurpleLizardDead = source.Configs["Sounds"].Get("PurpleLizardDead");
+            PurpleLizardAlive = source.Configs["Sounds"].Get("PurpleLizardAlive");
+            if (PurpleLizardDead == "Default")
+            {
+                PurpleLizardDead = Application.StartupPath + "\\Resources\\PurpleLizardDead.mp3";
+            }
+            if (PurpleLizardAlive == "Default")
+            {
+                PurpleLizardAlive = Application.StartupPath + "\\Resources\\PurpleLizardAlive.mp3";
+            }
         }
         
         public Form1()
