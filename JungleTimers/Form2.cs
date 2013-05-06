@@ -82,12 +82,12 @@ namespace JungleTimers
         private void button1_save_Click(object sender, EventArgs e)
         {                        
             // Hotkeys -
-            source.Configs["Hotkeys"].Set("Hotkey1", comboBox1_Hotkey1.SelectedItem);
-            source.Configs["Hotkeys"].Set("Hotkey2", comboBox2_Hotkey2.SelectedItem);
-            source.Configs["Hotkeys"].Set("Hotkey3", comboBox3_Hotkey3.SelectedItem);
-            source.Configs["Hotkeys"].Set("Hotkey4", comboBox4_Hotkey4.SelectedItem);
-            source.Configs["Hotkeys"].Set("Hotkey5", comboBox5_Hotkey5.SelectedItem);
-            source.Configs["Hotkeys"].Set("Hotkey6", comboBox6_Hotkey6.SelectedItem);
+            source.Configs["Hotkeys"].Set("Hotkey1", comboBox1_Hotkey1.Text);
+            source.Configs["Hotkeys"].Set("Hotkey2", comboBox2_Hotkey2.Text);
+            source.Configs["Hotkeys"].Set("Hotkey3", comboBox3_Hotkey3.Text);
+            source.Configs["Hotkeys"].Set("Hotkey4", comboBox4_Hotkey4.Text);
+            source.Configs["Hotkeys"].Set("Hotkey5", comboBox5_Hotkey5.Text);
+            source.Configs["Hotkeys"].Set("Hotkey6", comboBox6_Hotkey6.Text);
 
             // Sounds - 
             source.Configs["Sounds"].Set("PurpleLizardDead", textBox_PurpleLizardDead.Text);           
