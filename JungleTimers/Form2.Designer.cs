@@ -44,18 +44,21 @@
             this.label5_Hotkey5 = new System.Windows.Forms.Label();
             this.label2_Hotkey2 = new System.Windows.Forms.Label();
             this.groupBox_Sounds = new System.Windows.Forms.GroupBox();
-            this.textBox_BlueLizardAlive = new System.Windows.Forms.TextBox();
-            this.textBox_BlueLizardDead = new System.Windows.Forms.TextBox();
-            this.textBox_BlueGolemAlive = new System.Windows.Forms.TextBox();
-            this.textBox_BlueGolemDead = new System.Windows.Forms.TextBox();
-            this.textBox_DragonAlive = new System.Windows.Forms.TextBox();
-            this.textBox_DragonDead = new System.Windows.Forms.TextBox();
-            this.textBox_BaronAlive = new System.Windows.Forms.TextBox();
-            this.textBox_BaronDead = new System.Windows.Forms.TextBox();
-            this.textBox_PurpleGolemAlive = new System.Windows.Forms.TextBox();
-            this.textBox_PurpleGolemDead = new System.Windows.Forms.TextBox();
-            this.textBox_PurpleLizardAlive = new System.Windows.Forms.TextBox();
-            this.textBox_PurpleLizardDead = new System.Windows.Forms.TextBox();
+            this.radioButton1_Respawns = new System.Windows.Forms.RadioButton();
+            this.radioButton1_Warning = new System.Windows.Forms.RadioButton();
+            this.radioButton1_Dies = new System.Windows.Forms.RadioButton();
+            this.button_BlueLizardSounds = new System.Windows.Forms.Button();
+            this.button_BlueGolemSounds = new System.Windows.Forms.Button();
+            this.button_DragonSounds = new System.Windows.Forms.Button();
+            this.button_BaronSounds = new System.Windows.Forms.Button();
+            this.button_PurpleGolemSounds = new System.Windows.Forms.Button();
+            this.button_PurpleLizardSounds = new System.Windows.Forms.Button();
+            this.textBox_BlueLizardSounds = new System.Windows.Forms.TextBox();
+            this.textBox_BlueGolemSounds = new System.Windows.Forms.TextBox();
+            this.textBox_DragonSounds = new System.Windows.Forms.TextBox();
+            this.textBox_BaronSounds = new System.Windows.Forms.TextBox();
+            this.textBox_PurpleGolemSounds = new System.Windows.Forms.TextBox();
+            this.textBox_PurpleLizardSounds = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -63,18 +66,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.button_PurpleLizardDead = new System.Windows.Forms.Button();
-            this.button_PurpleLizardAlive = new System.Windows.Forms.Button();
-            this.button_PurpleGolemAlive = new System.Windows.Forms.Button();
-            this.button_PurpleGolemDead = new System.Windows.Forms.Button();
-            this.button_BaronAlive = new System.Windows.Forms.Button();
-            this.button_BaronDead = new System.Windows.Forms.Button();
-            this.button_DragonAlive = new System.Windows.Forms.Button();
-            this.button_DragonDead = new System.Windows.Forms.Button();
-            this.button_BlueGolemAlive = new System.Windows.Forms.Button();
-            this.button_BlueGolemDead = new System.Windows.Forms.Button();
-            this.button_BlueLizardAlive = new System.Windows.Forms.Button();
-            this.button_BlueLizardDead = new System.Windows.Forms.Button();
+            this.textBox_WarningSeconds = new System.Windows.Forms.TextBox();
             this.groupBox_HotKeys.SuspendLayout();
             this.groupBox_Sounds.SuspendLayout();
             this.SuspendLayout();
@@ -226,30 +218,22 @@
             // groupBox_Sounds
             // 
             this.groupBox_Sounds.BackColor = System.Drawing.Color.Transparent;
-            this.groupBox_Sounds.Controls.Add(this.button_BlueLizardAlive);
-            this.groupBox_Sounds.Controls.Add(this.button_BlueLizardDead);
-            this.groupBox_Sounds.Controls.Add(this.button_BlueGolemAlive);
-            this.groupBox_Sounds.Controls.Add(this.button_BlueGolemDead);
-            this.groupBox_Sounds.Controls.Add(this.button_DragonAlive);
-            this.groupBox_Sounds.Controls.Add(this.button_DragonDead);
-            this.groupBox_Sounds.Controls.Add(this.button_BaronAlive);
-            this.groupBox_Sounds.Controls.Add(this.button_BaronDead);
-            this.groupBox_Sounds.Controls.Add(this.button_PurpleGolemAlive);
-            this.groupBox_Sounds.Controls.Add(this.button_PurpleGolemDead);
-            this.groupBox_Sounds.Controls.Add(this.button_PurpleLizardAlive);
-            this.groupBox_Sounds.Controls.Add(this.button_PurpleLizardDead);
-            this.groupBox_Sounds.Controls.Add(this.textBox_BlueLizardAlive);
-            this.groupBox_Sounds.Controls.Add(this.textBox_BlueLizardDead);
-            this.groupBox_Sounds.Controls.Add(this.textBox_BlueGolemAlive);
-            this.groupBox_Sounds.Controls.Add(this.textBox_BlueGolemDead);
-            this.groupBox_Sounds.Controls.Add(this.textBox_DragonAlive);
-            this.groupBox_Sounds.Controls.Add(this.textBox_DragonDead);
-            this.groupBox_Sounds.Controls.Add(this.textBox_BaronAlive);
-            this.groupBox_Sounds.Controls.Add(this.textBox_BaronDead);
-            this.groupBox_Sounds.Controls.Add(this.textBox_PurpleGolemAlive);
-            this.groupBox_Sounds.Controls.Add(this.textBox_PurpleGolemDead);
-            this.groupBox_Sounds.Controls.Add(this.textBox_PurpleLizardAlive);
-            this.groupBox_Sounds.Controls.Add(this.textBox_PurpleLizardDead);
+            this.groupBox_Sounds.Controls.Add(this.textBox_WarningSeconds);
+            this.groupBox_Sounds.Controls.Add(this.radioButton1_Respawns);
+            this.groupBox_Sounds.Controls.Add(this.radioButton1_Warning);
+            this.groupBox_Sounds.Controls.Add(this.radioButton1_Dies);
+            this.groupBox_Sounds.Controls.Add(this.button_BlueLizardSounds);
+            this.groupBox_Sounds.Controls.Add(this.button_BlueGolemSounds);
+            this.groupBox_Sounds.Controls.Add(this.button_DragonSounds);
+            this.groupBox_Sounds.Controls.Add(this.button_BaronSounds);
+            this.groupBox_Sounds.Controls.Add(this.button_PurpleGolemSounds);
+            this.groupBox_Sounds.Controls.Add(this.button_PurpleLizardSounds);
+            this.groupBox_Sounds.Controls.Add(this.textBox_BlueLizardSounds);
+            this.groupBox_Sounds.Controls.Add(this.textBox_BlueGolemSounds);
+            this.groupBox_Sounds.Controls.Add(this.textBox_DragonSounds);
+            this.groupBox_Sounds.Controls.Add(this.textBox_BaronSounds);
+            this.groupBox_Sounds.Controls.Add(this.textBox_PurpleGolemSounds);
+            this.groupBox_Sounds.Controls.Add(this.textBox_PurpleLizardSounds);
             this.groupBox_Sounds.Controls.Add(this.label1);
             this.groupBox_Sounds.Controls.Add(this.label2);
             this.groupBox_Sounds.Controls.Add(this.label3);
@@ -266,101 +250,170 @@
             this.groupBox_Sounds.TabStop = false;
             this.groupBox_Sounds.Text = "Sounds";
             // 
-            // textBox_BlueLizardAlive
+            // radioButton1_Respawns
             // 
-            this.textBox_BlueLizardAlive.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_BlueLizardAlive.Location = new System.Drawing.Point(147, 256);
-            this.textBox_BlueLizardAlive.Name = "textBox_BlueLizardAlive";
-            this.textBox_BlueLizardAlive.Size = new System.Drawing.Size(492, 17);
-            this.textBox_BlueLizardAlive.TabIndex = 24;
+            this.radioButton1_Respawns.AutoSize = true;
+            this.radioButton1_Respawns.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioButton1_Respawns.Location = new System.Drawing.Point(462, 16);
+            this.radioButton1_Respawns.Name = "radioButton1_Respawns";
+            this.radioButton1_Respawns.Size = new System.Drawing.Size(75, 17);
+            this.radioButton1_Respawns.TabIndex = 38;
+            this.radioButton1_Respawns.TabStop = true;
+            this.radioButton1_Respawns.Text = "Respawns";
+            this.radioButton1_Respawns.UseVisualStyleBackColor = true;
+            this.radioButton1_Respawns.CheckedChanged += new System.EventHandler(this.radioButton1_Respawns_CheckedChanged);
             // 
-            // textBox_BlueLizardDead
+            // radioButton1_Warning
             // 
-            this.textBox_BlueLizardDead.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_BlueLizardDead.Location = new System.Drawing.Point(147, 238);
-            this.textBox_BlueLizardDead.Name = "textBox_BlueLizardDead";
-            this.textBox_BlueLizardDead.Size = new System.Drawing.Size(492, 17);
-            this.textBox_BlueLizardDead.TabIndex = 23;
+            this.radioButton1_Warning.AutoSize = true;
+            this.radioButton1_Warning.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioButton1_Warning.Location = new System.Drawing.Point(334, 16);
+            this.radioButton1_Warning.Name = "radioButton1_Warning";
+            this.radioButton1_Warning.Size = new System.Drawing.Size(65, 17);
+            this.radioButton1_Warning.TabIndex = 37;
+            this.radioButton1_Warning.TabStop = true;
+            this.radioButton1_Warning.Text = "Warning";
+            this.radioButton1_Warning.UseVisualStyleBackColor = true;
+            this.radioButton1_Warning.CheckedChanged += new System.EventHandler(this.radioButton1_Warning_CheckedChanged);
             // 
-            // textBox_BlueGolemAlive
+            // radioButton1_Dies
             // 
-            this.textBox_BlueGolemAlive.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_BlueGolemAlive.Location = new System.Drawing.Point(147, 214);
-            this.textBox_BlueGolemAlive.Name = "textBox_BlueGolemAlive";
-            this.textBox_BlueGolemAlive.Size = new System.Drawing.Size(492, 17);
-            this.textBox_BlueGolemAlive.TabIndex = 22;
+            this.radioButton1_Dies.AutoSize = true;
+            this.radioButton1_Dies.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioButton1_Dies.Location = new System.Drawing.Point(258, 16);
+            this.radioButton1_Dies.Name = "radioButton1_Dies";
+            this.radioButton1_Dies.Size = new System.Drawing.Size(46, 17);
+            this.radioButton1_Dies.TabIndex = 36;
+            this.radioButton1_Dies.TabStop = true;
+            this.radioButton1_Dies.Text = "Dies";
+            this.radioButton1_Dies.UseVisualStyleBackColor = true;
+            this.radioButton1_Dies.CheckedChanged += new System.EventHandler(this.radioButton1_Dies_CheckedChanged);
             // 
-            // textBox_BlueGolemDead
+            // button_BlueLizardSounds
             // 
-            this.textBox_BlueGolemDead.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_BlueGolemDead.Location = new System.Drawing.Point(147, 196);
-            this.textBox_BlueGolemDead.Name = "textBox_BlueGolemDead";
-            this.textBox_BlueGolemDead.Size = new System.Drawing.Size(492, 17);
-            this.textBox_BlueGolemDead.TabIndex = 21;
+            this.button_BlueLizardSounds.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_BlueLizardSounds.Location = new System.Drawing.Point(638, 245);
+            this.button_BlueLizardSounds.Margin = new System.Windows.Forms.Padding(0);
+            this.button_BlueLizardSounds.Name = "button_BlueLizardSounds";
+            this.button_BlueLizardSounds.Size = new System.Drawing.Size(64, 20);
+            this.button_BlueLizardSounds.TabIndex = 35;
+            this.button_BlueLizardSounds.Text = "Browse...";
+            this.button_BlueLizardSounds.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.button_BlueLizardSounds.UseVisualStyleBackColor = true;
+            this.button_BlueLizardSounds.Click += new System.EventHandler(this.button_BlueLizardSounds_Click);
             // 
-            // textBox_DragonAlive
+            // button_BlueGolemSounds
             // 
-            this.textBox_DragonAlive.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_DragonAlive.Location = new System.Drawing.Point(147, 171);
-            this.textBox_DragonAlive.Name = "textBox_DragonAlive";
-            this.textBox_DragonAlive.Size = new System.Drawing.Size(492, 17);
-            this.textBox_DragonAlive.TabIndex = 20;
+            this.button_BlueGolemSounds.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_BlueGolemSounds.Location = new System.Drawing.Point(638, 203);
+            this.button_BlueGolemSounds.Margin = new System.Windows.Forms.Padding(0);
+            this.button_BlueGolemSounds.Name = "button_BlueGolemSounds";
+            this.button_BlueGolemSounds.Size = new System.Drawing.Size(64, 20);
+            this.button_BlueGolemSounds.TabIndex = 33;
+            this.button_BlueGolemSounds.Text = "Browse...";
+            this.button_BlueGolemSounds.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.button_BlueGolemSounds.UseVisualStyleBackColor = true;
+            this.button_BlueGolemSounds.Click += new System.EventHandler(this.button_BlueGolemSounds_Click);
             // 
-            // textBox_DragonDead
+            // button_DragonSounds
             // 
-            this.textBox_DragonDead.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_DragonDead.Location = new System.Drawing.Point(147, 153);
-            this.textBox_DragonDead.Name = "textBox_DragonDead";
-            this.textBox_DragonDead.Size = new System.Drawing.Size(492, 17);
-            this.textBox_DragonDead.TabIndex = 19;
+            this.button_DragonSounds.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_DragonSounds.Location = new System.Drawing.Point(638, 161);
+            this.button_DragonSounds.Margin = new System.Windows.Forms.Padding(0);
+            this.button_DragonSounds.Name = "button_DragonSounds";
+            this.button_DragonSounds.Size = new System.Drawing.Size(64, 20);
+            this.button_DragonSounds.TabIndex = 31;
+            this.button_DragonSounds.Text = "Browse...";
+            this.button_DragonSounds.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.button_DragonSounds.UseVisualStyleBackColor = true;
+            this.button_DragonSounds.Click += new System.EventHandler(this.button_DragonSounds_Click);
             // 
-            // textBox_BaronAlive
+            // button_BaronSounds
             // 
-            this.textBox_BaronAlive.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_BaronAlive.Location = new System.Drawing.Point(147, 130);
-            this.textBox_BaronAlive.Name = "textBox_BaronAlive";
-            this.textBox_BaronAlive.Size = new System.Drawing.Size(492, 17);
-            this.textBox_BaronAlive.TabIndex = 18;
+            this.button_BaronSounds.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_BaronSounds.Location = new System.Drawing.Point(638, 119);
+            this.button_BaronSounds.Margin = new System.Windows.Forms.Padding(0);
+            this.button_BaronSounds.Name = "button_BaronSounds";
+            this.button_BaronSounds.Size = new System.Drawing.Size(64, 20);
+            this.button_BaronSounds.TabIndex = 29;
+            this.button_BaronSounds.Text = "Browse...";
+            this.button_BaronSounds.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.button_BaronSounds.UseVisualStyleBackColor = true;
+            this.button_BaronSounds.Click += new System.EventHandler(this.button_BaronSounds_Click);
             // 
-            // textBox_BaronDead
+            // button_PurpleGolemSounds
             // 
-            this.textBox_BaronDead.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_BaronDead.Location = new System.Drawing.Point(147, 112);
-            this.textBox_BaronDead.Name = "textBox_BaronDead";
-            this.textBox_BaronDead.Size = new System.Drawing.Size(492, 17);
-            this.textBox_BaronDead.TabIndex = 17;
+            this.button_PurpleGolemSounds.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_PurpleGolemSounds.Location = new System.Drawing.Point(638, 77);
+            this.button_PurpleGolemSounds.Margin = new System.Windows.Forms.Padding(0);
+            this.button_PurpleGolemSounds.Name = "button_PurpleGolemSounds";
+            this.button_PurpleGolemSounds.Size = new System.Drawing.Size(64, 20);
+            this.button_PurpleGolemSounds.TabIndex = 27;
+            this.button_PurpleGolemSounds.Text = "Browse...";
+            this.button_PurpleGolemSounds.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.button_PurpleGolemSounds.UseVisualStyleBackColor = true;
+            this.button_PurpleGolemSounds.Click += new System.EventHandler(this.button_PurpleGolemSounds_Click);
             // 
-            // textBox_PurpleGolemAlive
+            // button_PurpleLizardSounds
             // 
-            this.textBox_PurpleGolemAlive.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_PurpleGolemAlive.Location = new System.Drawing.Point(147, 88);
-            this.textBox_PurpleGolemAlive.Name = "textBox_PurpleGolemAlive";
-            this.textBox_PurpleGolemAlive.Size = new System.Drawing.Size(492, 17);
-            this.textBox_PurpleGolemAlive.TabIndex = 16;
+            this.button_PurpleLizardSounds.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_PurpleLizardSounds.Location = new System.Drawing.Point(638, 35);
+            this.button_PurpleLizardSounds.Margin = new System.Windows.Forms.Padding(0);
+            this.button_PurpleLizardSounds.Name = "button_PurpleLizardSounds";
+            this.button_PurpleLizardSounds.Size = new System.Drawing.Size(64, 20);
+            this.button_PurpleLizardSounds.TabIndex = 25;
+            this.button_PurpleLizardSounds.Text = "Browse...";
+            this.button_PurpleLizardSounds.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.button_PurpleLizardSounds.UseVisualStyleBackColor = true;
+            this.button_PurpleLizardSounds.Click += new System.EventHandler(this.button_PurpleLizardSounds_Click);
             // 
-            // textBox_PurpleGolemDead
+            // textBox_BlueLizardSounds
             // 
-            this.textBox_PurpleGolemDead.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_PurpleGolemDead.Location = new System.Drawing.Point(147, 70);
-            this.textBox_PurpleGolemDead.Name = "textBox_PurpleGolemDead";
-            this.textBox_PurpleGolemDead.Size = new System.Drawing.Size(492, 17);
-            this.textBox_PurpleGolemDead.TabIndex = 15;
+            this.textBox_BlueLizardSounds.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox_BlueLizardSounds.Location = new System.Drawing.Point(143, 247);
+            this.textBox_BlueLizardSounds.Name = "textBox_BlueLizardSounds";
+            this.textBox_BlueLizardSounds.Size = new System.Drawing.Size(492, 17);
+            this.textBox_BlueLizardSounds.TabIndex = 23;
             // 
-            // textBox_PurpleLizardAlive
+            // textBox_BlueGolemSounds
             // 
-            this.textBox_PurpleLizardAlive.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_PurpleLizardAlive.Location = new System.Drawing.Point(147, 46);
-            this.textBox_PurpleLizardAlive.Name = "textBox_PurpleLizardAlive";
-            this.textBox_PurpleLizardAlive.Size = new System.Drawing.Size(492, 17);
-            this.textBox_PurpleLizardAlive.TabIndex = 14;
+            this.textBox_BlueGolemSounds.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox_BlueGolemSounds.Location = new System.Drawing.Point(143, 205);
+            this.textBox_BlueGolemSounds.Name = "textBox_BlueGolemSounds";
+            this.textBox_BlueGolemSounds.Size = new System.Drawing.Size(492, 17);
+            this.textBox_BlueGolemSounds.TabIndex = 21;
             // 
-            // textBox_PurpleLizardDead
+            // textBox_DragonSounds
             // 
-            this.textBox_PurpleLizardDead.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_PurpleLizardDead.Location = new System.Drawing.Point(147, 28);
-            this.textBox_PurpleLizardDead.Name = "textBox_PurpleLizardDead";
-            this.textBox_PurpleLizardDead.Size = new System.Drawing.Size(492, 17);
-            this.textBox_PurpleLizardDead.TabIndex = 13;
+            this.textBox_DragonSounds.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox_DragonSounds.Location = new System.Drawing.Point(143, 163);
+            this.textBox_DragonSounds.Name = "textBox_DragonSounds";
+            this.textBox_DragonSounds.Size = new System.Drawing.Size(492, 17);
+            this.textBox_DragonSounds.TabIndex = 19;
+            // 
+            // textBox_BaronSounds
+            // 
+            this.textBox_BaronSounds.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox_BaronSounds.Location = new System.Drawing.Point(143, 121);
+            this.textBox_BaronSounds.Name = "textBox_BaronSounds";
+            this.textBox_BaronSounds.Size = new System.Drawing.Size(492, 17);
+            this.textBox_BaronSounds.TabIndex = 17;
+            // 
+            // textBox_PurpleGolemSounds
+            // 
+            this.textBox_PurpleGolemSounds.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox_PurpleGolemSounds.Location = new System.Drawing.Point(143, 79);
+            this.textBox_PurpleGolemSounds.Name = "textBox_PurpleGolemSounds";
+            this.textBox_PurpleGolemSounds.Size = new System.Drawing.Size(492, 17);
+            this.textBox_PurpleGolemSounds.TabIndex = 15;
+            // 
+            // textBox_PurpleLizardSounds
+            // 
+            this.textBox_PurpleLizardSounds.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox_PurpleLizardSounds.Location = new System.Drawing.Point(143, 37);
+            this.textBox_PurpleLizardSounds.Name = "textBox_PurpleLizardSounds";
+            this.textBox_PurpleLizardSounds.Size = new System.Drawing.Size(492, 17);
+            this.textBox_PurpleLizardSounds.TabIndex = 13;
             // 
             // label1
             // 
@@ -426,161 +479,15 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // button_PurpleLizardDead
+            // textBox_WarningSeconds
             // 
-            this.button_PurpleLizardDead.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_PurpleLizardDead.Location = new System.Drawing.Point(646, 25);
-            this.button_PurpleLizardDead.Margin = new System.Windows.Forms.Padding(0);
-            this.button_PurpleLizardDead.Name = "button_PurpleLizardDead";
-            this.button_PurpleLizardDead.Size = new System.Drawing.Size(64, 20);
-            this.button_PurpleLizardDead.TabIndex = 25;
-            this.button_PurpleLizardDead.Text = "Browse...";
-            this.button_PurpleLizardDead.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.button_PurpleLizardDead.UseVisualStyleBackColor = true;
-            this.button_PurpleLizardDead.Click += new System.EventHandler(this.button_PurpleLizardDead_Click);
-            // 
-            // button_PurpleLizardAlive
-            // 
-            this.button_PurpleLizardAlive.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_PurpleLizardAlive.Location = new System.Drawing.Point(646, 45);
-            this.button_PurpleLizardAlive.Margin = new System.Windows.Forms.Padding(0);
-            this.button_PurpleLizardAlive.Name = "button_PurpleLizardAlive";
-            this.button_PurpleLizardAlive.Size = new System.Drawing.Size(64, 20);
-            this.button_PurpleLizardAlive.TabIndex = 26;
-            this.button_PurpleLizardAlive.Text = "Browse...";
-            this.button_PurpleLizardAlive.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.button_PurpleLizardAlive.UseVisualStyleBackColor = true;
-            this.button_PurpleLizardAlive.Click += new System.EventHandler(this.button_PurpleLizardAlive_Click);
-            // 
-            // button_PurpleGolemAlive
-            // 
-            this.button_PurpleGolemAlive.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_PurpleGolemAlive.Location = new System.Drawing.Point(646, 87);
-            this.button_PurpleGolemAlive.Margin = new System.Windows.Forms.Padding(0);
-            this.button_PurpleGolemAlive.Name = "button_PurpleGolemAlive";
-            this.button_PurpleGolemAlive.Size = new System.Drawing.Size(64, 20);
-            this.button_PurpleGolemAlive.TabIndex = 28;
-            this.button_PurpleGolemAlive.Text = "Browse...";
-            this.button_PurpleGolemAlive.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.button_PurpleGolemAlive.UseVisualStyleBackColor = true;
-            this.button_PurpleGolemAlive.Click += new System.EventHandler(this.button_PurpleGolemAlive_Click);
-            // 
-            // button_PurpleGolemDead
-            // 
-            this.button_PurpleGolemDead.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_PurpleGolemDead.Location = new System.Drawing.Point(646, 67);
-            this.button_PurpleGolemDead.Margin = new System.Windows.Forms.Padding(0);
-            this.button_PurpleGolemDead.Name = "button_PurpleGolemDead";
-            this.button_PurpleGolemDead.Size = new System.Drawing.Size(64, 20);
-            this.button_PurpleGolemDead.TabIndex = 27;
-            this.button_PurpleGolemDead.Text = "Browse...";
-            this.button_PurpleGolemDead.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.button_PurpleGolemDead.UseVisualStyleBackColor = true;
-            this.button_PurpleGolemDead.Click += new System.EventHandler(this.button_PurpleGolemDead_Click);
-            // 
-            // button_BaronAlive
-            // 
-            this.button_BaronAlive.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_BaronAlive.Location = new System.Drawing.Point(646, 129);
-            this.button_BaronAlive.Margin = new System.Windows.Forms.Padding(0);
-            this.button_BaronAlive.Name = "button_BaronAlive";
-            this.button_BaronAlive.Size = new System.Drawing.Size(64, 20);
-            this.button_BaronAlive.TabIndex = 30;
-            this.button_BaronAlive.Text = "Browse...";
-            this.button_BaronAlive.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.button_BaronAlive.UseVisualStyleBackColor = true;
-            this.button_BaronAlive.Click += new System.EventHandler(this.button_BaronAlive_Click);
-            // 
-            // button_BaronDead
-            // 
-            this.button_BaronDead.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_BaronDead.Location = new System.Drawing.Point(646, 109);
-            this.button_BaronDead.Margin = new System.Windows.Forms.Padding(0);
-            this.button_BaronDead.Name = "button_BaronDead";
-            this.button_BaronDead.Size = new System.Drawing.Size(64, 20);
-            this.button_BaronDead.TabIndex = 29;
-            this.button_BaronDead.Text = "Browse...";
-            this.button_BaronDead.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.button_BaronDead.UseVisualStyleBackColor = true;
-            this.button_BaronDead.Click += new System.EventHandler(this.button_BaronDead_Click);
-            // 
-            // button_DragonAlive
-            // 
-            this.button_DragonAlive.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_DragonAlive.Location = new System.Drawing.Point(646, 170);
-            this.button_DragonAlive.Margin = new System.Windows.Forms.Padding(0);
-            this.button_DragonAlive.Name = "button_DragonAlive";
-            this.button_DragonAlive.Size = new System.Drawing.Size(64, 20);
-            this.button_DragonAlive.TabIndex = 32;
-            this.button_DragonAlive.Text = "Browse...";
-            this.button_DragonAlive.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.button_DragonAlive.UseVisualStyleBackColor = true;
-            this.button_DragonAlive.Click += new System.EventHandler(this.button_DragonAlive_Click);
-            // 
-            // button_DragonDead
-            // 
-            this.button_DragonDead.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_DragonDead.Location = new System.Drawing.Point(646, 150);
-            this.button_DragonDead.Margin = new System.Windows.Forms.Padding(0);
-            this.button_DragonDead.Name = "button_DragonDead";
-            this.button_DragonDead.Size = new System.Drawing.Size(64, 20);
-            this.button_DragonDead.TabIndex = 31;
-            this.button_DragonDead.Text = "Browse...";
-            this.button_DragonDead.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.button_DragonDead.UseVisualStyleBackColor = true;
-            this.button_DragonDead.Click += new System.EventHandler(this.button_DragonDead_Click);
-            // 
-            // button_BlueGolemAlive
-            // 
-            this.button_BlueGolemAlive.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_BlueGolemAlive.Location = new System.Drawing.Point(646, 213);
-            this.button_BlueGolemAlive.Margin = new System.Windows.Forms.Padding(0);
-            this.button_BlueGolemAlive.Name = "button_BlueGolemAlive";
-            this.button_BlueGolemAlive.Size = new System.Drawing.Size(64, 20);
-            this.button_BlueGolemAlive.TabIndex = 34;
-            this.button_BlueGolemAlive.Text = "Browse...";
-            this.button_BlueGolemAlive.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.button_BlueGolemAlive.UseVisualStyleBackColor = true;
-            this.button_BlueGolemAlive.Click += new System.EventHandler(this.button_BlueGolemAlive_Click);
-            // 
-            // button_BlueGolemDead
-            // 
-            this.button_BlueGolemDead.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_BlueGolemDead.Location = new System.Drawing.Point(646, 193);
-            this.button_BlueGolemDead.Margin = new System.Windows.Forms.Padding(0);
-            this.button_BlueGolemDead.Name = "button_BlueGolemDead";
-            this.button_BlueGolemDead.Size = new System.Drawing.Size(64, 20);
-            this.button_BlueGolemDead.TabIndex = 33;
-            this.button_BlueGolemDead.Text = "Browse...";
-            this.button_BlueGolemDead.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.button_BlueGolemDead.UseVisualStyleBackColor = true;
-            this.button_BlueGolemDead.Click += new System.EventHandler(this.button_BlueGolemDead_Click);
-            // 
-            // button_BlueLizardAlive
-            // 
-            this.button_BlueLizardAlive.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_BlueLizardAlive.Location = new System.Drawing.Point(646, 255);
-            this.button_BlueLizardAlive.Margin = new System.Windows.Forms.Padding(0);
-            this.button_BlueLizardAlive.Name = "button_BlueLizardAlive";
-            this.button_BlueLizardAlive.Size = new System.Drawing.Size(64, 20);
-            this.button_BlueLizardAlive.TabIndex = 36;
-            this.button_BlueLizardAlive.Text = "Browse...";
-            this.button_BlueLizardAlive.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.button_BlueLizardAlive.UseVisualStyleBackColor = true;
-            this.button_BlueLizardAlive.Click += new System.EventHandler(this.button_BlueLizardAlive_Click);
-            // 
-            // button_BlueLizardDead
-            // 
-            this.button_BlueLizardDead.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_BlueLizardDead.Location = new System.Drawing.Point(646, 235);
-            this.button_BlueLizardDead.Margin = new System.Windows.Forms.Padding(0);
-            this.button_BlueLizardDead.Name = "button_BlueLizardDead";
-            this.button_BlueLizardDead.Size = new System.Drawing.Size(64, 20);
-            this.button_BlueLizardDead.TabIndex = 35;
-            this.button_BlueLizardDead.Text = "Browse...";
-            this.button_BlueLizardDead.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.button_BlueLizardDead.UseVisualStyleBackColor = true;
-            this.button_BlueLizardDead.Click += new System.EventHandler(this.button_BlueLizardDead_Click);
+            this.textBox_WarningSeconds.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox_WarningSeconds.Location = new System.Drawing.Point(396, 14);
+            this.textBox_WarningSeconds.MaxLength = 3;
+            this.textBox_WarningSeconds.Name = "textBox_WarningSeconds";
+            this.textBox_WarningSeconds.Size = new System.Drawing.Size(31, 20);
+            this.textBox_WarningSeconds.TabIndex = 39;
+            this.textBox_WarningSeconds.TextChanged += new System.EventHandler(this.textBox_WarningSeconds_TextChanged);
             // 
             // Form2
             // 
@@ -624,29 +531,21 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
-        private System.Windows.Forms.TextBox textBox_BlueLizardAlive;
-        private System.Windows.Forms.TextBox textBox_BlueLizardDead;
-        private System.Windows.Forms.TextBox textBox_BlueGolemAlive;
-        private System.Windows.Forms.TextBox textBox_BlueGolemDead;
-        private System.Windows.Forms.TextBox textBox_DragonAlive;
-        private System.Windows.Forms.TextBox textBox_DragonDead;
-        private System.Windows.Forms.TextBox textBox_BaronAlive;
-        private System.Windows.Forms.TextBox textBox_BaronDead;
-        private System.Windows.Forms.TextBox textBox_PurpleGolemAlive;
-        private System.Windows.Forms.TextBox textBox_PurpleGolemDead;
-        private System.Windows.Forms.TextBox textBox_PurpleLizardAlive;
-        private System.Windows.Forms.TextBox textBox_PurpleLizardDead;
-        private System.Windows.Forms.Button button_BlueLizardAlive;
-        private System.Windows.Forms.Button button_BlueLizardDead;
-        private System.Windows.Forms.Button button_BlueGolemAlive;
-        private System.Windows.Forms.Button button_BlueGolemDead;
-        private System.Windows.Forms.Button button_DragonAlive;
-        private System.Windows.Forms.Button button_DragonDead;
-        private System.Windows.Forms.Button button_BaronAlive;
-        private System.Windows.Forms.Button button_BaronDead;
-        private System.Windows.Forms.Button button_PurpleGolemAlive;
-        private System.Windows.Forms.Button button_PurpleGolemDead;
-        private System.Windows.Forms.Button button_PurpleLizardAlive;
-        private System.Windows.Forms.Button button_PurpleLizardDead;
+        private System.Windows.Forms.TextBox textBox_BlueLizardSounds;
+        private System.Windows.Forms.TextBox textBox_BlueGolemSounds;
+        private System.Windows.Forms.TextBox textBox_DragonSounds;
+        private System.Windows.Forms.TextBox textBox_BaronSounds;
+        private System.Windows.Forms.TextBox textBox_PurpleGolemSounds;
+        private System.Windows.Forms.TextBox textBox_PurpleLizardSounds;
+        private System.Windows.Forms.Button button_BlueLizardSounds;
+        private System.Windows.Forms.Button button_BlueGolemSounds;
+        private System.Windows.Forms.Button button_DragonSounds;
+        private System.Windows.Forms.Button button_BaronSounds;
+        private System.Windows.Forms.Button button_PurpleGolemSounds;
+        private System.Windows.Forms.Button button_PurpleLizardSounds;
+        private System.Windows.Forms.RadioButton radioButton1_Respawns;
+        private System.Windows.Forms.RadioButton radioButton1_Warning;
+        private System.Windows.Forms.RadioButton radioButton1_Dies;
+        private System.Windows.Forms.TextBox textBox_WarningSeconds;
     }
 }

@@ -57,19 +57,9 @@ namespace JungleTimers
                 comboBox5_Hotkey5.Text = source.Configs["Hotkeys"].Get("Hotkey5");
                 comboBox6_Hotkey6.Text = source.Configs["Hotkeys"].Get("Hotkey6");
 
-                // Show current Sounds configuration  in each dropdown box...
-                textBox_PurpleLizardDead.Text = source.Configs["Sounds"].Get("PurpleLizardDead");
-                textBox_PurpleLizardAlive.Text = source.Configs["Sounds"].Get("PurpleLizardAlive");
-                textBox_PurpleGolemDead.Text = source.Configs["Sounds"].Get("PurpleGolemDead");
-                textBox_PurpleGolemAlive.Text = source.Configs["Sounds"].Get("PurpleGolemAlive");
-                textBox_BaronDead.Text = source.Configs["Sounds"].Get("BaronDead"); 
-                textBox_BaronAlive.Text = source.Configs["Sounds"].Get("BaronAlive");
-                textBox_DragonDead.Text = source.Configs["Sounds"].Get("DragonDead");
-                textBox_DragonAlive.Text = source.Configs["Sounds"].Get("DragonAlive");
-                textBox_BlueLizardDead.Text = source.Configs["Sounds"].Get("BlueLizardDead");
-                textBox_BlueLizardAlive.Text = source.Configs["Sounds"].Get("BlueLizardAlive");
-                textBox_BlueGolemDead.Text = source.Configs["Sounds"].Get("BlueGolemDead");
-                textBox_BlueGolemAlive.Text = source.Configs["Sounds"].Get("BlueGolemAlive");      
+                // Load Sound Options...
+                radioButton1_Dies.Checked = true;
+                textBox_WarningSeconds.Text = source.Configs["Sounds"].Get("WarningSeconds");
             }
             
         }
@@ -89,20 +79,7 @@ namespace JungleTimers
             source.Configs["Hotkeys"].Set("Hotkey5", comboBox5_Hotkey5.Text);
             source.Configs["Hotkeys"].Set("Hotkey6", comboBox6_Hotkey6.Text);
 
-            // Sounds - 
-            source.Configs["Sounds"].Set("PurpleLizardDead", textBox_PurpleLizardDead.Text);           
-            source.Configs["Sounds"].Set("PurpleLizardAlive", textBox_PurpleLizardAlive.Text);
-            source.Configs["Sounds"].Set("PurpleGolemDead", textBox_PurpleGolemDead.Text);
-            source.Configs["Sounds"].Set("PurpleGolemAlive", textBox_PurpleGolemAlive.Text);
-            source.Configs["Sounds"].Set("BaronDead", textBox_BaronDead.Text);
-            source.Configs["Sounds"].Set("BaronAlive", textBox_BaronAlive.Text);
-            source.Configs["Sounds"].Set("DragonDead", textBox_DragonDead.Text);
-            source.Configs["Sounds"].Set("DragonAlive", textBox_DragonAlive.Text);
-            source.Configs["Sounds"].Set("BlueLizardDead", textBox_BlueLizardDead.Text);
-            source.Configs["Sounds"].Set("BlueLizardAlive", textBox_BlueLizardAlive.Text);
-            source.Configs["Sounds"].Set("BlueGolemDead", textBox_BlueGolemDead.Text);
-            source.Configs["Sounds"].Set("BlueGolemAlive", textBox_BlueGolemAlive.Text);
-            
+            source.Configs["Sounds"].Set("WarningSeconds", textBox_WarningSeconds.Text);
             source.Save();
             this.Close();
         }
@@ -112,68 +89,129 @@ namespace JungleTimers
            
         }
 
-        private void button_PurpleLizardDead_Click(object sender, EventArgs e)
+        private void button_PurpleLizardSounds_Click(object sender, EventArgs e)
         {
             DialogResult result = openFileDialog1.ShowDialog();
             if (result == DialogResult.OK) // Test result.
             {
-                textBox_PurpleLizardDead.Text = openFileDialog1.FileName;
+                textBox_PurpleLizardSounds.Text = openFileDialog1.FileName;
+                if (radioButton1_Dies.Checked == true) { source.Configs["Sounds"].Set("PurpleLizardDead", openFileDialog1.FileName); }
+                if (radioButton1_Warning.Checked == true) { source.Configs["Sounds"].Set("PurpleLizardWarning", openFileDialog1.FileName); }
+                if (radioButton1_Respawns.Checked == true) { source.Configs["Sounds"].Set("PurpleLizardAlive", openFileDialog1.FileName); }
             }
         }
 
-        private void button_PurpleLizardAlive_Click(object sender, EventArgs e)
+        private void button_PurpleGolemSounds_Click(object sender, EventArgs e)
         {
-
+            DialogResult result = openFileDialog1.ShowDialog();
+            if (result == DialogResult.OK) // Test result.
+            {
+                textBox_PurpleGolemSounds.Text = openFileDialog1.FileName;
+                if (radioButton1_Dies.Checked == true) { source.Configs["Sounds"].Set("PurpleGolemDead", openFileDialog1.FileName); }
+                if (radioButton1_Warning.Checked == true) { source.Configs["Sounds"].Set("PurpleGolemWarning", openFileDialog1.FileName); }
+                if (radioButton1_Respawns.Checked == true) { source.Configs["Sounds"].Set("PurpleGolemAlive", openFileDialog1.FileName); }
+            }
         }
 
-        private void button_PurpleGolemDead_Click(object sender, EventArgs e)
+        private void button_BaronSounds_Click(object sender, EventArgs e)
         {
-
+            DialogResult result = openFileDialog1.ShowDialog();
+            if (result == DialogResult.OK) // Test result.
+            {
+                textBox_BaronSounds.Text = openFileDialog1.FileName;
+                if (radioButton1_Dies.Checked == true) { source.Configs["Sounds"].Set("BaronDead", openFileDialog1.FileName); }
+                if (radioButton1_Warning.Checked == true) { source.Configs["Sounds"].Set("BaronWarning", openFileDialog1.FileName); }
+                if (radioButton1_Respawns.Checked == true) { source.Configs["Sounds"].Set("BaronAlive", openFileDialog1.FileName); }
+            }
         }
 
-        private void button_PurpleGolemAlive_Click(object sender, EventArgs e)
+        private void button_DragonSounds_Click(object sender, EventArgs e)
         {
-
+            DialogResult result = openFileDialog1.ShowDialog();
+            if (result == DialogResult.OK) // Test result.
+            {
+                textBox_DragonSounds.Text = openFileDialog1.FileName;
+                if (radioButton1_Dies.Checked == true) { source.Configs["Sounds"].Set("DragonDead", openFileDialog1.FileName); }
+                if (radioButton1_Warning.Checked == true) { source.Configs["Sounds"].Set("DragonWarning", openFileDialog1.FileName); }
+                if (radioButton1_Respawns.Checked == true) { source.Configs["Sounds"].Set("DragonAlive", openFileDialog1.FileName); }
+            }
         }
 
-        private void button_BaronDead_Click(object sender, EventArgs e)
+        private void button_BlueGolemSounds_Click(object sender, EventArgs e)
         {
-
+            DialogResult result = openFileDialog1.ShowDialog();
+            if (result == DialogResult.OK) // Test result.
+            {
+                textBox_BlueGolemSounds.Text = openFileDialog1.FileName;
+                if (radioButton1_Dies.Checked == true) { source.Configs["Sounds"].Set("BlueGolemDead", openFileDialog1.FileName); }
+                if (radioButton1_Warning.Checked == true) { source.Configs["Sounds"].Set("BlueGolemWarning", openFileDialog1.FileName); }
+                if (radioButton1_Respawns.Checked == true) { source.Configs["Sounds"].Set("BlueGolemAlive", openFileDialog1.FileName); }
+            }
         }
 
-        private void button_BaronAlive_Click(object sender, EventArgs e)
+        private void button_BlueLizardSounds_Click(object sender, EventArgs e)
         {
+            DialogResult result = openFileDialog1.ShowDialog();
+            if (result == DialogResult.OK) // Test result.
+            {
+                textBox_BlueLizardSounds.Text = openFileDialog1.FileName;
+                if (radioButton1_Dies.Checked == true) { source.Configs["Sounds"].Set("BlueLizardDead", openFileDialog1.FileName); }
+                if (radioButton1_Warning.Checked == true) { source.Configs["Sounds"].Set("BlueLizardWarning", openFileDialog1.FileName); }
+                if (radioButton1_Respawns.Checked == true) { source.Configs["Sounds"].Set("BlueLizardAlive", openFileDialog1.FileName); }
+            }
+        } 
 
+        // Radial Button For Monster Dies Sound Event...
+        private void radioButton1_Dies_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButton1_Dies.Checked == true)
+            {
+                textBox_PurpleLizardSounds.Text = source.Configs["Sounds"].Get("PurpleLizardDead");
+                textBox_PurpleGolemSounds.Text = source.Configs["Sounds"].Get("PurpleGolemDead");                
+                textBox_BaronSounds.Text = source.Configs["Sounds"].Get("BaronDead");                
+                textBox_DragonSounds.Text = source.Configs["Sounds"].Get("DragonDead");               
+                textBox_BlueLizardSounds.Text = source.Configs["Sounds"].Get("BlueLizardDead");                
+                textBox_BlueGolemSounds.Text = source.Configs["Sounds"].Get("BlueGolemDead");                  
+            }
+     
         }
 
-        private void button_DragonDead_Click(object sender, EventArgs e)
+        // Radial Button For Monster Warning (about to respawn) Sound Event...
+        private void radioButton1_Warning_CheckedChanged(object sender, EventArgs e)
         {
-
+            if (radioButton1_Warning.Checked == true)
+            {
+                textBox_PurpleLizardSounds.Text = source.Configs["Sounds"].Get("PurpleLizardWarning");
+                textBox_PurpleGolemSounds.Text = source.Configs["Sounds"].Get("PurpleGolemWarning");
+                textBox_BaronSounds.Text = source.Configs["Sounds"].Get("BaronWarning");
+                textBox_DragonSounds.Text = source.Configs["Sounds"].Get("DragonWarning");
+                textBox_BlueLizardSounds.Text = source.Configs["Sounds"].Get("BlueLizardWarning");
+                textBox_BlueGolemSounds.Text = source.Configs["Sounds"].Get("BlueGolemWarning");
+            }
         }
 
-        private void button_DragonAlive_Click(object sender, EventArgs e)
+        // Radial Button For Monster Respawns Sound Event...
+        private void radioButton1_Respawns_CheckedChanged(object sender, EventArgs e)
         {
-
+            if (radioButton1_Respawns.Checked == true)
+            {
+                textBox_PurpleLizardSounds.Text = source.Configs["Sounds"].Get("PurpleLizardAlive");
+                textBox_PurpleGolemSounds.Text = source.Configs["Sounds"].Get("PurpleGolemAlive");
+                textBox_BaronSounds.Text = source.Configs["Sounds"].Get("BaronAlive");
+                textBox_DragonSounds.Text = source.Configs["Sounds"].Get("DragonAlive");
+                textBox_BlueLizardSounds.Text = source.Configs["Sounds"].Get("BlueLizardAlive");
+                textBox_BlueGolemSounds.Text = source.Configs["Sounds"].Get("BlueGolemAlive");
+            }
         }
 
-        private void button_BlueGolemDead_Click(object sender, EventArgs e)
+        private void textBox_WarningSeconds_TextChanged(object sender, EventArgs e)
         {
-
-        }
-
-        private void button_BlueGolemAlive_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button_BlueLizardDead_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button_BlueLizardAlive_Click(object sender, EventArgs e)
-        {
-
-        }
+            long testfornum;
+            if (!long.TryParse(textBox_WarningSeconds.Text, out testfornum))
+            {
+                // If Not Integer Clear Textbox text or you can also Undo() Last Operation :)
+                textBox_WarningSeconds.Clear();                
+            }
+        } 
     }
 }

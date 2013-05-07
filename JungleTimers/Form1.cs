@@ -23,7 +23,7 @@ namespace JungleTimers
     public partial class Form1 : Form
     {        
         // !! SET CODE REVISION !! 
-        public static string versionIs = "1.4c";        
+        public static string versionIs = "1.4d";        
         public bool FormCloseForUpdate;               
         
         //Resource manager for accessing embedded files...
@@ -71,27 +71,33 @@ namespace JungleTimers
         int timerCurrent;
         int timerLength;
 
-        // Sound Event Strings...  
-        //public string PurpleLizardDead = Application.StartupPath + "\\Resources\\PurpleLizardDead.mp3";
-        //public string PurpleLizardAlive = Application.StartupPath + "\\Resources\\PurpleLizardAlive.mp3";
+        // Sound Event Strings...
+        public string WarningSecondsString;
+        public int WarningSeconds;
 
         public string PurpleLizardDead;
+        public string PurpleLizardWarning;
         public string PurpleLizardAlive;
 
-        public string PurpleGolemDead = Application.StartupPath + "\\Resources\\PurpleGolemDead.mp3";
-        public string PurpleGolemAlive = Application.StartupPath + "\\Resources\\PurpleGolemAlive.mp3";
+        public string PurpleGolemDead;
+        public string PurpleGolemWarning;
+        public string PurpleGolemAlive;
 
-        public string BaronDead = Application.StartupPath + "\\Resources\\BaronDead.mp3";
-        public string BaronAlive = Application.StartupPath + "\\Resources\\BaronAlive.mp3";
+        public string BaronDead;
+        public string BaronWarning;
+        public string BaronAlive;
 
-        public string DragonDead = Application.StartupPath + "\\Resources\\DragonDead.mp3";
-        public string DragonAlive = Application.StartupPath + "\\Resources\\DragonAlive.mp3";
+        public string DragonDead;
+        public string DragonWarning;
+        public string DragonAlive;
 
-        public string BlueGolemDead = Application.StartupPath + "\\Resources\\BlueGolemDead.mp3";
-        public string BlueGolemAlive = Application.StartupPath + "\\Resources\\BlueGolemAlive.mp3";
+        public string BlueGolemDead;
+        public string BlueGolemWarning;
+        public string BlueGolemAlive;
 
-        public string BlueLizardDead = Application.StartupPath + "\\Resources\\BlueLizardDead.mp3";
-        public string BlueLizardAlive = Application.StartupPath + "\\Resources\\BlueLizardAlive.mp3";
+        public string BlueLizardDead;
+        public string BlueLizardWarning;
+        public string BlueLizardAlive;
         
         // Import DLL for MP3 Playback...        
         public const int MM_MCINOTIFY = 0x3B9;
@@ -118,17 +124,51 @@ namespace JungleTimers
             Hotkey5 = source.Configs["Hotkeys"].Get("Hotkey5");
             Hotkey6 = source.Configs["Hotkeys"].Get("Hotkey6");
 
-            // Pull Sound Events Config...
+            // Pull Sound Events Config from JTconfig.ini...
+            WarningSecondsString = source.Configs["Sounds"].Get("WarningSeconds");
+            int.TryParse(WarningSecondsString, out WarningSeconds);        
+
             PurpleLizardDead = source.Configs["Sounds"].Get("PurpleLizardDead");
-            PurpleLizardAlive = source.Configs["Sounds"].Get("PurpleLizardAlive");
-            if (PurpleLizardDead == "Default")
-            {
-                PurpleLizardDead = Application.StartupPath + "\\Resources\\PurpleLizardDead.mp3";
-            }
-            if (PurpleLizardAlive == "Default")
-            {
-                PurpleLizardAlive = Application.StartupPath + "\\Resources\\PurpleLizardAlive.mp3";
-            }
+            if (PurpleLizardDead == "Default") { PurpleLizardDead = Application.StartupPath + "\\Resources\\PurpleLizardDead.mp3"; }
+            PurpleLizardWarning = source.Configs["Sounds"].Get("PurpleLizardWarning");
+            if (PurpleLizardWarning == "Default") { PurpleLizardWarning = Application.StartupPath + "\\Resources\\PurpleLizardWarning.mp3"; }
+            PurpleLizardAlive = source.Configs["Sounds"].Get("PurpleLizardAlive");            
+            if (PurpleLizardAlive == "Default") { PurpleLizardAlive = Application.StartupPath + "\\Resources\\PurpleLizardAlive.mp3"; }
+
+            PurpleGolemDead = source.Configs["Sounds"].Get("PurpleGolemDead");
+            if (PurpleGolemDead == "Default") { PurpleGolemDead = Application.StartupPath + "\\Resources\\PurpleGolemDead.mp3"; }
+            PurpleGolemWarning = source.Configs["Sounds"].Get("PurpleGolemWarning");
+            if (PurpleGolemWarning == "Default") { PurpleGolemWarning = Application.StartupPath + "\\Resources\\PurpleGolemWarning.mp3"; }
+            PurpleGolemAlive = source.Configs["Sounds"].Get("PurpleGolemAlive");
+            if (PurpleGolemAlive == "Default") { PurpleGolemAlive = Application.StartupPath + "\\Resources\\PurpleGolemAlive.mp3"; }
+
+            BaronDead = source.Configs["Sounds"].Get("BaronDead");
+            if (BaronDead == "Default") { BaronDead = Application.StartupPath + "\\Resources\\BaronDead.mp3"; }
+            BaronWarning = source.Configs["Sounds"].Get("BaronWarning");
+            if (BaronWarning == "Default") { BaronWarning = Application.StartupPath + "\\Resources\\BaronWarning.mp3"; }
+            BaronAlive = source.Configs["Sounds"].Get("BaronAlive");
+            if (BaronAlive == "Default") { BaronAlive = Application.StartupPath + "\\Resources\\BaronAlive.mp3"; }
+
+            DragonDead = source.Configs["Sounds"].Get("DragonDead");
+            if (DragonDead == "Default") { DragonDead = Application.StartupPath + "\\Resources\\DragonDead.mp3"; }
+            DragonWarning = source.Configs["Sounds"].Get("DragonWarning");
+            if (DragonWarning == "Default") { DragonWarning = Application.StartupPath + "\\Resources\\DragonWarning.mp3"; }
+            DragonAlive = source.Configs["Sounds"].Get("DragonAlive");
+            if (DragonAlive == "Default") { DragonAlive = Application.StartupPath + "\\Resources\\DragonAlive.mp3"; }
+
+            BlueGolemDead = source.Configs["Sounds"].Get("BlueGolemDead");
+            if (BlueGolemDead == "Default") { BlueGolemDead = Application.StartupPath + "\\Resources\\BlueGolemDead.mp3"; }
+            BlueGolemWarning = source.Configs["Sounds"].Get("BlueGolemWarning");
+            if (BlueGolemWarning == "Default") { BlueGolemWarning = Application.StartupPath + "\\Resources\\BlueGolemWarning.mp3"; }
+            BlueGolemAlive = source.Configs["Sounds"].Get("BlueGolemAlive");
+            if (BlueGolemAlive == "Default") { BlueGolemAlive = Application.StartupPath + "\\Resources\\BlueGolemAlive.mp3"; }
+
+            BlueLizardDead = source.Configs["Sounds"].Get("BlueLizardDead");
+            if (BlueLizardDead == "Default") { BlueLizardDead = Application.StartupPath + "\\Resources\\BlueLizardDead.mp3"; }
+            BlueLizardWarning = source.Configs["Sounds"].Get("BlueLizardWarning");
+            if (BlueLizardWarning == "Default") { BlueLizardWarning = Application.StartupPath + "\\Resources\\BlueLizardWarning.mp3"; }
+            BlueLizardAlive = source.Configs["Sounds"].Get("BlueLizardAlive");
+            if (BlueLizardAlive == "Default") { BlueLizardAlive = Application.StartupPath + "\\Resources\\BlueLizardAlive.mp3"; }
         }
         
         public Form1()
@@ -698,7 +738,11 @@ namespace JungleTimers
             {
                 if (worker.CancellationPending != true)
                 {
-                    Thread.Sleep(1000);
+                    if (a == WarningSeconds)
+                    {
+                        PlaySong(PurpleLizardWarning);
+                    }
+                    Thread.Sleep(1000);                    
                     worker.ReportProgress(a);
                 }
             }
@@ -713,6 +757,10 @@ namespace JungleTimers
             {
                 if (worker.CancellationPending != true)
                 {
+                    if (b == WarningSeconds)
+                    {
+                        PlaySong(PurpleGolemWarning);
+                    }
                     Thread.Sleep(1000);
                     worker.ReportProgress(b);
                 }
@@ -728,6 +776,10 @@ namespace JungleTimers
             {
                 if (worker.CancellationPending != true)
                 {
+                    if (c == WarningSeconds)
+                    {
+                        PlaySong(BlueGolemWarning);
+                    }
                     Thread.Sleep(1000);
                     worker.ReportProgress(c);
                 }
@@ -743,6 +795,10 @@ namespace JungleTimers
             {
                 if (worker.CancellationPending != true)
                 {
+                    if (d == WarningSeconds)
+                    {
+                        PlaySong(BlueLizardWarning);
+                    }
                     Thread.Sleep(1000);
                     worker.ReportProgress(d);
                 }
@@ -758,6 +814,10 @@ namespace JungleTimers
             {
                 if (worker.CancellationPending != true)
                 {
+                    if (e == WarningSeconds)
+                    {
+                        PlaySong(BaronWarning);
+                    }
                     Thread.Sleep(1000);
                     worker.ReportProgress(e);
                 }
@@ -773,6 +833,10 @@ namespace JungleTimers
             {
                 if (worker.CancellationPending != true)
                 {
+                    if (f == WarningSeconds)
+                    {
+                        PlaySong(DragonWarning);
+                    }
                     Thread.Sleep(1000);
                     worker.ReportProgress(f);
                 }
@@ -863,8 +927,8 @@ namespace JungleTimers
 
         // hidden test button...
         private void button8_Click(object sender, EventArgs e)
-        {            
-            
+        {
+            MessageBox.Show(WarningSeconds.ToString());
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)

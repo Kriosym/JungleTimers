@@ -18,7 +18,7 @@ namespace ServerApplication
         public static HashSet<string> ConnectionsList = new HashSet<string>();
         
         // Set Latest available version of Client Software...
-        public static string LatestClientVersion = "1.4c";        
+        public static string LatestClientVersion = "1.4d";        
         
         public static void Main(string[] args)
         {
@@ -61,7 +61,7 @@ namespace ServerApplication
 
 
             // Print out the IPs and ports we are now listening on...
-            Console.WriteLine("Listening on:");
+            Console.WriteLine("Server version " + LatestClientVersion + " Listening on:");            
             foreach (System.Net.IPEndPoint localEndPoint in TCPConnection.ExistingLocalListenEndPoints()) Console.WriteLine("{0}:{1}", localEndPoint.Address, localEndPoint.Port);
 
             // Let the user close the server...
@@ -105,10 +105,11 @@ namespace ServerApplication
         public static void RemoveFromConnectionList(PacketHeader header, Connection connection, string Disconnection)
         {
             Console.WriteLine(connection.ConnectionInfo.RemoteEndPoint.Address.ToString() + " has DISCONNECTED!");
-            ConnectionsList.Remove(connection.ConnectionInfo.RemoteEndPoint.Address.ToString());
+            ConnectionsList.Remove(connection.ConnectionInfo.RemoteEndPoint.Address.ToString());            
             if (ConnectionsList.Count > 0)
             {
-                foreach (var item in ConnectionsList) Console.WriteLine("Current Clients:" + item);
+                Console.WriteLine("Current Clients:");
+                foreach (var item in ConnectionsList) Console.WriteLine(item);
             }
             else
             {
