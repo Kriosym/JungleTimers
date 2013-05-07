@@ -23,7 +23,7 @@ namespace JungleTimers
     public partial class Form1 : Form
     {        
         // !! SET CODE REVISION !! 
-        public static string versionIs = "1.4e";        
+        public static string versionIs = "1.4f";        
         public bool FormCloseForUpdate;               
         
         //Resource manager for accessing embedded files...
@@ -67,9 +67,9 @@ namespace JungleTimers
         public string Hotkey5;
         public string Hotkey6;
 
-        // Test timer...
-        int timerCurrent;
-        int timerLength;
+        // Test timer...                
+        public int timerCurrent = 0;
+        public int timerLength = 5;
 
         // Sound Event Strings...
         public string WarningSecondsString;
@@ -114,7 +114,7 @@ namespace JungleTimers
         // Other Load Actions...
         private void Form1_Load(object sender, EventArgs e)
         {
-            label1.Text = "v" + versionIs;
+            label1.Text = versionIs;
             // Pull Hotkey Config...
             IConfigSource source = new IniConfigSource("JTconfig.ini");
             Hotkey1 = source.Configs["Hotkeys"].Get("Hotkey1");
@@ -383,148 +383,157 @@ namespace JungleTimers
             }
         }
 
-
-        /* A little test timer...
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            if (timerCurrent < timerLength)
-            {
-                timerCurrent++;
-            }
-            else
-            {             
-                button1.Enabled = true;
-                timer1.Stop();
-            }
-        }
-         */
-
         // BUTTON CLICK EVENTS -
         private void button1_Click(object sender, EventArgs e)
         {                       
             // Start the Timer if it isn't already going, using Client/Server mechanism if connected...
             // note: button7connect.Text reads "Connect" prior to connecting, and reads "Disconnect" once connection has been established.
-            if (b1.IsBusy != true && button7connect.Text != "Connect")
+            
+            if (timer1.Enabled == false)
             {
-                foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b1");
-            }
+                if (b1.IsBusy != true && button7connect.Text != "Connect")
+                {
+                    foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b1");
+                }
 
-            // ...or using local mechanism if not connected...
-            else if (b1.IsBusy != true && button7connect.Text != "Disconnect")
-            {
-                b1.RunWorkerAsync();                
-            }
+                // ...or using local mechanism if not connected...
+                else if (b1.IsBusy != true && button7connect.Text != "Disconnect")
+                {
+                    b1.RunWorkerAsync();
+                }
 
-            // Otherwise cancel Timer using Client/Server mechanism if connected...
-            else if (b1.IsBusy != false && button7connect.Text != "Connect")
-            {
-                foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b1STOP");
-            }
+                // Otherwise cancel Timer using Client/Server mechanism if connected...
+                else if (b1.IsBusy != false && button7connect.Text != "Connect")
+                {
+                    foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b1STOP");
+                }
 
-            // ...or using local mechanism if not connected...
-            else if (b1.IsBusy == true && button7connect.Text != "Disconnect")
-            {
-                b1.CancelAsync();
-            }
+                // ...or using local mechanism if not connected...
+                else if (b1.IsBusy == true && button7connect.Text != "Disconnect")
+                {
+                    b1.CancelAsync();
+                }
+                timer1.Enabled = true;
+            }            
         }          
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (b2.IsBusy != true && button7connect.Text != "Connect")
-            {                
-                foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b2");
-            }
-            else if (b2.IsBusy != true && button7connect.Text != "Disconnect")
-            {             
-                b2.RunWorkerAsync();     
-            }
-            else if (b2.IsBusy != false && button7connect.Text != "Connect")
+            if (timer1.Enabled == false)
             {
-                foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b2STOP");
-            }
-            else if (b2.IsBusy == true && button7connect.Text != "Disconnect")
-            {
-                b2.CancelAsync();
-            }
+                if (b2.IsBusy != true && button7connect.Text != "Connect")
+                {
+                    foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b2");
+                }
+                else if (b2.IsBusy != true && button7connect.Text != "Disconnect")
+                {
+                    b2.RunWorkerAsync();
+                }
+                else if (b2.IsBusy != false && button7connect.Text != "Connect")
+                {
+                    foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b2STOP");
+                }
+                else if (b2.IsBusy == true && button7connect.Text != "Disconnect")
+                {
+                    b2.CancelAsync();
+                }
+                timer1.Enabled = true;
+            }        
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            if (b3.IsBusy != true && button7connect.Text != "Connect")
+            if (timer1.Enabled == false)
             {
-                foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b3");
-            }
-            else if (b3.IsBusy != true && button7connect.Text != "Disconnect")
-            {
-                b3.RunWorkerAsync();
-            }
-            else if (b3.IsBusy != false && button7connect.Text != "Connect")
-            {
-                foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b3STOP");
-            }
-            else if (b3.IsBusy != false && button7connect.Text != "Disconnect")
-            {
-                b3.CancelAsync();
+                if (b3.IsBusy != true && button7connect.Text != "Connect")
+                {
+                    foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b3");
+                }
+                else if (b3.IsBusy != true && button7connect.Text != "Disconnect")
+                {
+                    b3.RunWorkerAsync();
+                }
+                else if (b3.IsBusy != false && button7connect.Text != "Connect")
+                {
+                    foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b3STOP");
+                }
+                else if (b3.IsBusy != false && button7connect.Text != "Disconnect")
+                {
+                    b3.CancelAsync();
+                }
+                timer1.Enabled = true;
             }
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            if (b4.IsBusy != true && button7connect.Text != "Connect")
+            if (timer1.Enabled == false)
             {
-                foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b4");
-            }
-            else if (b4.IsBusy != true && button7connect.Text != "Disconnect")
-            {
-                b4.RunWorkerAsync();
-            }
-            else if (b4.IsBusy != false && button7connect.Text != "Connect")
-            {
-                foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b4STOP");
-            }
-            else if (b4.IsBusy != false && button7connect.Text != "Disconnect")
-            {
-                b4.CancelAsync();
+                if (b4.IsBusy != true && button7connect.Text != "Connect")
+                {
+                    foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b4");
+                }
+                else if (b4.IsBusy != true && button7connect.Text != "Disconnect")
+                {
+                    b4.RunWorkerAsync();
+                }
+                else if (b4.IsBusy != false && button7connect.Text != "Connect")
+                {
+                    foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b4STOP");
+                }
+                else if (b4.IsBusy != false && button7connect.Text != "Disconnect")
+                {
+                    b4.CancelAsync();
+                }
+                timer1.Enabled = true;
             }
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
-            if (b5.IsBusy != true && button7connect.Text != "Connect")
+            if (timer1.Enabled == false)
             {
-                foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b5");
-            }
-            else if (b5.IsBusy != true && button7connect.Text != "Disconnect")
-            {
-                b5.RunWorkerAsync();
-            }
-            else if (b5.IsBusy != false && button7connect.Text != "Connect")
-            {
-                foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b5STOP");
-            }
-            else if (b5.IsBusy != false && button7connect.Text != "Disconnect")
-            {
-                b5.CancelAsync();
+                if (b5.IsBusy != true && button7connect.Text != "Connect")
+                {
+                    foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b5");
+                }
+                else if (b5.IsBusy != true && button7connect.Text != "Disconnect")
+                {
+                    b5.RunWorkerAsync();
+                }
+                else if (b5.IsBusy != false && button7connect.Text != "Connect")
+                {
+                    foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b5STOP");
+                }
+                else if (b5.IsBusy != false && button7connect.Text != "Disconnect")
+                {
+                    b5.CancelAsync();
+                }
+                timer1.Enabled = true;
             }
         }
 
         private void button6_Click(object sender, EventArgs e)
         {
-            if (b6.IsBusy != true && button7connect.Text != "Connect")
+            if (timer1.Enabled == false)
             {
-                foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b6");
-            }
-            else if (b6.IsBusy != true && button7connect.Text != "Disconnect")
-            {                
-                b6.RunWorkerAsync();
-            }
-            else if (b6.IsBusy != false && button7connect.Text != "Connect")
-            {
-                foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b6STOP");
-            }
-            else if (b6.IsBusy != false && button7connect.Text != "Disconnect")
-            {
-                b6.CancelAsync();
+                if (b6.IsBusy != true && button7connect.Text != "Connect")
+                {
+                    foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b6");
+                }
+                else if (b6.IsBusy != true && button7connect.Text != "Disconnect")
+                {
+                    b6.RunWorkerAsync();
+                }
+                else if (b6.IsBusy != false && button7connect.Text != "Connect")
+                {
+                    foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b6STOP");
+                }
+                else if (b6.IsBusy != false && button7connect.Text != "Disconnect")
+                {
+                    b6.CancelAsync();
+                }
+                timer1.Enabled = true;
             }
         }
 
@@ -981,6 +990,25 @@ namespace JungleTimers
             Form2 frm = new Form2(this);
             frm.ShowDialog();
             Form1_Load(null, null);
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/Kriosym/JungleTimers/commits?author=Kriosym");
+        }
+
+        // Anti-Button-Spam Timer...
+        private void timer1_Tick_1(object sender, EventArgs e)
+        {             
+            if (timerCurrent < timerLength)
+            {
+                timerCurrent++;
+            }
+            else
+            {   
+                timer1.Stop();
+                timerCurrent = 0;
+            }                    
         }
 
     }

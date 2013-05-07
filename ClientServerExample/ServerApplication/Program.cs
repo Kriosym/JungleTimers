@@ -18,7 +18,7 @@ namespace ServerApplication
         public static HashSet<string> ConnectionsList = new HashSet<string>();
         
         // Set Latest available version of Client Software...
-        public static string LatestClientVersion = "1.4e";        
+        public static string LatestClientVersion = "1.4f";        
         
         public static void Main(string[] args)
         {
