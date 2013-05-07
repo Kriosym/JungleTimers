@@ -78,8 +78,39 @@ namespace JungleTimers
             source.Configs["Hotkeys"].Set("Hotkey4", comboBox4_Hotkey4.Text);
             source.Configs["Hotkeys"].Set("Hotkey5", comboBox5_Hotkey5.Text);
             source.Configs["Hotkeys"].Set("Hotkey6", comboBox6_Hotkey6.Text);
-
+            
+            // Sounds -
             source.Configs["Sounds"].Set("WarningSeconds", textBox_WarningSeconds.Text);
+            if (radioButton1_Dies.Checked == true)
+            {
+                source.Configs["Sounds"].Set("PurpleLizardDead", textBox_PurpleLizardSounds.Text);
+                source.Configs["Sounds"].Set("PurpleGolemDead", textBox_PurpleGolemSounds.Text);
+                source.Configs["Sounds"].Set("BaronDead", textBox_BaronSounds.Text);
+                source.Configs["Sounds"].Set("DragonDead", textBox_DragonSounds.Text);
+                source.Configs["Sounds"].Set("BlueGolemDead", textBox_BlueGolemSounds.Text);
+                source.Configs["Sounds"].Set("BlueLizardDead", textBox_BlueLizardSounds.Text);                
+            }
+
+            if (radioButton1_Warning.Checked == true)
+            {
+                source.Configs["Sounds"].Set("PurpleLizardWarning", textBox_PurpleLizardSounds.Text);
+                source.Configs["Sounds"].Set("PurpleGolemWarning", textBox_PurpleGolemSounds.Text);
+                source.Configs["Sounds"].Set("BaronWarning", textBox_BaronSounds.Text);
+                source.Configs["Sounds"].Set("DragonWarning", textBox_DragonSounds.Text);
+                source.Configs["Sounds"].Set("BlueGolemWarning", textBox_BlueGolemSounds.Text);
+                source.Configs["Sounds"].Set("BlueLizardWarning", textBox_BlueLizardSounds.Text);                
+            }
+
+            if (radioButton1_Respawns.Checked == true)
+            {
+                source.Configs["Sounds"].Set("PurpleLizardAlive", textBox_PurpleLizardSounds.Text);
+                source.Configs["Sounds"].Set("PurpleGolemAlive", textBox_PurpleGolemSounds.Text);
+                source.Configs["Sounds"].Set("BaronAlive", textBox_BaronSounds.Text);
+                source.Configs["Sounds"].Set("DragonAlive", textBox_DragonSounds.Text);
+                source.Configs["Sounds"].Set("BlueGolemAlive", textBox_BlueGolemSounds.Text);
+                source.Configs["Sounds"].Set("BlueLizardAlive", textBox_BlueLizardSounds.Text);                
+            } 
+
             source.Save();
             this.Close();
         }
@@ -208,8 +239,7 @@ namespace JungleTimers
         {
             long testfornum;
             if (!long.TryParse(textBox_WarningSeconds.Text, out testfornum))
-            {
-                // If Not Integer Clear Textbox text or you can also Undo() Last Operation :)
+            {                
                 textBox_WarningSeconds.Clear();                
             }
         } 

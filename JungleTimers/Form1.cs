@@ -23,7 +23,7 @@ namespace JungleTimers
     public partial class Form1 : Form
     {        
         // !! SET CODE REVISION !! 
-        public static string versionIs = "1.4d";        
+        public static string versionIs = "1.4e";        
         public bool FormCloseForUpdate;               
         
         //Resource manager for accessing embedded files...
