@@ -18,15 +18,15 @@ namespace ServerApplication
         public static HashSet<string> ConnectionsList = new HashSet<string>();
         
         // Set Latest available version of Client Software...
-        public static string LatestClientVersion = "1.4f";        
+        public static string LatestClientVersion = "1.4g";        
         
         public static void Main(string[] args)
         {
-            // incoming Connection List...  
-            ConnectionFilePath = @"c:\temp\JTConnectionList.txt";
-            MessagesFilePath = @"c:\temp\JTMessagesList.txt";
+            // Old Method for incoming Connection List...  
+            // ConnectionFilePath = @"c:\temp\JTConnectionList.txt";
+            // MessagesFilePath = @"c:\temp\JTMessagesList.txt";
 
-            // Precent unhandled Exceptions from rogue packet type receives...
+            // Prevent unhandled Exceptions from rogue packet type receives...
             NetworkComms.IgnoreUnknownPacketTypes = true;
             
             // Trigger the methods when packets are received from Clients...
@@ -35,34 +35,33 @@ namespace ServerApplication
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("Message", PrintIncomingMessage);
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("version", VersionCheck);
 
-            //foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b5");
-
             /* Start listening for incoming connections using Oiginal method for all IP's and random port number between 10000-65535...
             TCPConnection.StartListening(true);
             ...*/
 
-            // Specify exactly the IP and Port to listen on...                     
-            
-            // Home...
-            IPEndPoint MyipLocalEndPoint = new IPEndPoint(IPAddress.Parse("192.168.1.11"), 11000);
-
-            // Work...
+            // Or specify exactly the IP and Port to listen on...                     
+            // From Home...
+            //IPEndPoint MyipLocalEndPoint = new IPEndPoint(IPAddress.Parse("192.168.1.11"), 11000);
+            // ...Or From Work...
             // IPEndPoint MyipLocalEndPoint = new IPEndPoint(IPAddress.Parse("172.16.69.69"), 11000);
 
-            /* Prompt for IP and Port...
-            Console.WriteLine("Enter the Server IP:port to listen on:");
-            string serverInfo = Console.ReadLine();
-            string serverIP = serverInfo.Split(':').First();
-            int serverPort = int.Parse(serverInfo.Split(':').Last());
-            IPEndPoint MyipLocalEndPoint = new IPEndPoint(IPAddress.Parse(serverIP), serverPort);*/
+            // Prompt for IP and Port...
+            Console.WriteLine("Enter the local IP:port to listen on:\n example: 192.168.1.11:11000");
+            var serverInfo = Console.ReadLine();
+            if (serverInfo != null)
+            {
+                var serverIp = serverInfo.Split(':').First();
+                var serverPort = int.Parse(serverInfo.Split(':').Last());
+                var myipLocalEndPoint = new IPEndPoint(IPAddress.Parse(serverIp), serverPort);
 
-            // Make the connection...
-            TCPConnection.StartListening(MyipLocalEndPoint);
+                // Make the connection...
+                TCPConnection.StartListening(myipLocalEndPoint);
+            }
 
 
             // Print out the IPs and ports we are now listening on...
             Console.WriteLine("Server version " + LatestClientVersion + " Listening on:");            
-            foreach (System.Net.IPEndPoint localEndPoint in TCPConnection.ExistingLocalListenEndPoints()) Console.WriteLine("{0}:{1}", localEndPoint.Address, localEndPoint.Port);
+            foreach (var localEndPoint in TCPConnection.ExistingLocalListenEndPoints()) Console.WriteLine("{0}:{1}", localEndPoint.Address, localEndPoint.Port);
 
             // Let the user close the server...
             Console.WriteLine("\nPress any key to close server.");
@@ -159,7 +158,7 @@ namespace ServerApplication
 
             Console.WriteLine("\nRecieved " + "'" + message + "' from " + connection.ConnectionInfo.RemoteEndPoint.Address.ToString() + ".");
 
-            // Begin testing code for sendback to all clients...
+            // TimerControl sendback to all clients...
             
             foreach(var item in NetworkComms.GetExistingConnection())
                 item.SendObject("TimerControl", message);                              

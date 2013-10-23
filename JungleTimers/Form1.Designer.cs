@@ -274,11 +274,13 @@
             this.label1.TabIndex = 16;
             this.label1.Text = "vx.x";
             this.label1.Click += new System.EventHandler(this.label1_Click);
-            // 
-            // timer1
-            // 
+            
+            /* Original Timer Spam Control. Better method will be to add anti-spam control to client preferences
+             * for incoming messages from a given client, with option for each client to ignore audio portion or
+             * option for server to kick or ban.
             this.timer1.Interval = 1000;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick_1);
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick_1); */
+
             // 
             // contextMenuStrip1
             // 

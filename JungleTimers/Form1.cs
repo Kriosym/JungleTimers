@@ -23,7 +23,7 @@ namespace JungleTimers
     public partial class Form1 : Form
     {        
         // !! SET CODE REVISION !! 
-        public static string versionIs = "1.4f";        
+        public static string versionIs = "1.4g";        
         public bool FormCloseForUpdate;               
         
         //Resource manager for accessing embedded files...
@@ -389,7 +389,8 @@ namespace JungleTimers
             // Start the Timer if it isn't already going, using Client/Server mechanism if connected...
             // note: button7connect.Text reads "Connect" prior to connecting, and reads "Disconnect" once connection has been established.
             
-            if (timer1.Enabled == false)
+            /* Spam Control Timer, works but blocks all button interaction for too long, better method will be to add anti-spam control to client preferences for incoming messages from a given client with option for each client to ignore audio portion or option for server to kick or ban.
+            if (timer1.Enabled == false */
             {
                 if (b1.IsBusy != true && button7connect.Text != "Connect")
                 {
@@ -413,13 +414,13 @@ namespace JungleTimers
                 {
                     b1.CancelAsync();
                 }
-                timer1.Enabled = true;
+                // timer1.Enabled = true;
             }            
         }          
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (timer1.Enabled == false)
+            // if (timer1.Enabled == false)
             {
                 if (b2.IsBusy != true && button7connect.Text != "Connect")
                 {
@@ -437,13 +438,13 @@ namespace JungleTimers
                 {
                     b2.CancelAsync();
                 }
-                timer1.Enabled = true;
+                // timer1.Enabled = true;
             }        
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            if (timer1.Enabled == false)
+            // if (timer1.Enabled == false)
             {
                 if (b3.IsBusy != true && button7connect.Text != "Connect")
                 {
@@ -461,13 +462,13 @@ namespace JungleTimers
                 {
                     b3.CancelAsync();
                 }
-                timer1.Enabled = true;
+               // timer1.Enabled = true;
             }
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            if (timer1.Enabled == false)
+            // if (timer1.Enabled == false)
             {
                 if (b4.IsBusy != true && button7connect.Text != "Connect")
                 {
@@ -485,13 +486,13 @@ namespace JungleTimers
                 {
                     b4.CancelAsync();
                 }
-                timer1.Enabled = true;
+                // timer1.Enabled = true;
             }
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
-            if (timer1.Enabled == false)
+            // if (timer1.Enabled == false)
             {
                 if (b5.IsBusy != true && button7connect.Text != "Connect")
                 {
@@ -509,13 +510,13 @@ namespace JungleTimers
                 {
                     b5.CancelAsync();
                 }
-                timer1.Enabled = true;
+                // timer1.Enabled = true;
             }
         }
 
         private void button6_Click(object sender, EventArgs e)
         {
-            if (timer1.Enabled == false)
+            // if (timer1.Enabled == false)
             {
                 if (b6.IsBusy != true && button7connect.Text != "Connect")
                 {
@@ -533,7 +534,7 @@ namespace JungleTimers
                 {
                     b6.CancelAsync();
                 }
-                timer1.Enabled = true;
+                // timer1.Enabled = true;
             }
         }
 
@@ -997,7 +998,9 @@ namespace JungleTimers
             System.Diagnostics.Process.Start("https://github.com/Kriosym/JungleTimers/commits?author=Kriosym");
         }
 
-        // Anti-Button-Spam Timer...
+        /* Spam Control Timer, works but blocks all button interaction for too long...
+         * Better method will be to add anti-spam control to client preferences for incoming messages from a given client,
+         * with option for each client to ignore audio portion or option for server to kick or ban.
         private void timer1_Tick_1(object sender, EventArgs e)
         {             
             if (timerCurrent < timerLength)
@@ -1009,7 +1012,7 @@ namespace JungleTimers
                 timer1.Stop();
                 timerCurrent = 0;
             }                    
-        }
+        }*/
 
     }
     
