@@ -18,14 +18,32 @@ using System.Resources;
 using System.IO;
 using Nini.Config;
 
+
 namespace JungleTimers
 {
     public partial class Form1 : Form
     {        
         // !! SET CODE REVISION !! 
-        public static string versionIs = "1.4g";        
+        public static string versionIs = "1.4h";        
         public bool FormCloseForUpdate;               
-        
+
+        // Animation Time!
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        static extern bool AnimateWindow(IntPtr hWnd, int time, AnimateWindowFlags flags);
+        [Flags]
+        enum AnimateWindowFlags
+        {
+            AW_HOR_POSITIVE = 0x00000001,
+            AW_HOR_NEGATIVE = 0x00000002,
+            AW_VER_POSITIVE = 0x00000004,
+            AW_VER_NEGATIVE = 0x00000008,
+            AW_CENTER = 0x00000010,
+            AW_HIDE = 0x00010000,
+            AW_ACTIVATE = 0x00020000,
+            AW_SLIDE = 0x00040000,
+            AW_BLEND = 0x00080000
+        }
+
         //Resource manager for accessing embedded files...
         ResourceManager resources = new ResourceManager(typeof(Form1));
 
@@ -45,7 +63,7 @@ namespace JungleTimers
         string ConnectButtonState = "Connect";
         string StartPath = Application.StartupPath;
         
-        // Inialize Notification MP3 Play History...
+        // Initialize Notification MP3 Play History...
         bool b1_SongHasPlayed = false;
         bool b2_SongHasPlayed = false;
         bool b3_SongHasPlayed = false;
@@ -98,6 +116,8 @@ namespace JungleTimers
         public string BlueLizardDead;
         public string BlueLizardWarning;
         public string BlueLizardAlive;
+
+        public string BackgroundMusic;
         
         // Import DLL for MP3 Playback...        
         public const int MM_MCINOTIFY = 0x3B9;
@@ -113,8 +133,8 @@ namespace JungleTimers
 
         // Other Load Actions...
         private void Form1_Load(object sender, EventArgs e)
-        {
-            label1.Text = versionIs;
+        {            
+            label1.Text = "v" + versionIs;
             // Pull Hotkey Config...
             IConfigSource source = new IniConfigSource("JTconfig.ini");
             Hotkey1 = source.Configs["Hotkeys"].Get("Hotkey1");
@@ -169,6 +189,9 @@ namespace JungleTimers
             if (BlueLizardWarning == "Default") { BlueLizardWarning = Application.StartupPath + "\\Resources\\BlueLizardWarning.mp3"; }
             BlueLizardAlive = source.Configs["Sounds"].Get("BlueLizardAlive");
             if (BlueLizardAlive == "Default") { BlueLizardAlive = Application.StartupPath + "\\Resources\\BlueLizardAlive.mp3"; }
+
+            BackgroundMusic = source.Configs["Sounds"].Get("BackgroundMusic");
+            if (BackgroundMusic == "Default") { BackgroundMusic = Application.StartupPath + "\\Resources\\DragonWarning.mp3"; }
         }
         
         public Form1()
@@ -176,7 +199,10 @@ namespace JungleTimers
             this.StartPosition = FormStartPosition.CenterScreen;
             
             InitializeComponent();
-            
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            // Animate the Form as it Loads.
+            AnimateWindow(this.Handle, 1200, AnimateWindowFlags.AW_BLEND | AnimateWindowFlags.AW_ACTIVATE);
+
             //Prevent Unhandled Exception incase of rogue packet reception...
             NetworkComms.IgnoreUnknownPacketTypes = true;
 
@@ -380,6 +406,23 @@ namespace JungleTimers
                 Song6Busy = true;
                 mciSendString("open \"" + file + "\" type mpegvideo alias media6", null, 0, IntPtr.Zero);
                 mciSendString("play media6 notify", null, 0, this.Handle);
+            }
+        }
+
+        // PlaySong7 starts alias media6...
+        public delegate void delegatePlaySong7(string file);
+        public void PlaySong7(string file)
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new delegatePlaySong7(PlaySong7), file);
+            }
+            else
+            {
+                mciSendString("close media7", null, 0, IntPtr.Zero);
+                Song6Busy = true;
+                mciSendString("open \"" + file + "\" type mpegvideo alias media7", null, 0, IntPtr.Zero);
+                mciSendString("play media7 notify", null, 0, this.Handle);
             }
         }
 
@@ -632,12 +675,16 @@ namespace JungleTimers
             }
             else
             {
-                DialogResult result1 = MessageBox.Show("An updated installation package (v" + message + ") is available, Download now?", "Version Check", MessageBoxButtons.YesNo);
+                DialogResult result1 = MessageBox.Show("An updated installation package (" + message + ") is available, Download now?", "Version Check", MessageBoxButtons.YesNo);
                 if (result1 == DialogResult.Yes)
                 {
                     FormCloseForUpdate = true;                    
-                    Process.Start("https://www.dropbox.com/s/76harst0u0g2iuq/JungleTimers.exe?dl=1");
-                    // MessageBox.Show("Manually execute JungleTimers.exe installer once it finishes downloading", "NOTICE!");
+                    /* Old download method...
+                     * Process.Start("https://www.dropbox.com/s/76harst0u0g2iuq/JungleTimers.exe?dl=1"); */
+                    Process.Start("Update_Downloader.exe");
+                    
+                    // MessageBox.Show("Manually execute JungleTimers.exe installer once it finishes downloading", "NOTICE!");                    
+                    this.Close();
                     if (this.InvokeRequired)
                         this.Invoke(new MethodInvoker(delegate { this.Close(); }), null);                                     
                 }
@@ -670,8 +717,6 @@ namespace JungleTimers
             }
             
         }
-
-
 
         // BEGIN TIMERS...        
         private void TimerControl(PacketHeader packetHeader, Connection connection, string message)
@@ -853,6 +898,26 @@ namespace JungleTimers
             }
         }
 
+        void b7_DoWork(object sender, DoWorkEventArgs b7)
+        {
+            BackgroundWorker worker = sender as BackgroundWorker;
+            // button7.Image = Properties.Resources.dragonbutton_bw;
+            PlaySong6(DragonDead);
+            for (int g = 359; g > -1; g--)
+            {
+                if (worker.CancellationPending != true)
+                {
+                    if (g == WarningSeconds)
+                    {
+                        PlaySong(BackgroundMusic);
+                    }
+                    Thread.Sleep(1000);
+                    worker.ReportProgress(g);
+                }
+            }
+        }
+
+
 
         // BACKGROUND WORKER TIMERS PROGRESS - 
         void b1_ProgressChanged(object sender, ProgressChangedEventArgs b1)
@@ -938,11 +1003,25 @@ namespace JungleTimers
         // hidden test button...
         private void button8_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(WarningSeconds.ToString());
+            DialogResult result1 = MessageBox.Show("An updated installation package (v" + "TEST" + ") is available, Download now?", "Version Check", MessageBoxButtons.YesNo);
+            if (result1 == DialogResult.Yes)
+            {
+                FormCloseForUpdate = true;
+                /* Old download method...
+                 * Process.Start("https://www.dropbox.com/s/76harst0u0g2iuq/JungleTimers.exe?dl=1"); */
+                
+                // New Hotness Downloader...
+                Process.Start("Update_Downloader.exe");
+                               
+                this.Close();
+                if (this.InvokeRequired)
+                    this.Invoke(new MethodInvoker(delegate { this.Close(); }), null);
+            }
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
+            AnimateWindow(this.Handle, 1500, AnimateWindowFlags.AW_BLEND | AnimateWindowFlags.AW_HIDE);
             base.OnFormClosing(e);
             if (e.CloseReason == CloseReason.WindowsShutDown) return;
 
