@@ -24,7 +24,7 @@ namespace JungleTimers
     public partial class Form1 : Form
     {        
         // !! SET CODE REVISION !! 
-        public static string versionIs = "1.4h";        
+        public static string versionIs = "1.5a";        
         public bool FormCloseForUpdate;               
 
         // Animation Time!
@@ -76,6 +76,7 @@ namespace JungleTimers
         bool Song4Busy = false;
         bool Song5Busy = false;
         bool Song6Busy = false;
+        bool Song7Busy = false;
         
         // Hotkey strings...
         public string Hotkey1;
@@ -145,6 +146,13 @@ namespace JungleTimers
             Hotkey6 = source.Configs["Hotkeys"].Get("Hotkey6");
 
             // Pull Sound Events Config from JTconfig.ini...
+            BackgroundMusic = source.Configs["Sounds"].Get("BackgroundMusic");
+            if (BackgroundMusic == "Default") { BackgroundMusic = Application.StartupPath + "\\Resources\\oppagangamstyle.mp3"; }
+            PlaySong7(BackgroundMusic);
+
+            // Animate the Form as it Loads.
+            AnimateWindow(this.Handle, 3500, AnimateWindowFlags.AW_BLEND | AnimateWindowFlags.AW_ACTIVATE);
+            
             WarningSecondsString = source.Configs["Sounds"].Get("WarningSeconds");
             int.TryParse(WarningSecondsString, out WarningSeconds);        
 
@@ -189,9 +197,7 @@ namespace JungleTimers
             if (BlueLizardWarning == "Default") { BlueLizardWarning = Application.StartupPath + "\\Resources\\BlueLizardWarning.mp3"; }
             BlueLizardAlive = source.Configs["Sounds"].Get("BlueLizardAlive");
             if (BlueLizardAlive == "Default") { BlueLizardAlive = Application.StartupPath + "\\Resources\\BlueLizardAlive.mp3"; }
-
-            BackgroundMusic = source.Configs["Sounds"].Get("BackgroundMusic");
-            if (BackgroundMusic == "Default") { BackgroundMusic = Application.StartupPath + "\\Resources\\DragonWarning.mp3"; }
+            
         }
         
         public Form1()
@@ -200,8 +206,6 @@ namespace JungleTimers
             
             InitializeComponent();
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-            // Animate the Form as it Loads.
-            AnimateWindow(this.Handle, 1200, AnimateWindowFlags.AW_BLEND | AnimateWindowFlags.AW_ACTIVATE);
 
             //Prevent Unhandled Exception incase of rogue packet reception...
             NetworkComms.IgnoreUnknownPacketTypes = true;
@@ -409,7 +413,7 @@ namespace JungleTimers
             }
         }
 
-        // PlaySong7 starts alias media6...
+        // PlaySong7 starts alias media7...
         public delegate void delegatePlaySong7(string file);
         public void PlaySong7(string file)
         {
@@ -420,7 +424,7 @@ namespace JungleTimers
             else
             {
                 mciSendString("close media7", null, 0, IntPtr.Zero);
-                Song6Busy = true;
+                Song7Busy = true;
                 mciSendString("open \"" + file + "\" type mpegvideo alias media7", null, 0, IntPtr.Zero);
                 mciSendString("play media7 notify", null, 0, this.Handle);
             }
@@ -1003,20 +1007,22 @@ namespace JungleTimers
         // hidden test button...
         private void button8_Click(object sender, EventArgs e)
         {
-            DialogResult result1 = MessageBox.Show("An updated installation package (v" + "TEST" + ") is available, Download now?", "Version Check", MessageBoxButtons.YesNo);
-            if (result1 == DialogResult.Yes)
+            if (Song7Busy == true)
             {
-                FormCloseForUpdate = true;
-                /* Old download method...
-                 * Process.Start("https://www.dropbox.com/s/76harst0u0g2iuq/JungleTimers.exe?dl=1"); */
-                
-                // New Hotness Downloader...
-                Process.Start("Update_Downloader.exe");
-                               
-                this.Close();
-                if (this.InvokeRequired)
-                    this.Invoke(new MethodInvoker(delegate { this.Close(); }), null);
+                // mciSendString("close media7", null, 0, IntPtr.Zero);
+                mciSendString("pause media7", null, 0, IntPtr.Zero);
+                Song7Busy = false;
+                button8.Text = "No Beats";
+                button8.ForeColor = Color.Red;               
             }
+            else
+            {
+                // PlaySong7(BackgroundMusic);
+                mciSendString("resume media7", null, 0, IntPtr.Zero);
+                Song7Busy = true;
+                button8.Text = "Gangnam Style!";
+                button8.ForeColor = Color.Lime;
+            }            
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)

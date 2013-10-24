@@ -206,7 +206,7 @@
             this.comboHostAddressBox.Name = "comboHostAddressBox";
             this.comboHostAddressBox.Size = new System.Drawing.Size(222, 26);
             this.comboHostAddressBox.TabIndex = 1;
-            this.comboHostAddressBox.Text = "krio.game-host.org";
+            this.comboHostAddressBox.Text = "LoL.KrioGamer.com";
             this.comboHostAddressBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.comboHostAddressBox.WordWrap = false;
             this.comboHostAddressBox.TextChanged += new System.EventHandler(this.comboHostAddressBox_TextChanged);
@@ -225,6 +225,7 @@
             // 
             // button7connect
             // 
+            this.button7connect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button7connect.Location = new System.Drawing.Point(448, 425);
             this.button7connect.Name = "button7connect";
             this.button7connect.Size = new System.Drawing.Size(73, 27);
@@ -235,14 +236,18 @@
             // 
             // button8
             // 
-            this.button8.Location = new System.Drawing.Point(686, 48);
+            this.button8.BackColor = System.Drawing.Color.Transparent;
+            this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button8.Font = new System.Drawing.Font("Impact", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button8.ForeColor = System.Drawing.Color.Lime;
+            this.button8.Location = new System.Drawing.Point(298, 425);
+            this.button8.Margin = new System.Windows.Forms.Padding(1);
             this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(75, 23);
+            this.button8.Size = new System.Drawing.Size(98, 26);
             this.button8.TabIndex = 14;
-            this.button8.Text = "test";
+            this.button8.Text = "Gangnam Style";
             this.button8.UseCompatibleTextRendering = true;
-            this.button8.UseVisualStyleBackColor = true;
-            this.button8.Visible = false;
+            this.button8.UseVisualStyleBackColor = false;
             this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
             // statusled

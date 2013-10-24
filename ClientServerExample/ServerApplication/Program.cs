@@ -18,7 +18,7 @@ namespace ServerApplication
         public static HashSet<string> ConnectionsList = new HashSet<string>();
         
         // Set Latest available version of Client Software...
-        public static string LatestClientVersion = "1.4h";        
+        public static string LatestClientVersion = "1.5a";        
         
         public static void Main(string[] args)
         {
@@ -46,7 +46,7 @@ namespace ServerApplication
             // IPEndPoint MyipLocalEndPoint = new IPEndPoint(IPAddress.Parse("172.16.69.69"), 11000);
 
             // Prompt for IP and Port...
-            Console.WriteLine("Enter the local IP:port to listen on:\n example: 192.168.1.11:11000");
+            Console.WriteLine("Enter IP Adddress:port to listen on: (example: 192.168.1.11:11000):");
             var serverInfo = Console.ReadLine();
             if (serverInfo != null)
             {
