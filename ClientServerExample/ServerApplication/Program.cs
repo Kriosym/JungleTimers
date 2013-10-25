@@ -2,6 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using NetworkCommsDotNet;
 using System.Net;
@@ -16,12 +17,19 @@ namespace ServerApplication
         
         // Create Connectionlist HashSet...
         public static HashSet<string> ConnectionsList = new HashSet<string>();
+
+        // Definable TCP port number to listen on...
+        public static int definedPort = 11000;
         
         // Set Latest available version of Client Software...
-        public static string LatestClientVersion = "1.5a";        
-        
+        public static string LatestClientVersion = "1.5b";
+
         public static void Main(string[] args)
         {
+            ConsoleKeyInfo cki;
+            IPHostEntry host;
+            string localIP = "?";
+            host = Dns.GetHostEntry(Dns.GetHostName());
             // Old Method for incoming Connection List...  
             // ConnectionFilePath = @"c:\temp\JTConnectionList.txt";
             // MessagesFilePath = @"c:\temp\JTMessagesList.txt";
@@ -35,17 +43,15 @@ namespace ServerApplication
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("Message", PrintIncomingMessage);
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("version", VersionCheck);
 
-            /* Start listening for incoming connections using Oiginal method for all IP's and random port number between 10000-65535...
+            /* Oiginal method 1 to Start listening for incoming connections using all IP's and random port number between 10000-65535...
             TCPConnection.StartListening(true);
-            ...*/
+            ...
 
-            // Or specify exactly the IP and Port to listen on...                     
-            // From Home...
-            //IPEndPoint MyipLocalEndPoint = new IPEndPoint(IPAddress.Parse("192.168.1.11"), 11000);
-            // ...Or From Work...
-            // IPEndPoint MyipLocalEndPoint = new IPEndPoint(IPAddress.Parse("172.16.69.69"), 11000);
-
-            // Prompt for IP and Port...
+            ...Or 2 to specify exactly the IP and Port to listen on...                     
+            From Home...
+            IPEndPoint MyipLocalEndPoint = new IPEndPoint(IPAddress.Parse("192.168.1.136"), 11000);
+            
+            ...or 3 to prompt for IP and Port...
             Console.WriteLine("Enter IP Adddress:port to listen on: (example: 192.168.1.11:11000):");
             var serverInfo = Console.ReadLine();
             if (serverInfo != null)
@@ -56,19 +62,77 @@ namespace ServerApplication
 
                 // Make the connection...
                 TCPConnection.StartListening(myipLocalEndPoint);
+            } */
+
+            // BEST METHOD 4 - Listen on all IPv4 Addresses, user defined port.
+            Console.WriteLine("~ Jungle Timers by Kriosym ~");
+            Console.WriteLine("Server version " + LatestClientVersion + " listening on: ");
+            foreach (IPAddress ip in host.AddressList)
+            {
+                if (ip.AddressFamily.ToString() == "InterNetwork")
+                {
+                    localIP = ip.ToString();
+                    IPEndPoint myipLocalEndPoint = new IPEndPoint(IPAddress.Parse(localIP), definedPort);
+                    TCPConnection.StartListening(myipLocalEndPoint);
+                    Console.Write(localIP + " | ");
+                }
             }
+            Console.Write("TCP port " + definedPort);
+            Console.WriteLine("");
 
+            
+            // Options Menu...
+            Console.TreatControlCAsInput = true;
+            Console.WriteLine("");
+            Console.WriteLine("\n\nMENU\n======================================");
+            Console.WriteLine("x - Close Connections and Exit");
+            Console.WriteLine("======================================");
+            Console.Write("Enter Selection: ");
 
-            // Print out the IPs and ports we are now listening on...
-            Console.WriteLine("Server version " + LatestClientVersion + " Listening on:");            
-            foreach (var localEndPoint in TCPConnection.ExistingLocalListenEndPoints()) Console.WriteLine("{0}:{1}", localEndPoint.Address, localEndPoint.Port);
+            bool exitnow = false;
+            do
+            {
+                cki = Console.ReadKey();
+                string choice = cki.Key.ToString();
+                Console.WriteLine();
+                Console.WriteLine("\n\nMENU\n======================================");
+                Console.WriteLine("x  Close Connections and Exit");
+                Console.WriteLine("======================================");
+                Console.Write("Enter Selection: ");
+                try
+                {
 
-            // Let the user close the server...
-            Console.WriteLine("\nPress any key to close server.");
-            Console.ReadKey(true);
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
+                switch (choice)
+                {
+                    case "X":
+                        exitnow = true;
+                        Console.WriteLine("Goodbye!");
+                        NetworkComms.Shutdown();
+                        Environment.Exit(-1);
+                        break;
+                    case "D":
+                        Console.WriteLine("dum da dum dum!");
+                        continue;
+                }
+            } while (!exitnow);
+
+            /* do
+            {
+                cki = Console.ReadKey();
+                string choice = cki.Key.ToString();
+                Console.WriteLine("\n\nMENU\n======================================");
+                Console.WriteLine("x  Close Connections and Exit");
+                Console.WriteLine("======================================");
+                Console.Write("Make Selection: ");
+            } while (cki.Key.ToString() != "X"); 
+             */
 
             // We have used NetworkComms so we should ensure that we correctly call shutdown...
-            NetworkComms.Shutdown();            
         }
 
         // Receive incoming initial Connection messages from Clients...
