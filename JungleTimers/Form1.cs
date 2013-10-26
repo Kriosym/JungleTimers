@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
 using System.Net;
+using AnimatorNS;
 using NetworkCommsDotNet;
 using System.Runtime.InteropServices;
 using MouseKeyboardActivityMonitor;
@@ -18,16 +19,18 @@ using System.Resources;
 using System.IO;
 using Nini.Config;
 
-
 namespace JungleTimers
 {
     public partial class Form1 : Form
     {        
         // !! SET CODE REVISION !! 
-        public static string versionIs = "1.5a";        
-        public bool FormCloseForUpdate;               
+        public static string versionIs = "1.5c";        
+        public bool FormCloseForUpdate;
+        public static HashSet<string> ConnectionsList = new HashSet<string>();
 
         // Animation Time!
+        Animator animator = new Animator();
+
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         static extern bool AnimateWindow(IntPtr hWnd, int time, AnimateWindowFlags flags);
         [Flags]
@@ -132,10 +135,38 @@ namespace JungleTimers
         // Declare Delegate to allow me to set button enabled state without cross-thread errors...
         delegate void SetButtonStatus(Control ctrl, bool status);
 
+        /* Testing to try and get rid of flicker...(disabled as doesn't work with AnimateWindowFlags)...
+       *protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                cp.ExStyle |= 0x02000000;
+                //WS_EX_COMPOSITED. Prevents flickering.
+                cp.ExStyle |= 0x00080000; //WS_EX_LAYERED. Transparency key
+                
+                return cp;
+            }
+        } */
+
         // Other Load Actions...
         private void Form1_Load(object sender, EventArgs e)
-        {            
+        {
+            // Anti-Flicker parameters...
+            this.SetStyle(ControlStyles.DoubleBuffer, true);
+            this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+            this.SetStyle(ControlStyles.UserPaint, true);
+            this.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+            this.SetStyle(ControlStyles.Opaque, false);
+            this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            this.SetStyle(ControlStyles.ResizeRedraw, true);
+            
+            // version...
             label1.Text = "v" + versionIs;
+
+            // Animate the Form as it Loads (doesn't work with cp.Exstyle protected override above)...
+            AnimateWindow(this.Handle, 1000, AnimateWindowFlags.AW_BLEND);
+
             // Pull Hotkey Config...
             IConfigSource source = new IniConfigSource("JTconfig.ini");
             Hotkey1 = source.Configs["Hotkeys"].Get("Hotkey1");
@@ -150,17 +181,14 @@ namespace JungleTimers
             if (BackgroundMusic == "Default") { BackgroundMusic = Application.StartupPath + "\\Resources\\oppagangamstyle.mp3"; }
             PlaySong7(BackgroundMusic);
 
-            // Animate the Form as it Loads.
-            AnimateWindow(this.Handle, 3500, AnimateWindowFlags.AW_BLEND | AnimateWindowFlags.AW_ACTIVATE);
-            
             WarningSecondsString = source.Configs["Sounds"].Get("WarningSeconds");
-            int.TryParse(WarningSecondsString, out WarningSeconds);        
+            int.TryParse(WarningSecondsString, out WarningSeconds);
 
             PurpleLizardDead = source.Configs["Sounds"].Get("PurpleLizardDead");
             if (PurpleLizardDead == "Default") { PurpleLizardDead = Application.StartupPath + "\\Resources\\PurpleLizardDead.mp3"; }
             PurpleLizardWarning = source.Configs["Sounds"].Get("PurpleLizardWarning");
             if (PurpleLizardWarning == "Default") { PurpleLizardWarning = Application.StartupPath + "\\Resources\\PurpleLizardWarning.mp3"; }
-            PurpleLizardAlive = source.Configs["Sounds"].Get("PurpleLizardAlive");            
+            PurpleLizardAlive = source.Configs["Sounds"].Get("PurpleLizardAlive");
             if (PurpleLizardAlive == "Default") { PurpleLizardAlive = Application.StartupPath + "\\Resources\\PurpleLizardAlive.mp3"; }
 
             PurpleGolemDead = source.Configs["Sounds"].Get("PurpleGolemDead");
@@ -197,15 +225,6 @@ namespace JungleTimers
             if (BlueLizardWarning == "Default") { BlueLizardWarning = Application.StartupPath + "\\Resources\\BlueLizardWarning.mp3"; }
             BlueLizardAlive = source.Configs["Sounds"].Get("BlueLizardAlive");
             if (BlueLizardAlive == "Default") { BlueLizardAlive = Application.StartupPath + "\\Resources\\BlueLizardAlive.mp3"; }
-            
-        }
-        
-        public Form1()
-        {
-            this.StartPosition = FormStartPosition.CenterScreen;
-            
-            InitializeComponent();
-            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
 
             //Prevent Unhandled Exception incase of rogue packet reception...
             NetworkComms.IgnoreUnknownPacketTypes = true;
@@ -214,9 +233,12 @@ namespace JungleTimers
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("Connected", Connected);
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("TimerControl", TimerControl);
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("version", VersionCheck);
-                        
+            NetworkComms.AppendGlobalIncomingPacketHandler<string>("Connection", AddToConnectionList);
+            NetworkComms.AppendGlobalIncomingPacketHandler<string>("Disconnection", RemoveFromConnectionList);
+            
+            
             // Keyboard Hook Initialize...
-            m_KeyboardHookManager.KeyUp += m_KeyboardHookManager_KeyUp;            
+            m_KeyboardHookManager.KeyUp += m_KeyboardHookManager_KeyUp;
             m_KeyboardHookManager.Enabled = true;
             this.comboHostAddressBox.GotFocus += OnFocus;
             this.comboHostAddressBox.LostFocus += OnDefocus;
@@ -257,6 +279,32 @@ namespace JungleTimers
             b6.ProgressChanged += new ProgressChangedEventHandler(b6_ProgressChanged);
             b6.RunWorkerCompleted += new RunWorkerCompletedEventHandler(b6_RunWorkerCompleted);
             b6.WorkerSupportsCancellation = true;
+
+            // test animation...
+
+            button1.Focus();
+        }
+        
+        public Form1()
+        {
+            this.StartPosition = FormStartPosition.CenterScreen;
+            // Anti-Flicker parameters...
+            this.SetStyle(ControlStyles.DoubleBuffer, true);
+            this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+            this.SetStyle(ControlStyles.UserPaint, true);
+            this.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+            this.SetStyle(ControlStyles.Opaque, false);
+            this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            this.SetStyle(ControlStyles.ResizeRedraw, true);
+            InitializeComponent();
+            // Anti-Flicker parameters...
+            this.SetStyle(ControlStyles.DoubleBuffer, true);
+            this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+            this.SetStyle(ControlStyles.UserPaint, true);
+            this.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+            this.SetStyle(ControlStyles.Opaque, false);
+            this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            this.SetStyle(ControlStyles.ResizeRedraw, true);
         }
 
         // Disable Hotkeys if the Server/IP Textbox has focus...
@@ -299,7 +347,17 @@ namespace JungleTimers
             {
                 button6_Click(null, null);
             }
-        }        
+        }
+
+        public static void AddToConnectionList(PacketHeader header, Connection connection, string Connection)
+        {
+            // Add incoming IP Address to HashSet list...            
+            ConnectionsList.Add(Connection);}
+
+        public static void RemoveFromConnectionList(PacketHeader header, Connection connection, string Disconnection)
+        {
+            ConnectionsList.Remove(Disconnection);
+        }
 
         // MP3 Finished return actions...(incomplete, need to figure out how to implement other song alias status checking (i.e. PlaySong2's media2 alias)...        
         protected override void DefWndProc(ref Message m)
@@ -671,15 +729,15 @@ namespace JungleTimers
         }
 
         // Get version response from server and prompt user for update if needed...
-        public void VersionCheck(PacketHeader header, Connection connection, string message)
+        public void VersionCheck(PacketHeader header, Connection connection, string version)
         {
-            if (message == versionIs)
+            if (version == versionIs)
             {
-                MessageBox.Show("Jungle Timers is up to date (v" + message +").", "Version Check");
+                MessageBox.Show("Jungle Timers is up to date (v" + version +").", "Version Check");
             }
             else
             {
-                DialogResult result1 = MessageBox.Show("An updated installation package (" + message + ") is available, Download now?", "Version Check", MessageBoxButtons.YesNo);
+                DialogResult result1 = MessageBox.Show("An updated installation package (" + version + ") is available, Download now?", "Version Check", MessageBoxButtons.YesNo);
                 if (result1 == DialogResult.Yes)
                 {
                     FormCloseForUpdate = true;                    
@@ -1027,7 +1085,9 @@ namespace JungleTimers
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            AnimateWindow(this.Handle, 1500, AnimateWindowFlags.AW_BLEND | AnimateWindowFlags.AW_HIDE);
+            // Animate window on closing...(doesn't work with ex.style override)
+            AnimateWindow(this.Handle, 1000, AnimateWindowFlags.AW_BLEND | AnimateWindowFlags.AW_HIDE);
+
             base.OnFormClosing(e);
             if (e.CloseReason == CloseReason.WindowsShutDown) return;
 
@@ -1082,6 +1142,37 @@ namespace JungleTimers
         {
             System.Diagnostics.Process.Start("https://github.com/Kriosym/JungleTimers/commits?author=Kriosym");
         }
+
+        // Test Button...
+        private void buttonTest_Click(object sender, EventArgs e)
+        {
+            
+            animator.Hide(button7connect);
+            /* Kinda cool code to dynamically generate buttons, labels, etc.
+            
+            var newButton = new Button { Text = "Click me", Dock = DockStyle.Top };
+            newButton.Click += new EventHandler(newButton_Click);
+            this.panel1.Controls.Add(newButton);
+            
+            var clientPanel = new Label { Text = "Clients", ForeColor = Color.Gold, Dock = DockStyle.Top, TextAlign = ContentAlignment.TopRight };
+            clientPanel.Font = new Font("Impact", 10, FontStyle.Underline);
+            this.panel1.Controls.Add(clientPanel);
+
+            foreach (var item in ConnectionsList)
+            {
+                var clientPanelName = new Label { Text = item, ForeColor = Color.Gold, Dock = DockStyle.Bottom, TextAlign = ContentAlignment.BottomRight };
+                this.panel1.Controls.Add(clientPanelName);
+            } */
+        }
+
+        /* Dynamic Button (for above dynamic panel code)...
+        void newButton_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("I was clicked");
+            var button = sender as Button;
+            button.Click -= new EventHandler(newButton_Click);
+            this.panel1.Controls.Remove(button);
+        } */
 
         /* Spam Control Timer, works but blocks all button interaction for too long...
          * Better method will be to add anti-spam control to client preferences for incoming messages from a given client,

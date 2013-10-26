@@ -72,6 +72,10 @@
     <ApplicationIcon>lolicon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Animator">
+      <HintPath>..\..\..\..\Desktop\Share\c#\Animator\Animator\bin\Debug\Animator.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="MouseKeyboardActivityMonitor">
       <HintPath>..\Vendors\MouseKeyboardActivityMonitor.dll</HintPath>
     </Reference>

@@ -18,11 +18,14 @@ namespace ServerApplication
         // Create Connectionlist HashSet...
         public static HashSet<string> ConnectionsList = new HashSet<string>();
 
+        // Track last client to disconnect for notification to other clients...
+        public static string disconLastclient;
+
         // Definable TCP port number to listen on...
         public static int definedPort = 11000;
         
         // Set Latest available version of Client Software...
-        public static string LatestClientVersion = "1.5b";
+        public static string LatestClientVersion = "1.5c";
 
         public static void Main(string[] args)
         {
@@ -138,37 +141,38 @@ namespace ServerApplication
         // Receive incoming initial Connection messages from Clients...
         public static void AddToConnectionList(PacketHeader header, Connection connection, string Connection)
         {
-            /* Old method to create files on hard disk for testing the code...
-             * 
-               if (!File.Exists(ConnectionFilePath))
-            {
-                // Create a file to write to. 
-                using (StreamWriter sw = File.CreateText(ConnectionFilePath))
-                {
-
-                }
-            }
-             
-            using (StreamWriter sw = File.AppendText(ConnectionFilePath))
-            {
-                sw.WriteLine(connection.ConnectionInfo.RemoteEndPoint.Address.ToString());
-            }  
-             * 
-             ...*/
-            
             // Add incoming IP Address to HashSet list...            
             ConnectionsList.Add(connection.ConnectionInfo.RemoteEndPoint.Address.ToString());                                
 
             // Respond to sender that they are succesfully connected.            
             connection.SendObject("Connected", "CONNECTED!");
-            Console.WriteLine(connection.ConnectionInfo.RemoteEndPoint.Address.ToString() + " has CONNECTED!");           
+            Console.WriteLine(connection.ConnectionInfo.RemoteEndPoint.Address.ToString() + " has CONNECTED!");
+            foreach (var item in NetworkComms.GetExistingConnection())
+            foreach (var currentclients in ConnectionsList) item.SendObject("Connection", currentclients);
+
+            /* Old method to create files on hard disk for testing the code...              
+               if (!File.Exists(ConnectionFilePath))
+            {
+                // Create a file to write to. 
+                using (StreamWriter sw = File.CreateText(ConnectionFilePath))
+                {
+                }
+            }             
+            using (StreamWriter sw = File.AppendText(ConnectionFilePath))
+            {
+                sw.WriteLine(connection.ConnectionInfo.RemoteEndPoint.Address.ToString());
+            } */
         }
 
         // When client closes, this Server should receive packet of string type "Disconnection", report to console and remove IP from ConnectionsList...
         public static void RemoveFromConnectionList(PacketHeader header, Connection connection, string Disconnection)
         {
-            Console.WriteLine(connection.ConnectionInfo.RemoteEndPoint.Address.ToString() + " has DISCONNECTED!");
-            ConnectionsList.Remove(connection.ConnectionInfo.RemoteEndPoint.Address.ToString());            
+            disconLastclient = connection.ConnectionInfo.RemoteEndPoint.Address.ToString();
+            connection.CloseConnection(false);
+            ConnectionsList.Remove(disconLastclient);
+            Console.WriteLine(disconLastclient + " has DISCONNECTED!");
+            foreach (var item in NetworkComms.GetExistingConnection())
+                item.SendObject("Disconnection", disconLastclient);  
             if (ConnectionsList.Count > 0)
             {
                 Console.WriteLine("Current Clients:");
@@ -182,9 +186,9 @@ namespace ServerApplication
         }
         
         // Check Client version and send update signal if needed.
-        public static void VersionCheck(PacketHeader header, Connection connection, string message)
+        public static void VersionCheck(PacketHeader header, Connection connection, string version)
         {            
-            if (message == LatestClientVersion)
+            if (version == LatestClientVersion)
             {
                 Console.WriteLine(connection.ConnectionInfo.RemoteEndPoint.Address.ToString() + " is up to date.");                
                 // Display all connected Clients...
@@ -192,8 +196,8 @@ namespace ServerApplication
             }
             else
             {
-                Console.WriteLine(connection.ConnectionInfo.RemoteEndPoint.Address.ToString() + " is version " + message + ", and has been notified of available update.");
                 connection.SendObject("version", LatestClientVersion);
+                Console.WriteLine(connection.ConnectionInfo.RemoteEndPoint.Address.ToString() + " is version " + version + ", and has been notified of available update.");
                 // Display all connected Clients...
                 Console.WriteLine("Current Clients:");
                 foreach (var item in ConnectionsList) Console.WriteLine(item);

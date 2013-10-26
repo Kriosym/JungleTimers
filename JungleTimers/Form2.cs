@@ -40,7 +40,7 @@ namespace JungleTimers
         private void Form2_Load(object sender, EventArgs e)
         {            
             foreach (System.Windows.Forms.Keys key in Enum.GetValues(typeof(System.Windows.Forms.Keys)))
-            {   
+            {
                 // Load all possible Keyboard keys into dropdown selections...
                 comboBox1_Hotkey1.Items.Add(key);
                 comboBox2_Hotkey2.Items.Add(key);

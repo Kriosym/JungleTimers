@@ -1,0 +1,14 @@
+C:\Users\WS5070 Administrator\Documents\GitHub\JungleTimers\JungleTimers\Fakes\Animator.fakes : warning : Cannot generate stub for AnimatorNS.DecorationType: type is a value type.
+C:\Users\WS5070 Administrator\Documents\GitHub\JungleTimers\JungleTimers\Fakes\Animator.fakes : warning : Cannot generate stub for AnimatorNS.AnimateMode: type is a value type.
+C:\Users\WS5070 Administrator\Documents\GitHub\JungleTimers\JungleTimers\Fakes\Animator.fakes : warning : Cannot generate stub for AnimatorNS.TransfromHelper: type is sealed.
+C:\Users\WS5070 Administrator\Documents\GitHub\JungleTimers\JungleTimers\Fakes\Animator.fakes : warning : Cannot generate stub for AnimatorNS.DecorationControl: type is not visible to exported or assembly(Animator.1.0.2.0.Fakes).
+C:\Users\WS5070 Administrator\Documents\GitHub\JungleTimers\JungleTimers\Fakes\Animator.fakes : warning : Cannot generate stub for AnimatorNS.AnimationType: type is a value type.
+C:\Users\WS5070 Administrator\Documents\GitHub\JungleTimers\JungleTimers\Fakes\Animator.fakes : warning : Cannot generate shim for AnimatorNS.IFakeControl: type is an interface.
+C:\Users\WS5070 Administrator\Documents\GitHub\JungleTimers\JungleTimers\Fakes\Animator.fakes : warning : Cannot generate shim for AnimatorNS.Animator+<>c__DisplayClass2: type is not supported because of internal limitations.
+C:\Users\WS5070 Administrator\Documents\GitHub\JungleTimers\JungleTimers\Fakes\Animator.fakes : warning : Cannot generate shim for AnimatorNS.Animator+<>c__DisplayClass5: type is not supported because of internal limitations.
+C:\Users\WS5070 Administrator\Documents\GitHub\JungleTimers\JungleTimers\Fakes\Animator.fakes : warning : Cannot generate shim for AnimatorNS.Animator+<>c__DisplayClasse: type is not supported because of internal limitations.
+C:\Users\WS5070 Administrator\Documents\GitHub\JungleTimers\JungleTimers\Fakes\Animator.fakes : warning : Cannot generate shim for AnimatorNS.Animator+QueueItem: type is not visible to exported or assembly(Animator.1.0.2.0.Fakes).
+C:\Users\WS5070 Administrator\Documents\GitHub\JungleTimers\JungleTimers\Fakes\Animator.fakes : warning : Cannot generate shim for AnimatorNS.DecorationType: type is an enum.
+C:\Users\WS5070 Administrator\Documents\GitHub\JungleTimers\JungleTimers\Fakes\Animator.fakes : warning : Cannot generate shim for AnimatorNS.AnimateMode: type is an enum.
+C:\Users\WS5070 Administrator\Documents\GitHub\JungleTimers\JungleTimers\Fakes\Animator.fakes : warning : Cannot generate shim for AnimatorNS.DecorationControl: type is not visible to exported or assembly(Animator.1.0.2.0.Fakes).
+C:\Users\WS5070 Administrator\Documents\GitHub\JungleTimers\JungleTimers\Fakes\Animator.fakes : warning : Cannot generate shim for AnimatorNS.AnimationType: type is an enum.
