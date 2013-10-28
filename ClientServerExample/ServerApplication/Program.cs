@@ -25,7 +25,7 @@ namespace ServerApplication
         public static int definedPort = 11000;
         
         // Set Latest available version of Client Software...
-        public static string LatestClientVersion = "1.5c";
+        public static string LatestClientVersion = "1.5d";
 
         public static void Main(string[] args)
         {
@@ -123,19 +123,6 @@ namespace ServerApplication
                         continue;
                 }
             } while (!exitnow);
-
-            /* do
-            {
-                cki = Console.ReadKey();
-                string choice = cki.Key.ToString();
-                Console.WriteLine("\n\nMENU\n======================================");
-                Console.WriteLine("x  Close Connections and Exit");
-                Console.WriteLine("======================================");
-                Console.Write("Make Selection: ");
-            } while (cki.Key.ToString() != "X"); 
-             */
-
-            // We have used NetworkComms so we should ensure that we correctly call shutdown...
         }
 
         // Receive incoming initial Connection messages from Clients...
@@ -147,8 +134,14 @@ namespace ServerApplication
             // Respond to sender that they are succesfully connected.            
             connection.SendObject("Connected", "CONNECTED!");
             Console.WriteLine(connection.ConnectionInfo.RemoteEndPoint.Address.ToString() + " has CONNECTED!");
+                        
             foreach (var item in NetworkComms.GetExistingConnection())
-            foreach (var currentclients in ConnectionsList) item.SendObject("Connection", currentclients);
+            {
+                foreach (var items in ConnectionsList.Distinct())
+                {
+                    item.SendObject("Connection", items);
+                }
+            }
 
             /* Old method to create files on hard disk for testing the code...              
                if (!File.Exists(ConnectionFilePath))
@@ -171,14 +164,24 @@ namespace ServerApplication
             connection.CloseConnection(false);
             ConnectionsList.Remove(disconLastclient);
             Console.WriteLine(disconLastclient + " has DISCONNECTED!");
+
             foreach (var item in NetworkComms.GetExistingConnection())
-                item.SendObject("Disconnection", disconLastclient);  
+            {
+                item.SendObject("Disconnection", disconLastclient);
+            }
+
             if (ConnectionsList.Count > 0)
             {
                 Console.WriteLine("Current Clients:");
-                foreach (var item in ConnectionsList) Console.WriteLine(item);
+                foreach (var item in ConnectionsList) { Console.WriteLine(item); };
+                
+                var currentclients = ConnectionsList.Distinct();    
+                foreach (var item in NetworkComms.GetExistingConnection())
+                {
+                    item.SendObject("Connection", currentclients);
+                }
             }
-            else
+            if (ConnectionsList.Count == 0)
             {
                 Console.WriteLine("No Connected Clients.");
             }
@@ -192,7 +195,8 @@ namespace ServerApplication
             {
                 Console.WriteLine(connection.ConnectionInfo.RemoteEndPoint.Address.ToString() + " is up to date.");                
                 // Display all connected Clients...
-                foreach (var item in ConnectionsList) Console.WriteLine("Current Clients:\n" + item);
+                Console.WriteLine("Current Clients:");
+                foreach (var item in ConnectionsList) { Console.WriteLine(item); }
             }
             else
             {
@@ -200,7 +204,7 @@ namespace ServerApplication
                 Console.WriteLine(connection.ConnectionInfo.RemoteEndPoint.Address.ToString() + " is version " + version + ", and has been notified of available update.");
                 // Display all connected Clients...
                 Console.WriteLine("Current Clients:");
-                foreach (var item in ConnectionsList) Console.WriteLine(item);
+                foreach (var item in ConnectionsList) { Console.WriteLine(item); }
             }           
         }
 

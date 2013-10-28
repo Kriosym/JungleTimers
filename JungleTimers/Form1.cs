@@ -24,13 +24,15 @@ namespace JungleTimers
     public partial class Form1 : Form
     {        
         // !! SET CODE REVISION !! 
-        public static string versionIs = "1.5c";        
-        public bool FormCloseForUpdate;
-        public static HashSet<string> ConnectionsList = new HashSet<string>();
+        public static string versionIs = "1.5d";        
+
+        // various other declarations...
+        public bool FormCloseForUpdate;        
+        bool backgroundhasplayed = false;
+        public static HashSet<string> ConnectionsList = new HashSet<string>();        
 
         // Animation Time!
         Animator animator = new Animator();
-
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         static extern bool AnimateWindow(IntPtr hWnd, int time, AnimateWindowFlags flags);
         [Flags]
@@ -124,8 +126,7 @@ namespace JungleTimers
         public string BackgroundMusic;
         
         // Import DLL for MP3 Playback...        
-        public const int MM_MCINOTIFY = 0x3B9;
-        
+        public const int MM_MCINOTIFY = 0x3B9;        
         [DllImport("winmm.dll")]
         private static extern long mciSendString(string command, StringBuilder returnString, int returnSize, IntPtr hwndCallback);
 
@@ -151,22 +152,14 @@ namespace JungleTimers
 
         // Other Load Actions...
         private void Form1_Load(object sender, EventArgs e)
-        {
-            // Anti-Flicker parameters...
-            this.SetStyle(ControlStyles.DoubleBuffer, true);
-            this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-            this.SetStyle(ControlStyles.UserPaint, true);
-            this.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
-            this.SetStyle(ControlStyles.Opaque, false);
-            this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-            this.SetStyle(ControlStyles.ResizeRedraw, true);
+        {            
             
             // version...
-            label1.Text = "v" + versionIs;
+            label1.Text = "v" + versionIs;            
 
             // Animate the Form as it Loads (doesn't work with cp.Exstyle protected override above)...
-            AnimateWindow(this.Handle, 1000, AnimateWindowFlags.AW_BLEND);
-
+            // AnimateWindow(this.Handle, 1000, AnimateWindowFlags.AW_BLEND);
+            
             // Pull Hotkey Config...
             IConfigSource source = new IniConfigSource("JTconfig.ini");
             Hotkey1 = source.Configs["Hotkeys"].Get("Hotkey1");
@@ -179,7 +172,11 @@ namespace JungleTimers
             // Pull Sound Events Config from JTconfig.ini...
             BackgroundMusic = source.Configs["Sounds"].Get("BackgroundMusic");
             if (BackgroundMusic == "Default") { BackgroundMusic = Application.StartupPath + "\\Resources\\oppagangamstyle.mp3"; }
-            PlaySong7(BackgroundMusic);
+            if (backgroundhasplayed == false)
+            {
+                PlaySong7(BackgroundMusic);
+                backgroundhasplayed = true;
+            }
 
             WarningSecondsString = source.Configs["Sounds"].Get("WarningSeconds");
             int.TryParse(WarningSecondsString, out WarningSeconds);
@@ -279,9 +276,7 @@ namespace JungleTimers
             b6.ProgressChanged += new ProgressChangedEventHandler(b6_ProgressChanged);
             b6.RunWorkerCompleted += new RunWorkerCompletedEventHandler(b6_RunWorkerCompleted);
             b6.WorkerSupportsCancellation = true;
-
-            // test animation...
-
+                        
             button1.Focus();
         }
         
@@ -297,14 +292,14 @@ namespace JungleTimers
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             this.SetStyle(ControlStyles.ResizeRedraw, true);
             InitializeComponent();
-            // Anti-Flicker parameters...
-            this.SetStyle(ControlStyles.DoubleBuffer, true);
-            this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-            this.SetStyle(ControlStyles.UserPaint, true);
-            this.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
-            this.SetStyle(ControlStyles.Opaque, false);
-            this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-            this.SetStyle(ControlStyles.ResizeRedraw, true);
+            
+            // test animation...           
+            /* foreach (Control X in this.Controls)
+            {
+                animator.BeginUpdateSync(X, true);
+                animator.Show(X, false, Animation.Particles);
+                animator.EndUpdate(X);
+            } */
         }
 
         // Disable Hotkeys if the Server/IP Textbox has focus...
@@ -349,14 +344,38 @@ namespace JungleTimers
             }
         }
 
-        public static void AddToConnectionList(PacketHeader header, Connection connection, string Connection)
+        private void RefreshClientPanel()
+        {
+            // A new connection has happened, so clear then re-Populate client list in ClientPanel...
+            this.Invoke((MethodInvoker)delegate { flowLayoutPanel1_clients.Controls.Clear(); });            
+                        
+            this.Invoke((MethodInvoker)delegate
+            { 
+                foreach (var item in ConnectionsList.Distinct())
+                {                     
+                   flowLayoutPanel1_clients.Controls.Add(new Label { Text = item, ForeColor = Color.Lime });    
+                }                
+            });
+
+            // var clientPanelName = new Label { Text = item, ForeColor = Color.Lime };       
+            // flowLayoutPanel1_clients.Controls.Add(clientPanelName);
+        }
+
+        private void AddToConnectionList(PacketHeader header, Connection connection, string Connection)
         {
             // Add incoming IP Address to HashSet list...            
-            ConnectionsList.Add(Connection);}
+            ConnectionsList.Add(Connection);
 
-        public static void RemoveFromConnectionList(PacketHeader header, Connection connection, string Disconnection)
+            // And refresh the list of clients shown in Client Panel...
+            RefreshClientPanel();
+        }
+
+        private void RemoveFromConnectionList(PacketHeader header, Connection connection, string Disconnection)
         {
             ConnectionsList.Remove(Disconnection);
+            
+            // And refresh the list of clients shown in Client Panel...
+            RefreshClientPanel();
         }
 
         // MP3 Finished return actions...(incomplete, need to figure out how to implement other song alias status checking (i.e. PlaySong2's media2 alias)...        
@@ -652,6 +671,8 @@ namespace JungleTimers
                 {
                     foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Disconnection", "Bye!");
                     NetworkComms.CloseAllConnections();
+                    ConnectionsList.Clear();
+                    RefreshClientPanel();
                     button7connect.Text = ConnectButtonState;
                     statusled.Image = Properties.Resources.reddot;
                 }
@@ -741,11 +762,12 @@ namespace JungleTimers
                 if (result1 == DialogResult.Yes)
                 {
                     FormCloseForUpdate = true;                    
+                    
                     /* Old download method...
                      * Process.Start("https://www.dropbox.com/s/76harst0u0g2iuq/JungleTimers.exe?dl=1"); */
-                    Process.Start("Update_Downloader.exe");
-                    
-                    // MessageBox.Show("Manually execute JungleTimers.exe installer once it finishes downloading", "NOTICE!");                    
+
+                    Process.Start("Update_Downloader.exe");                    
+                                     
                     this.Close();
                     if (this.InvokeRequired)
                         this.Invoke(new MethodInvoker(delegate { this.Close(); }), null);                                     
@@ -764,7 +786,7 @@ namespace JungleTimers
             {
                 ctrl.Text = text;
             }
-        }
+        }               
 
         // Delegate to allow me to set Button Enabled Status without cross-thread errors...
         void SetButton(Control ctrl, bool status)
@@ -1085,36 +1107,24 @@ namespace JungleTimers
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            // Animate window on closing...(doesn't work with ex.style override)
+            base.OnFormClosing(e);
+            foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Disconnection", "Bye!");
+            
+            // Animate window on closing...(doesn't work with ex.style override)       
             AnimateWindow(this.Handle, 1000, AnimateWindowFlags.AW_BLEND | AnimateWindowFlags.AW_HIDE);
 
-            base.OnFormClosing(e);
             if (e.CloseReason == CloseReason.WindowsShutDown) return;
 
-            // Confirm user wants to close, or not...           
+            /* Confirm user wants to close, or not...
+             * note: not sure why I put this code here over 5 months ago, could have been to avoid some bug, leaving commented out incase I need it in the future.
             if (button7connect.Text == "Disconnect" && FormCloseForUpdate != true)
             {
                 DialogResult result2 = MessageBox.Show(this, "Are you sure you want to close?", "Closing", MessageBoxButtons.YesNo);
-                if (result2 == DialogResult.No)
-                {
-                    e.Cancel = true;
-                }
-                else
-                {
-                    try
-                    {
-                        foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Disconnection", "Bye!");
-                    }
-                    finally
-                    {
-
-                    }
-                }                    
-            }
+                if (result2 == DialogResult.No) {e.Cancel = true;}
+                else { try { foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Disconnection", "Bye!"); }
+                    finally { } } }
             else if (button7connect.Text == "Disconect" && FormCloseForUpdate == true)
-            {
-                foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Disconnection", "Bye!");
-            }                           
+            { foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Disconnection", "Bye!"); } */
         }
 
         // Cleanup on Close...
@@ -1123,6 +1133,7 @@ namespace JungleTimers
             NetworkComms.Shutdown();
             GC.Collect();
             GC.WaitForPendingFinalizers();
+
             //System.Diagnostics.Process.GetCurrentProcess().Kill();
         }
 
@@ -1134,7 +1145,7 @@ namespace JungleTimers
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Form2 frm = new Form2(this);
-            frm.ShowDialog();
+            frm.ShowDialog();            
             Form1_Load(null, null);
         }
 
@@ -1146,23 +1157,27 @@ namespace JungleTimers
         // Test Button...
         private void buttonTest_Click(object sender, EventArgs e)
         {
-            
-            animator.Hide(button7connect);
-            /* Kinda cool code to dynamically generate buttons, labels, etc.
-            
-            var newButton = new Button { Text = "Click me", Dock = DockStyle.Top };
-            newButton.Click += new EventHandler(newButton_Click);
-            this.panel1.Controls.Add(newButton);
-            
-            var clientPanel = new Label { Text = "Clients", ForeColor = Color.Gold, Dock = DockStyle.Top, TextAlign = ContentAlignment.TopRight };
+            foreach (var item in ConnectionsList)
+            MessageBox.Show(item);
+
+            // if (flowLayoutPanel1_clients.Visible == false) { flowLayoutPanel1_clients.Visible = true; }
+            // else { flowLayoutPanel1_clients.Visible = false; }
+
+            /* this.flowLayoutPanel1_clients.Controls.Clear();
+            var clientPanel = new Label { Text = "Clients", ForeColor = Color.Gold};
             clientPanel.Font = new Font("Impact", 10, FontStyle.Underline);
-            this.panel1.Controls.Add(clientPanel);
+            this.flowLayoutPanel1_clients.Controls.Add(clientPanel);
 
             foreach (var item in ConnectionsList)
             {
-                var clientPanelName = new Label { Text = item, ForeColor = Color.Gold, Dock = DockStyle.Bottom, TextAlign = ContentAlignment.BottomRight };
-                this.panel1.Controls.Add(clientPanelName);
+                var clientPanelName = new Label { Text = item, ForeColor = Color.Lime };
+                this.flowLayoutPanel1_clients.Controls.Add(clientPanelName);
             } */
+        }
+
+        private void label_client1_Click(object sender, EventArgs e)
+        {
+
         }
 
         /* Dynamic Button (for above dynamic panel code)...

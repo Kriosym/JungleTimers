@@ -1,7 +1,12 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="JungleTimers.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="flowLayoutPanel_clientList" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">flowLayoutPanel_clientList</Value>
+    </Setting>
+    <Setting Name="label_client1" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">label_client1</Value>
+    </Setting>
+  </Settings>
 </SettingsFile>

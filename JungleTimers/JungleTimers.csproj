@@ -74,6 +74,7 @@
   <ItemGroup>
     <Reference Include="Animator">
       <HintPath>..\..\..\..\Desktop\Share\c#\Animator\Animator\bin\Debug\Animator.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="MouseKeyboardActivityMonitor">
@@ -193,6 +194,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Animator.dll" />
     <Content Include="lolicon.ico" />
     <Content Include="Resources\BaronAlive.mp3">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -200,6 +202,7 @@
     <Content Include="Resources\BaronDead.mp3">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Resources\Blue Jungle.png" />
     <Content Include="Resources\BlueGolemAlive.mp3">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -221,6 +224,7 @@
     <Content Include="Resources\oppagangamstyle.mp3">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Resources\Purple Jungle.png" />
     <Content Include="Resources\PurpleGolemAlive.mp3">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
