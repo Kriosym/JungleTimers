@@ -138,7 +138,7 @@
             this.comboHostAddressBox.Size = new System.Drawing.Size(196, 18);
             this.comboHostAddressBox.TabIndex = 0;
             this.comboHostAddressBox.TabStop = false;
-            this.comboHostAddressBox.Text = "192.168.1.136";
+            this.comboHostAddressBox.Text = "KrioGamer.com";
             this.comboHostAddressBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.comboHostAddressBox.WordWrap = false;
             this.comboHostAddressBox.TextChanged += new System.EventHandler(this.comboHostAddressBox_TextChanged);
@@ -216,9 +216,9 @@
             this.label1.ForeColor = System.Drawing.Color.DodgerBlue;
             this.label1.Location = new System.Drawing.Point(720, 2);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(40, 15);
+            this.label1.Size = new System.Drawing.Size(41, 15);
             this.label1.TabIndex = 16;
-            this.label1.Text = "v1.5c";
+            this.label1.Text = "v1.5e";
             this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // contextMenuStrip1
