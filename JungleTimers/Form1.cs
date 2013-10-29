@@ -24,7 +24,7 @@ namespace JungleTimers
     public partial class Form1 : Form
     {        
         // !! SET CODE REVISION !! 
-        public static string versionIs = "1.5d";        
+        public static string versionIs = "1.5e";        
 
         // various other declarations...
         public bool FormCloseForUpdate;        
@@ -65,7 +65,7 @@ namespace JungleTimers
         IPAddress ipaddr;        
         string validAddress;
         int serverPort = 11000;
-        string ConnectButtonState = "Connect";
+        string ConnectButtonState = "connect";
         string StartPath = Application.StartupPath;
         
         // Initialize Notification MP3 Play History...
@@ -83,6 +83,9 @@ namespace JungleTimers
         bool Song6Busy = false;
         bool Song7Busy = false;
         
+        // UserPrefs strings...
+        public string UserName;
+
         // Hotkey strings...
         public string Hotkey1;
         public string Hotkey2;
@@ -160,8 +163,12 @@ namespace JungleTimers
             // Animate the Form as it Loads (doesn't work with cp.Exstyle protected override above)...
             // AnimateWindow(this.Handle, 1000, AnimateWindowFlags.AW_BLEND);
             
-            // Pull Hotkey Config...
+            
+            // Pull Username Config from JTconfig.ini
             IConfigSource source = new IniConfigSource("JTconfig.ini");
+            UserName = source.Configs["UserPrefs"].Get("UserName");
+
+            // Pull Hotkey Config...            
             Hotkey1 = source.Configs["Hotkeys"].Get("Hotkey1");
             Hotkey2 = source.Configs["Hotkeys"].Get("Hotkey2");
             Hotkey3 = source.Configs["Hotkeys"].Get("Hotkey3");
@@ -169,7 +176,7 @@ namespace JungleTimers
             Hotkey5 = source.Configs["Hotkeys"].Get("Hotkey5");
             Hotkey6 = source.Configs["Hotkeys"].Get("Hotkey6");
 
-            // Pull Sound Events Config from JTconfig.ini...
+            // Pull Sound Events Config...
             BackgroundMusic = source.Configs["Sounds"].Get("BackgroundMusic");
             if (BackgroundMusic == "Default") { BackgroundMusic = Application.StartupPath + "\\Resources\\oppagangamstyle.mp3"; }
             if (backgroundhasplayed == false)
@@ -292,6 +299,8 @@ namespace JungleTimers
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             this.SetStyle(ControlStyles.ResizeRedraw, true);
             InitializeComponent();
+            this.button8_speaker.MouseLeave += new System.EventHandler(this.button8_speaker_MouseLeave);
+            this.button8_speaker.MouseEnter += new System.EventHandler(this.button8_speaker_MouseEnter);            
             
             // test animation...           
             /* foreach (Control X in this.Controls)
@@ -300,6 +309,21 @@ namespace JungleTimers
                 animator.Show(X, false, Animation.Particles);
                 animator.EndUpdate(X);
             } */
+        }
+
+        void button8_speaker_MouseEnter(object sender, EventArgs e)
+        {
+            this.button8_speaker.BackgroundImage = ((System.Drawing.Image)(Properties.Resources.speakerTURNOFF));            
+        }
+
+        void button8_speaker_MouseLeave(object sender, EventArgs e)
+        {
+            this.button8_speaker.BackgroundImage = ((System.Drawing.Image)(Properties.Resources.speaker));            
+        }
+
+        void button8_speaker_MouseLeaveWhileOff(object sender, EventArgs e)
+        {
+            this.button8_speaker.BackgroundImage = ((System.Drawing.Image)(Properties.Resources.speakerOFF));
         }
 
         // Disable Hotkeys if the Server/IP Textbox has focus...
@@ -352,13 +376,21 @@ namespace JungleTimers
             this.Invoke((MethodInvoker)delegate
             { 
                 foreach (var item in ConnectionsList.Distinct())
-                {                     
-                   flowLayoutPanel1_clients.Controls.Add(new Label { Text = item, ForeColor = Color.Lime });    
+                {
+                    // System.Windows.Forms.ToolTip ToolTip1 = new System.Windows.Forms.ToolTip();                    
+                    string s = item;
+                    string[] words = s.Split('|');
+                    string name = words.First();
+                    string ipaddr = words.Last();
+                    ToolTip tt = new ToolTip();
+                    Label lbl = new Label();
+                    lbl.Text = ipaddr;
+                    lbl.ForeColor = Color.Lime;                    
+                    tt.SetToolTip(lbl, name);
+                    flowLayoutPanel1_clients.Controls.Add(lbl);
                 }                
             });
 
-            // var clientPanelName = new Label { Text = item, ForeColor = Color.Lime };       
-            // flowLayoutPanel1_clients.Controls.Add(clientPanelName);
         }
 
         private void AddToConnectionList(PacketHeader header, Connection connection, string Connection)
@@ -372,7 +404,7 @@ namespace JungleTimers
 
         private void RemoveFromConnectionList(PacketHeader header, Connection connection, string Disconnection)
         {
-            ConnectionsList.Remove(Disconnection);
+            ConnectionsList.RemoveWhere(element => element.Contains(Disconnection));            
             
             // And refresh the list of clients shown in Client Panel...
             RefreshClientPanel();
@@ -511,30 +543,30 @@ namespace JungleTimers
         private void button1_Click(object sender, EventArgs e)
         {                       
             // Start the Timer if it isn't already going, using Client/Server mechanism if connected...
-            // note: button7connect.Text reads "Connect" prior to connecting, and reads "Disconnect" once connection has been established.
+            // note: button7connect.Text reads "connect" prior to connecting, and reads "disconnect" once connection has been established.
             
             /* Spam Control Timer, works but blocks all button interaction for too long, better method will be to add anti-spam control to client preferences for incoming messages from a given client with option for each client to ignore audio portion or option for server to kick or ban.
             if (timer1.Enabled == false */
             {
-                if (b1.IsBusy != true && button7connect.Text != "Connect")
+                if (b1.IsBusy != true && button7connect.Text != "connect")
                 {
                     foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b1");
                 }
 
                 // ...or using local mechanism if not connected...
-                else if (b1.IsBusy != true && button7connect.Text != "Disconnect")
+                else if (b1.IsBusy != true && button7connect.Text != "disconnect")
                 {
                     b1.RunWorkerAsync();
                 }
 
                 // Otherwise cancel Timer using Client/Server mechanism if connected...
-                else if (b1.IsBusy != false && button7connect.Text != "Connect")
+                else if (b1.IsBusy != false && button7connect.Text != "connect")
                 {
                     foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b1STOP");
                 }
 
                 // ...or using local mechanism if not connected...
-                else if (b1.IsBusy == true && button7connect.Text != "Disconnect")
+                else if (b1.IsBusy == true && button7connect.Text != "disconnect")
                 {
                     b1.CancelAsync();
                 }
@@ -546,19 +578,19 @@ namespace JungleTimers
         {
             // if (timer1.Enabled == false)
             {
-                if (b2.IsBusy != true && button7connect.Text != "Connect")
+                if (b2.IsBusy != true && button7connect.Text != "connect")
                 {
                     foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b2");
                 }
-                else if (b2.IsBusy != true && button7connect.Text != "Disconnect")
+                else if (b2.IsBusy != true && button7connect.Text != "disconnect")
                 {
                     b2.RunWorkerAsync();
                 }
-                else if (b2.IsBusy != false && button7connect.Text != "Connect")
+                else if (b2.IsBusy != false && button7connect.Text != "connect")
                 {
                     foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b2STOP");
                 }
-                else if (b2.IsBusy == true && button7connect.Text != "Disconnect")
+                else if (b2.IsBusy == true && button7connect.Text != "disconnect")
                 {
                     b2.CancelAsync();
                 }
@@ -570,19 +602,19 @@ namespace JungleTimers
         {
             // if (timer1.Enabled == false)
             {
-                if (b3.IsBusy != true && button7connect.Text != "Connect")
+                if (b3.IsBusy != true && button7connect.Text != "connect")
                 {
                     foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b3");
                 }
-                else if (b3.IsBusy != true && button7connect.Text != "Disconnect")
+                else if (b3.IsBusy != true && button7connect.Text != "disconnect")
                 {
                     b3.RunWorkerAsync();
                 }
-                else if (b3.IsBusy != false && button7connect.Text != "Connect")
+                else if (b3.IsBusy != false && button7connect.Text != "connect")
                 {
                     foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b3STOP");
                 }
-                else if (b3.IsBusy != false && button7connect.Text != "Disconnect")
+                else if (b3.IsBusy != false && button7connect.Text != "disconnect")
                 {
                     b3.CancelAsync();
                 }
@@ -594,19 +626,19 @@ namespace JungleTimers
         {
             // if (timer1.Enabled == false)
             {
-                if (b4.IsBusy != true && button7connect.Text != "Connect")
+                if (b4.IsBusy != true && button7connect.Text != "connect")
                 {
                     foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b4");
                 }
-                else if (b4.IsBusy != true && button7connect.Text != "Disconnect")
+                else if (b4.IsBusy != true && button7connect.Text != "disconnect")
                 {
                     b4.RunWorkerAsync();
                 }
-                else if (b4.IsBusy != false && button7connect.Text != "Connect")
+                else if (b4.IsBusy != false && button7connect.Text != "connect")
                 {
                     foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b4STOP");
                 }
-                else if (b4.IsBusy != false && button7connect.Text != "Disconnect")
+                else if (b4.IsBusy != false && button7connect.Text != "disconnect")
                 {
                     b4.CancelAsync();
                 }
@@ -618,19 +650,19 @@ namespace JungleTimers
         {
             // if (timer1.Enabled == false)
             {
-                if (b5.IsBusy != true && button7connect.Text != "Connect")
+                if (b5.IsBusy != true && button7connect.Text != "connect")
                 {
                     foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b5");
                 }
-                else if (b5.IsBusy != true && button7connect.Text != "Disconnect")
+                else if (b5.IsBusy != true && button7connect.Text != "disconnect")
                 {
                     b5.RunWorkerAsync();
                 }
-                else if (b5.IsBusy != false && button7connect.Text != "Connect")
+                else if (b5.IsBusy != false && button7connect.Text != "connect")
                 {
                     foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b5STOP");
                 }
-                else if (b5.IsBusy != false && button7connect.Text != "Disconnect")
+                else if (b5.IsBusy != false && button7connect.Text != "disconnect")
                 {
                     b5.CancelAsync();
                 }
@@ -642,19 +674,19 @@ namespace JungleTimers
         {
             // if (timer1.Enabled == false)
             {
-                if (b6.IsBusy != true && button7connect.Text != "Connect")
+                if (b6.IsBusy != true && button7connect.Text != "connect")
                 {
                     foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b6");
                 }
-                else if (b6.IsBusy != true && button7connect.Text != "Disconnect")
+                else if (b6.IsBusy != true && button7connect.Text != "disconnect")
                 {
                     b6.RunWorkerAsync();
                 }
-                else if (b6.IsBusy != false && button7connect.Text != "Connect")
+                else if (b6.IsBusy != false && button7connect.Text != "connect")
                 {
                     foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b6STOP");
                 }
-                else if (b6.IsBusy != false && button7connect.Text != "Disconnect")
+                else if (b6.IsBusy != false && button7connect.Text != "disconnect")
                 {
                     b6.CancelAsync();
                 }
@@ -665,7 +697,7 @@ namespace JungleTimers
         // CONNECT/DISCONNECT BUTTON -
         public void button7connect_Click(object sender, EventArgs e)
         {
-            if (button7connect.Text == "Disconnect")
+            if (button7connect.Text == "disconnect")
             {
                 try
                 {
@@ -674,7 +706,11 @@ namespace JungleTimers
                     ConnectionsList.Clear();
                     RefreshClientPanel();
                     button7connect.Text = ConnectButtonState;
-                    statusled.Image = Properties.Resources.reddot;
+                    this.Invoke((MethodInvoker)delegate { button7connect.ForeColor = Color.Lime; });
+                    this.Invoke((MethodInvoker)delegate { comboHostAddressBox.Visible = true; });
+                    this.Invoke((MethodInvoker)delegate { label_Clients.Visible = false; });
+                    this.Invoke((MethodInvoker)delegate { label_hostnameorip.Visible = true; }); 
+                    // statusled.Image = Properties.Resources.reddot;
                 }
                 catch (DPSBase.ConnectionSetupException)
                 {
@@ -715,11 +751,11 @@ namespace JungleTimers
                 {
                     if (NetworkComms.TotalNumConnections() > 0)
                     {
-                        foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Connection", "Connected?");
+                        foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Connection", UserName);
                     }
                     else
                     {
-                        NetworkComms.SendObject("Connection", validAddress, serverPort, "Connected?");
+                        NetworkComms.SendObject("Connection", validAddress, serverPort, UserName);
                     }
                 }
                 catch (DPSBase.ConnectionSetupException)
@@ -741,9 +777,13 @@ namespace JungleTimers
         // Get Server Connection Response...
         public void Connected(PacketHeader header, Connection connection, string message)
         {
-            // Set Form button and LED Image to Connected state...
-            SetText(button7connect, "Disconnect");
-            statusled.Image = Properties.Resources.greendot;
+            // Set Form elements to Connected state...            
+            SetText(button7connect, "disconnect");
+            this.Invoke((MethodInvoker)delegate { button7connect.ForeColor = Color.Red; });
+            this.Invoke((MethodInvoker)delegate { label_Clients.Visible = true; });             
+            this.Invoke((MethodInvoker)delegate { comboHostAddressBox.Visible = false; });
+            this.Invoke((MethodInvoker)delegate { label_hostnameorip.Visible = false; });
+            // statusled.Image = Properties.Resources.greendot;
 
             // Report our version to server to check for update...
             foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("version", versionIs);            
@@ -1084,7 +1124,7 @@ namespace JungleTimers
             SetText(button6, "");
         }
 
-        // hidden test button...
+        // Background Music Volume Control...
         private void button8_Click(object sender, EventArgs e)
         {
             if (Song7Busy == true)
@@ -1092,16 +1132,18 @@ namespace JungleTimers
                 // mciSendString("close media7", null, 0, IntPtr.Zero);
                 mciSendString("pause media7", null, 0, IntPtr.Zero);
                 Song7Busy = false;
-                button8.Text = "No Beats";
-                button8.ForeColor = Color.Red;               
+                this.button8_speaker.BackgroundImage = ((System.Drawing.Image)(Properties.Resources.speakerOFF));
+                this.button8_speaker.MouseLeave += new System.EventHandler(this.button8_speaker_MouseLeaveWhileOff);
+                this.button8_speaker.MouseEnter += new System.EventHandler(this.button8_speaker_MouseLeave);
             }
             else
             {
                 // PlaySong7(BackgroundMusic);
                 mciSendString("resume media7", null, 0, IntPtr.Zero);
                 Song7Busy = true;
-                button8.Text = "Gangnam Style!";
-                button8.ForeColor = Color.Lime;
+                this.button8_speaker.BackgroundImage = ((System.Drawing.Image)(Properties.Resources.speaker));
+                this.button8_speaker.MouseLeave += new System.EventHandler(this.button8_speaker_MouseLeave);
+                this.button8_speaker.MouseEnter += new System.EventHandler(this.button8_speaker_MouseEnter);  
             }            
         }
 

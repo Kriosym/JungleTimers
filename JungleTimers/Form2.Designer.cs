@@ -44,6 +44,7 @@
             this.label5_Hotkey5 = new System.Windows.Forms.Label();
             this.label2_Hotkey2 = new System.Windows.Forms.Label();
             this.groupBox_Sounds = new System.Windows.Forms.GroupBox();
+            this.textBox_WarningSeconds = new System.Windows.Forms.TextBox();
             this.radioButton1_Respawns = new System.Windows.Forms.RadioButton();
             this.radioButton1_Warning = new System.Windows.Forms.RadioButton();
             this.radioButton1_Dies = new System.Windows.Forms.RadioButton();
@@ -66,7 +67,8 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.textBox_WarningSeconds = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.textBox_UserName = new System.Windows.Forms.TextBox();
             this.groupBox_HotKeys.SuspendLayout();
             this.groupBox_Sounds.SuspendLayout();
             this.SuspendLayout();
@@ -249,6 +251,16 @@
             this.groupBox_Sounds.TabIndex = 9;
             this.groupBox_Sounds.TabStop = false;
             this.groupBox_Sounds.Text = "Sounds";
+            // 
+            // textBox_WarningSeconds
+            // 
+            this.textBox_WarningSeconds.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox_WarningSeconds.Location = new System.Drawing.Point(396, 14);
+            this.textBox_WarningSeconds.MaxLength = 3;
+            this.textBox_WarningSeconds.Name = "textBox_WarningSeconds";
+            this.textBox_WarningSeconds.Size = new System.Drawing.Size(31, 20);
+            this.textBox_WarningSeconds.TabIndex = 39;
+            this.textBox_WarningSeconds.TextChanged += new System.EventHandler(this.textBox_WarningSeconds_TextChanged);
             // 
             // radioButton1_Respawns
             // 
@@ -479,21 +491,31 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // textBox_WarningSeconds
+            // label7
             // 
-            this.textBox_WarningSeconds.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_WarningSeconds.Location = new System.Drawing.Point(396, 14);
-            this.textBox_WarningSeconds.MaxLength = 3;
-            this.textBox_WarningSeconds.Name = "textBox_WarningSeconds";
-            this.textBox_WarningSeconds.Size = new System.Drawing.Size(31, 20);
-            this.textBox_WarningSeconds.TabIndex = 39;
-            this.textBox_WarningSeconds.TextChanged += new System.EventHandler(this.textBox_WarningSeconds_TextChanged);
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
+            this.label7.Location = new System.Drawing.Point(122, 317);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(84, 16);
+            this.label7.TabIndex = 10;
+            this.label7.Text = "Client Name:";
+            // 
+            // textBox_UserName
+            // 
+            this.textBox_UserName.Location = new System.Drawing.Point(207, 316);
+            this.textBox_UserName.MaxLength = 22;
+            this.textBox_UserName.Name = "textBox_UserName";
+            this.textBox_UserName.Size = new System.Drawing.Size(152, 20);
+            this.textBox_UserName.TabIndex = 11;
             // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1123, 355);
+            this.Controls.Add(this.textBox_UserName);
+            this.Controls.Add(this.label7);
             this.Controls.Add(this.groupBox_Sounds);
             this.Controls.Add(this.groupBox_HotKeys);
             this.Controls.Add(this.button1_save);
@@ -504,6 +526,7 @@
             this.groupBox_Sounds.ResumeLayout(false);
             this.groupBox_Sounds.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -547,5 +570,7 @@
         private System.Windows.Forms.RadioButton radioButton1_Warning;
         private System.Windows.Forms.RadioButton radioButton1_Dies;
         private System.Windows.Forms.TextBox textBox_WarningSeconds;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox textBox_UserName;
     }
 }

@@ -38,7 +38,12 @@ namespace JungleTimers
         }
 
         private void Form2_Load(object sender, EventArgs e)
-        {            
+        {
+            openFileDialog1.Title = "Find MP3 Sound Files";
+            openFileDialog1.FileName = "";
+            openFileDialog1.DefaultExt = "mp3";
+            openFileDialog1.Filter = "MP3 files (*.mp3)|*.mp3";
+            openFileDialog1.FilterIndex = 2;
             foreach (System.Windows.Forms.Keys key in Enum.GetValues(typeof(System.Windows.Forms.Keys)))
             {
                 // Load all possible Keyboard keys into dropdown selections...
@@ -60,6 +65,9 @@ namespace JungleTimers
                 // Load Sound Options...
                 radioButton1_Dies.Checked = true;
                 textBox_WarningSeconds.Text = source.Configs["Sounds"].Get("WarningSeconds");
+
+                // Load UserName...
+                textBox_UserName.Text = source.Configs["UserPrefs"].Get("UserName");
             }
             
         }
@@ -71,6 +79,9 @@ namespace JungleTimers
         // Save Configuration...
         private void button1_save_Click(object sender, EventArgs e)
         {                        
+            // Save UserName - 
+            source.Configs["UserPrefs"].Set("UserName", textBox_UserName.Text);
+            
             // Hotkeys -
             source.Configs["Hotkeys"].Set("Hotkey1", comboBox1_Hotkey1.Text);
             source.Configs["Hotkeys"].Set("Hotkey2", comboBox2_Hotkey2.Text);

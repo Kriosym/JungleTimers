@@ -11,10 +11,10 @@ namespace ServerApplication
 {
     class Program
     {   
-        // Old Test code for writing connections and messages to text file on hdd...
+        /* Old Test code for writing connections and messages to text file on hdd...
         public static string ConnectionFilePath;
-        public static string MessagesFilePath;
-        
+        public static string MessagesFilePath; */           
+
         // Create Connectionlist HashSet...
         public static HashSet<string> ConnectionsList = new HashSet<string>();
 
@@ -25,10 +25,23 @@ namespace ServerApplication
         public static int definedPort = 11000;
         
         // Set Latest available version of Client Software...
-        public static string LatestClientVersion = "1.5d";
+        public static string LatestClientVersion = "1.5e";
+
+
+        private static void ServerInfo()
+        {
+            Console.WriteLine("\n\n~ Jungle Timers by Kriosym version " + LatestClientVersion + " ~");
+            Console.WriteLine("\nMENU\n======================================");
+            Console.WriteLine("x - Close Connections and Exit");
+            Console.WriteLine("i - Re-Display Menu");
+            Console.WriteLine("======================================");
+            Console.Write("Enter Selection: ");
+            return;
+        }
 
         public static void Main(string[] args)
         {
+            Console.Title = "Jungle Timers Server by Kriosym (enter i to Re-Display Menu)";
             ConsoleKeyInfo cki;
             IPHostEntry host;
             string localIP = "?";
@@ -67,6 +80,7 @@ namespace ServerApplication
                 TCPConnection.StartListening(myipLocalEndPoint);
             } */
 
+
             // BEST METHOD 4 - Listen on all IPv4 Addresses, user defined port.
             Console.WriteLine("~ Jungle Timers by Kriosym ~");
             Console.WriteLine("Server version " + LatestClientVersion + " listening on: ");
@@ -81,14 +95,14 @@ namespace ServerApplication
                 }
             }
             Console.Write("TCP port " + definedPort);
-            Console.WriteLine("");
+            Console.Title = "Jungle Timers Server listening on " + localIP + ":" + definedPort + " | (enter i to Re-Display Menu)";
 
             
             // Options Menu...
-            Console.TreatControlCAsInput = true;
-            Console.WriteLine("");
+            Console.TreatControlCAsInput = true;            
             Console.WriteLine("\n\nMENU\n======================================");
             Console.WriteLine("x - Close Connections and Exit");
+            Console.WriteLine("i - Re-Display Menu");
             Console.WriteLine("======================================");
             Console.Write("Enter Selection: ");
 
@@ -96,12 +110,7 @@ namespace ServerApplication
             do
             {
                 cki = Console.ReadKey();
-                string choice = cki.Key.ToString();
-                Console.WriteLine();
-                Console.WriteLine("\n\nMENU\n======================================");
-                Console.WriteLine("x  Close Connections and Exit");
-                Console.WriteLine("======================================");
-                Console.Write("Enter Selection: ");
+                string choice = cki.Key.ToString();                
                 try
                 {
 
@@ -114,12 +123,12 @@ namespace ServerApplication
                 {
                     case "X":
                         exitnow = true;
-                        Console.WriteLine("Goodbye!");
+                        Console.WriteLine("\n\nGoodbye!");
                         NetworkComms.Shutdown();
                         Environment.Exit(-1);
                         break;
-                    case "D":
-                        Console.WriteLine("dum da dum dum!");
+                    case "I":
+                        ServerInfo();
                         continue;
                 }
             } while (!exitnow);
@@ -129,12 +138,13 @@ namespace ServerApplication
         public static void AddToConnectionList(PacketHeader header, Connection connection, string Connection)
         {
             // Add incoming IP Address to HashSet list...            
-            ConnectionsList.Add(connection.ConnectionInfo.RemoteEndPoint.Address.ToString());                                
+            ConnectionsList.Add(connection.ConnectionInfo.RemoteEndPoint.Address.ToString() + "|" + Connection);                                
 
             // Respond to sender that they are succesfully connected.            
             connection.SendObject("Connected", "CONNECTED!");
-            Console.WriteLine(connection.ConnectionInfo.RemoteEndPoint.Address.ToString() + " has CONNECTED!");
+            Console.WriteLine("\n" + connection.ConnectionInfo.RemoteEndPoint.Address.ToString() + " has CONNECTED!");
                         
+            // Send all active connections to all active connections for Client List.
             foreach (var item in NetworkComms.GetExistingConnection())
             {
                 foreach (var items in ConnectionsList.Distinct())
@@ -160,11 +170,18 @@ namespace ServerApplication
         // When client closes, this Server should receive packet of string type "Disconnection", report to console and remove IP from ConnectionsList...
         public static void RemoveFromConnectionList(PacketHeader header, Connection connection, string Disconnection)
         {
+            // Formulate which client has just disconnected...
             disconLastclient = connection.ConnectionInfo.RemoteEndPoint.Address.ToString();
-            connection.CloseConnection(false);
-            ConnectionsList.Remove(disconLastclient);
-            Console.WriteLine(disconLastclient + " has DISCONNECTED!");
+            string disconClientName = ConnectionsList.Single(element => element.Contains(disconLastclient));                       
+            Console.WriteLine("\n" + disconClientName + " has DISCONNECTED!");
 
+            // ...and remove it from ConnectionsList HashSet
+            ConnectionsList.RemoveWhere(element => element.Contains(disconLastclient));
+
+            // Close the connection...                                            
+            connection.CloseConnection(false);    
+
+            // Notify remaining clients of the disconnection...
             foreach (var item in NetworkComms.GetExistingConnection())
             {
                 item.SendObject("Disconnection", disconLastclient);
@@ -172,7 +189,7 @@ namespace ServerApplication
 
             if (ConnectionsList.Count > 0)
             {
-                Console.WriteLine("Current Clients:");
+                Console.WriteLine("\nCurrent Clients:");
                 foreach (var item in ConnectionsList) { Console.WriteLine(item); };
                 
                 var currentclients = ConnectionsList.Distinct();    
@@ -195,7 +212,7 @@ namespace ServerApplication
             {
                 Console.WriteLine(connection.ConnectionInfo.RemoteEndPoint.Address.ToString() + " is up to date.");                
                 // Display all connected Clients...
-                Console.WriteLine("Current Clients:");
+                Console.WriteLine("\nCurrent Clients:");
                 foreach (var item in ConnectionsList) { Console.WriteLine(item); }
             }
             else
@@ -203,38 +220,29 @@ namespace ServerApplication
                 connection.SendObject("version", LatestClientVersion);
                 Console.WriteLine(connection.ConnectionInfo.RemoteEndPoint.Address.ToString() + " is version " + version + ", and has been notified of available update.");
                 // Display all connected Clients...
-                Console.WriteLine("Current Clients:");
+                Console.WriteLine("\nCurrent Clients:");
                 foreach (var item in ConnectionsList) { Console.WriteLine(item); }
             }           
         }
 
         // Receive incoming messages to trigger Jungle Timers...
         public static void PrintIncomingMessage(PacketHeader header, Connection connection, string message)
-        {            
+        {
+            Console.WriteLine("\nRecieved " + "'" + message + "' from " + connection.ConnectionInfo.RemoteEndPoint.Address.ToString() + ".");
+
+            // TimerControl sendback to all clients...            
+            foreach (var item in NetworkComms.GetExistingConnection())
+            { item.SendObject("TimerControl", message); }
+
             /* Test code to write messages to text file...
             if (!File.Exists(MessagesFilePath))
             {
                 // Create a file to write to. 
-                using (StreamWriter sw = File.CreateText(MessagesFilePath))
-                {
-                    
-                }
+                using (StreamWriter sw = File.CreateText(MessagesFilePath)){}
             }
-
             // Add Message to Messages File...
             using (StreamWriter sw = File.AppendText(MessagesFilePath))
-            {
-                sw.WriteLine(message);
-            }
-            ...*/
-
-            Console.WriteLine("\nRecieved " + "'" + message + "' from " + connection.ConnectionInfo.RemoteEndPoint.Address.ToString() + ".");
-
-            // TimerControl sendback to all clients...
-            
-            foreach(var item in NetworkComms.GetExistingConnection())
-                item.SendObject("TimerControl", message);                              
-            
+            {sw.WriteLine(message);} */
         }
     }
 }
