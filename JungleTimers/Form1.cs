@@ -155,10 +155,13 @@ namespace JungleTimers
 
         // Other Load Actions...
         private void Form1_Load(object sender, EventArgs e)
-        {            
-            
+        {   
             // version...
-            label1.Text = "v" + versionIs;            
+            label1.Text = "v" + versionIs;
+
+            LinkLabel.Link link = new LinkLabel.Link();
+            link.LinkData = "skype:echo123?call";
+            linkLabel1.Links.Add(link);
 
             // Animate the Form as it Loads (doesn't work with cp.Exstyle protected override above)...
             // AnimateWindow(this.Handle, 1000, AnimateWindowFlags.AW_BLEND);
@@ -1220,6 +1223,16 @@ namespace JungleTimers
         private void label_client1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start(e.Link.LinkData as string);
         }
 
         /* Dynamic Button (for above dynamic panel code)...

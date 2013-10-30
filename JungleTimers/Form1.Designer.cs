@@ -53,6 +53,7 @@
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.label_Clients = new System.Windows.Forms.Label();
             this.flowLayoutPanel1_clients = new System.Windows.Forms.FlowLayoutPanel();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.statusled)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -336,6 +337,17 @@
             this.flowLayoutPanel1_clients.Size = new System.Drawing.Size(192, 213);
             this.flowLayoutPanel1_clients.TabIndex = 21;
             // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Location = new System.Drawing.Point(352, 48);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(55, 13);
+            this.linkLabel1.TabIndex = 22;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "linkLabel1";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
             // Form1
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -343,6 +355,7 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(763, 450);
             this.ContextMenuStrip = this.contextMenuStrip1;
+            this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.label_Clients);
             this.Controls.Add(this.flowLayoutPanel1_clients);
             this.Controls.Add(this.pictureBox2);
@@ -406,6 +419,7 @@
         private System.Windows.Forms.Label label_Clients;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1_clients;
         private System.Windows.Forms.Button button8_speaker;
+        private System.Windows.Forms.LinkLabel linkLabel1;
     }
 }
 
