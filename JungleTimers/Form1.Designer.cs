@@ -54,6 +54,7 @@
             this.label_Clients = new System.Windows.Forms.Label();
             this.flowLayoutPanel1_clients = new System.Windows.Forms.FlowLayoutPanel();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.button_ServerGO = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.statusled)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -67,7 +68,7 @@
             this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F);
             this.button6.ForeColor = System.Drawing.Color.Lime;
             this.button6.Image = global::JungleTimers.Properties.Resources.dragonbutton;
-            this.button6.Location = new System.Drawing.Point(130, 197);
+            this.button6.Location = new System.Drawing.Point(130, 192);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(96, 96);
             this.button6.TabIndex = 5;
@@ -81,7 +82,7 @@
             this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F);
             this.button5.ForeColor = System.Drawing.Color.Lime;
             this.button5.Image = global::JungleTimers.Properties.Resources.baronbutton;
-            this.button5.Location = new System.Drawing.Point(14, 197);
+            this.button5.Location = new System.Drawing.Point(14, 192);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(96, 96);
             this.button5.TabIndex = 4;
@@ -96,7 +97,7 @@
             this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F);
             this.button4.ForeColor = System.Drawing.Color.Lime;
             this.button4.Image = global::JungleTimers.Properties.Resources.redbutton;
-            this.button4.Location = new System.Drawing.Point(130, 346);
+            this.button4.Location = new System.Drawing.Point(130, 345);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(96, 96);
             this.button4.TabIndex = 3;
@@ -107,11 +108,11 @@
             // 
             this.baronlabel.AutoSize = true;
             this.baronlabel.BackColor = System.Drawing.Color.Transparent;
-            this.baronlabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.baronlabel.Font = new System.Drawing.Font("Trebuchet MS", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.baronlabel.ForeColor = System.Drawing.Color.Lime;
-            this.baronlabel.Location = new System.Drawing.Point(16, 171);
+            this.baronlabel.Location = new System.Drawing.Point(22, 165);
             this.baronlabel.Name = "baronlabel";
-            this.baronlabel.Size = new System.Drawing.Size(91, 25);
+            this.baronlabel.Size = new System.Drawing.Size(80, 27);
             this.baronlabel.TabIndex = 10;
             this.baronlabel.Text = "BARON";
             // 
@@ -119,11 +120,11 @@
             // 
             this.dragonlabel.AutoSize = true;
             this.dragonlabel.BackColor = System.Drawing.Color.Transparent;
-            this.dragonlabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dragonlabel.Font = new System.Drawing.Font("Trebuchet MS", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dragonlabel.ForeColor = System.Drawing.Color.Yellow;
-            this.dragonlabel.Location = new System.Drawing.Point(123, 173);
+            this.dragonlabel.Location = new System.Drawing.Point(131, 165);
             this.dragonlabel.Name = "dragonlabel";
-            this.dragonlabel.Size = new System.Drawing.Size(109, 25);
+            this.dragonlabel.Size = new System.Drawing.Size(95, 27);
             this.dragonlabel.TabIndex = 11;
             this.dragonlabel.Text = "DRAGON";
             // 
@@ -186,10 +187,11 @@
             this.button8_speaker.Location = new System.Drawing.Point(676, 17);
             this.button8_speaker.Margin = new System.Windows.Forms.Padding(0);
             this.button8_speaker.Name = "button8_speaker";
-            this.button8_speaker.Size = new System.Drawing.Size(84, 97);
+            this.button8_speaker.Size = new System.Drawing.Size(84, 96);
             this.button8_speaker.TabIndex = 0;
             this.button8_speaker.TabStop = false;
-            this.button8_speaker.UseVisualStyleBackColor = true;
+            this.button8_speaker.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.button8_speaker.UseVisualStyleBackColor = false;
             this.button8_speaker.Click += new System.EventHandler(this.button8_Click);
             // 
             // statusled
@@ -257,7 +259,7 @@
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F);
             this.button1.ForeColor = System.Drawing.Color.Lime;
             this.button1.Image = global::JungleTimers.Properties.Resources.redbutton;
-            this.button1.Location = new System.Drawing.Point(14, 48);
+            this.button1.Location = new System.Drawing.Point(14, 40);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(96, 96);
             this.button1.TabIndex = 0;
@@ -272,7 +274,7 @@
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F);
             this.button2.ForeColor = System.Drawing.Color.Lime;
             this.button2.Image = global::JungleTimers.Properties.Resources.bluebutton;
-            this.button2.Location = new System.Drawing.Point(130, 48);
+            this.button2.Location = new System.Drawing.Point(130, 40);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(96, 96);
             this.button2.TabIndex = 1;
@@ -287,7 +289,7 @@
             this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F);
             this.button3.ForeColor = System.Drawing.Color.Lime;
             this.button3.Image = global::JungleTimers.Properties.Resources.bluebutton;
-            this.button3.Location = new System.Drawing.Point(14, 346);
+            this.button3.Location = new System.Drawing.Point(14, 345);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(96, 96);
             this.button3.TabIndex = 2;
@@ -298,9 +300,9 @@
             // 
             this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox1.Image = global::JungleTimers.Properties.Resources.Blue_Jungle;
-            this.pictureBox1.Location = new System.Drawing.Point(14, 311);
+            this.pictureBox1.Location = new System.Drawing.Point(48, 312);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(212, 36);
+            this.pictureBox1.Size = new System.Drawing.Size(139, 29);
             this.pictureBox1.TabIndex = 18;
             this.pictureBox1.TabStop = false;
             // 
@@ -308,9 +310,9 @@
             // 
             this.pictureBox2.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox2.Image = global::JungleTimers.Properties.Resources.Purple_Jungle;
-            this.pictureBox2.Location = new System.Drawing.Point(14, 12);
+            this.pictureBox2.Location = new System.Drawing.Point(16, 5);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(212, 36);
+            this.pictureBox2.Size = new System.Drawing.Size(205, 32);
             this.pictureBox2.TabIndex = 19;
             this.pictureBox2.TabStop = false;
             // 
@@ -340,13 +342,32 @@
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(352, 48);
+            this.linkLabel1.BackColor = System.Drawing.Color.Transparent;
+            this.linkLabel1.LinkColor = System.Drawing.Color.Lime;
+            this.linkLabel1.Location = new System.Drawing.Point(358, 7);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(55, 13);
+            this.linkLabel1.Size = new System.Drawing.Size(37, 13);
             this.linkLabel1.TabIndex = 22;
             this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "linkLabel1";
+            this.linkLabel1.Text = "Skype";
+            this.linkLabel1.Visible = false;
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
+            // button_ServerGO
+            // 
+            this.button_ServerGO.BackColor = System.Drawing.Color.Transparent;
+            this.button_ServerGO.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button_ServerGO.Font = new System.Drawing.Font("Calibri", 11F, System.Drawing.FontStyle.Bold);
+            this.button_ServerGO.ForeColor = System.Drawing.Color.Lime;
+            this.button_ServerGO.Location = new System.Drawing.Point(667, 400);
+            this.button_ServerGO.Name = "button_ServerGO";
+            this.button_ServerGO.Size = new System.Drawing.Size(84, 19);
+            this.button_ServerGO.TabIndex = 23;
+            this.button_ServerGO.TabStop = false;
+            this.button_ServerGO.Text = "Server GO!";
+            this.button_ServerGO.UseCompatibleTextRendering = true;
+            this.button_ServerGO.UseVisualStyleBackColor = false;
+            this.button_ServerGO.Click += new System.EventHandler(this.button_ServerGO_Click);
             // 
             // Form1
             // 
@@ -355,6 +376,7 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(763, 450);
             this.ContextMenuStrip = this.contextMenuStrip1;
+            this.Controls.Add(this.button_ServerGO);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.label_Clients);
             this.Controls.Add(this.flowLayoutPanel1_clients);
@@ -420,6 +442,7 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1_clients;
         private System.Windows.Forms.Button button8_speaker;
         private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.Button button_ServerGO;
     }
 }
 

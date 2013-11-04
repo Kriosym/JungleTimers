@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -18,25 +19,36 @@ using System.Diagnostics;
 using System.Resources;
 using System.IO;
 using Nini.Config;
+using RemoteProcedureCalls;
 
 namespace JungleTimers
 {
     public partial class Form1 : Form
-    {        
+    {
         // !! SET CODE REVISION !! 
-        public static string versionIs = "1.5e";        
+        public static string versionIs = "1.6a";
+
+        #region JungleTimers Init/Load area...
 
         // various other declarations...
-        public bool FormCloseForUpdate;        
-        bool backgroundhasplayed = false;
-        public static HashSet<string> ConnectionsList = new HashSet<string>();        
+        public bool FormCloseForUpdate;
+        public bool backgroundhasplayed = false;
+        public static HashSet<string> ConnectionsList = new HashSet<string>();
+        public IConfigSource source = new IniConfigSource("JTconfig.ini");
+
+        // Server Application Process Declare...
+        public bool ServerStarted;
+        public System.Diagnostics.Process process = new System.Diagnostics.Process();
+        public System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
 
         // Animation Time!
-        Animator animator = new Animator();
+        private Animator animator = new Animator();
+
         [System.Runtime.InteropServices.DllImport("user32.dll")]
-        static extern bool AnimateWindow(IntPtr hWnd, int time, AnimateWindowFlags flags);
+        private static extern bool AnimateWindow(IntPtr hWnd, int time, AnimateWindowFlags flags);
+
         [Flags]
-        enum AnimateWindowFlags
+        private enum AnimateWindowFlags
         {
             AW_HOR_POSITIVE = 0x00000001,
             AW_HOR_NEGATIVE = 0x00000002,
@@ -50,39 +62,40 @@ namespace JungleTimers
         }
 
         //Resource manager for accessing embedded files...
-        ResourceManager resources = new ResourceManager(typeof(Form1));
+        private ResourceManager resources = new ResourceManager(typeof (Form1));
 
         // Low level Keyboard Hook so that hotkeys work even while another fullscreen application has focus...
-        KeyboardHookListener m_KeyboardHookManager = new KeyboardHookListener(new GlobalHooker());
+        private KeyboardHookListener m_KeyboardHookManager = new KeyboardHookListener(new GlobalHooker());
 
         // Declare Background Workers and other variables...
-        BackgroundWorker b1 = new BackgroundWorker();
-        BackgroundWorker b2 = new BackgroundWorker();
-        BackgroundWorker b3 = new BackgroundWorker();
-        BackgroundWorker b4 = new BackgroundWorker();
-        BackgroundWorker b5 = new BackgroundWorker();
-        BackgroundWorker b6 = new BackgroundWorker();
-        IPAddress ipaddr;        
-        string validAddress;
-        int serverPort = 11000;
-        string ConnectButtonState = "connect";
-        string StartPath = Application.StartupPath;
-        
+        private BackgroundWorker b1 = new BackgroundWorker();
+        private BackgroundWorker b2 = new BackgroundWorker();
+        private BackgroundWorker b3 = new BackgroundWorker();
+        private BackgroundWorker b4 = new BackgroundWorker();
+        private BackgroundWorker b5 = new BackgroundWorker();
+        private BackgroundWorker b6 = new BackgroundWorker();
+        private IPAddress ipaddr;
+        private string validAddress;
+        private int serverPort = 11000;
+        private string ConnectButtonState = "connect";
+        private string StartPath = Application.StartupPath;
+
         // Initialize Notification MP3 Play History...
-        bool b1_SongHasPlayed = false;
-        bool b2_SongHasPlayed = false;
-        bool b3_SongHasPlayed = false;
-        bool b4_SongHasPlayed = false;
-        bool b5_SongHasPlayed = false;
-        bool b6_SongHasPlayed = false;    
-        bool SongBusy = false;
-        bool Song2Busy = false;
-        bool Song3Busy = false;
-        bool Song4Busy = false;
-        bool Song5Busy = false;
-        bool Song6Busy = false;
-        bool Song7Busy = false;
-        
+        public bool b1_SongHasPlayed = false;
+        public bool b2_SongHasPlayed = false;
+        public bool b3_SongHasPlayed = false;
+        public bool b4_SongHasPlayed = false;
+        public bool b5_SongHasPlayed = false;
+        public bool b6_SongHasPlayed = false;
+        public bool SongBusy = false;
+        public bool Song2Busy = false;
+        public bool Song3Busy = false;
+        public bool Song4Busy = false;
+        public bool Song5Busy = false;
+        public bool Song6Busy = false;
+        public bool Song7Busy = false;
+        public string PlayBGM;
+
         // UserPrefs strings...
         public string UserName;
 
@@ -127,17 +140,19 @@ namespace JungleTimers
         public string BlueLizardAlive;
 
         public string BackgroundMusic;
-        
+
         // Import DLL for MP3 Playback...        
-        public const int MM_MCINOTIFY = 0x3B9;        
+        public const int MM_MCINOTIFY = 0x3B9;
+
         [DllImport("winmm.dll")]
-        private static extern long mciSendString(string command, StringBuilder returnString, int returnSize, IntPtr hwndCallback);
+        private static extern long mciSendString(string command, StringBuilder returnString, int returnSize,
+            IntPtr hwndCallback);
 
         // Declare Delegate to allow me to set button text without cross-thread errors...
-        delegate void SetTextCallback(Control ctrl, string text);
-        
+        private delegate void SetTextCallback(Control ctrl, string text);
+
         // Declare Delegate to allow me to set button enabled state without cross-thread errors...
-        delegate void SetButtonStatus(Control ctrl, bool status);
+        private delegate void SetButtonStatus(Control ctrl, bool status);
 
         /* Testing to try and get rid of flicker...(disabled as doesn't work with AnimateWindowFlags)...
        *protected override CreateParams CreateParams
@@ -155,9 +170,15 @@ namespace JungleTimers
 
         // Other Load Actions...
         private void Form1_Load(object sender, EventArgs e)
-        {   
+        {
             // version...
             label1.Text = "v" + versionIs;
+
+            // Server Application Process Stuff...
+            process.StartInfo = startInfo;
+            // startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+            startInfo.FileName = "ServerApplication.exe";
+            startInfo.Arguments = "system(erase /q)";
 
             LinkLabel.Link link = new LinkLabel.Link();
             link.LinkData = "skype:echo123?call";
@@ -165,11 +186,10 @@ namespace JungleTimers
 
             // Animate the Form as it Loads (doesn't work with cp.Exstyle protected override above)...
             // AnimateWindow(this.Handle, 1000, AnimateWindowFlags.AW_BLEND);
-            
-            
+
             // Pull Username Config from JTconfig.ini
-            IConfigSource source = new IniConfigSource("JTconfig.ini");
             UserName = source.Configs["UserPrefs"].Get("UserName");
+            PlayBGM = source.Configs["UserPrefs"].Get("PlayBGM");
 
             // Pull Hotkey Config...            
             Hotkey1 = source.Configs["Hotkeys"].Get("Hotkey1");
@@ -180,58 +200,125 @@ namespace JungleTimers
             Hotkey6 = source.Configs["Hotkeys"].Get("Hotkey6");
 
             // Pull Sound Events Config...
+
             BackgroundMusic = source.Configs["Sounds"].Get("BackgroundMusic");
-            if (BackgroundMusic == "Default") { BackgroundMusic = Application.StartupPath + "\\Resources\\oppagangamstyle.mp3"; }
-            if (backgroundhasplayed == false)
+            if (BackgroundMusic == "Default")
+            {
+                BackgroundMusic = Application.StartupPath + "\\Resources\\oppagangamstyle.mp3";
+            }
+            if (source.Configs["UserPrefs"].Get("PlayBGM") == "true" && backgroundhasplayed == false)
             {
                 PlaySong7(BackgroundMusic);
                 backgroundhasplayed = true;
+                this.button8_speaker.BackgroundImage = ((System.Drawing.Image) (Properties.Resources.speaker));
+                this.button8_speaker.MouseLeave += new System.EventHandler(this.button8_speaker_MouseLeave);
+                this.button8_speaker.MouseEnter += new System.EventHandler(this.button8_speaker_MouseEnter);
+            }
+            else if (source.Configs["UserPrefs"].Get("PlayBGM") == "false")
+            {
+                this.button8_speaker.BackgroundImage = ((System.Drawing.Image) (Properties.Resources.speakerOFF));
+                this.button8_speaker.MouseLeave += new System.EventHandler(this.button8_speaker_MouseLeaveWhileOff);
+                this.button8_speaker.MouseEnter += new System.EventHandler(this.button8_speaker_MouseLeave);
             }
 
             WarningSecondsString = source.Configs["Sounds"].Get("WarningSeconds");
             int.TryParse(WarningSecondsString, out WarningSeconds);
 
             PurpleLizardDead = source.Configs["Sounds"].Get("PurpleLizardDead");
-            if (PurpleLizardDead == "Default") { PurpleLizardDead = Application.StartupPath + "\\Resources\\PurpleLizardDead.mp3"; }
+            if (PurpleLizardDead == "Default")
+            {
+                PurpleLizardDead = Application.StartupPath + "\\Resources\\PurpleLizardDead.mp3";
+            }
             PurpleLizardWarning = source.Configs["Sounds"].Get("PurpleLizardWarning");
-            if (PurpleLizardWarning == "Default") { PurpleLizardWarning = Application.StartupPath + "\\Resources\\PurpleLizardWarning.mp3"; }
+            if (PurpleLizardWarning == "Default")
+            {
+                PurpleLizardWarning = Application.StartupPath + "\\Resources\\PurpleLizardWarning.mp3";
+            }
             PurpleLizardAlive = source.Configs["Sounds"].Get("PurpleLizardAlive");
-            if (PurpleLizardAlive == "Default") { PurpleLizardAlive = Application.StartupPath + "\\Resources\\PurpleLizardAlive.mp3"; }
+            if (PurpleLizardAlive == "Default")
+            {
+                PurpleLizardAlive = Application.StartupPath + "\\Resources\\PurpleLizardAlive.mp3";
+            }
 
             PurpleGolemDead = source.Configs["Sounds"].Get("PurpleGolemDead");
-            if (PurpleGolemDead == "Default") { PurpleGolemDead = Application.StartupPath + "\\Resources\\PurpleGolemDead.mp3"; }
+            if (PurpleGolemDead == "Default")
+            {
+                PurpleGolemDead = Application.StartupPath + "\\Resources\\PurpleGolemDead.mp3";
+            }
             PurpleGolemWarning = source.Configs["Sounds"].Get("PurpleGolemWarning");
-            if (PurpleGolemWarning == "Default") { PurpleGolemWarning = Application.StartupPath + "\\Resources\\PurpleGolemWarning.mp3"; }
+            if (PurpleGolemWarning == "Default")
+            {
+                PurpleGolemWarning = Application.StartupPath + "\\Resources\\PurpleGolemWarning.mp3";
+            }
             PurpleGolemAlive = source.Configs["Sounds"].Get("PurpleGolemAlive");
-            if (PurpleGolemAlive == "Default") { PurpleGolemAlive = Application.StartupPath + "\\Resources\\PurpleGolemAlive.mp3"; }
+            if (PurpleGolemAlive == "Default")
+            {
+                PurpleGolemAlive = Application.StartupPath + "\\Resources\\PurpleGolemAlive.mp3";
+            }
 
             BaronDead = source.Configs["Sounds"].Get("BaronDead");
-            if (BaronDead == "Default") { BaronDead = Application.StartupPath + "\\Resources\\BaronDead.mp3"; }
+            if (BaronDead == "Default")
+            {
+                BaronDead = Application.StartupPath + "\\Resources\\BaronDead.mp3";
+            }
             BaronWarning = source.Configs["Sounds"].Get("BaronWarning");
-            if (BaronWarning == "Default") { BaronWarning = Application.StartupPath + "\\Resources\\BaronWarning.mp3"; }
+            if (BaronWarning == "Default")
+            {
+                BaronWarning = Application.StartupPath + "\\Resources\\BaronWarning.mp3";
+            }
             BaronAlive = source.Configs["Sounds"].Get("BaronAlive");
-            if (BaronAlive == "Default") { BaronAlive = Application.StartupPath + "\\Resources\\BaronAlive.mp3"; }
+            if (BaronAlive == "Default")
+            {
+                BaronAlive = Application.StartupPath + "\\Resources\\BaronAlive.mp3";
+            }
 
             DragonDead = source.Configs["Sounds"].Get("DragonDead");
-            if (DragonDead == "Default") { DragonDead = Application.StartupPath + "\\Resources\\DragonDead.mp3"; }
+            if (DragonDead == "Default")
+            {
+                DragonDead = Application.StartupPath + "\\Resources\\DragonDead.mp3";
+            }
             DragonWarning = source.Configs["Sounds"].Get("DragonWarning");
-            if (DragonWarning == "Default") { DragonWarning = Application.StartupPath + "\\Resources\\DragonWarning.mp3"; }
+            if (DragonWarning == "Default")
+            {
+                DragonWarning = Application.StartupPath + "\\Resources\\DragonWarning.mp3";
+            }
             DragonAlive = source.Configs["Sounds"].Get("DragonAlive");
-            if (DragonAlive == "Default") { DragonAlive = Application.StartupPath + "\\Resources\\DragonAlive.mp3"; }
+            if (DragonAlive == "Default")
+            {
+                DragonAlive = Application.StartupPath + "\\Resources\\DragonAlive.mp3";
+            }
 
             BlueGolemDead = source.Configs["Sounds"].Get("BlueGolemDead");
-            if (BlueGolemDead == "Default") { BlueGolemDead = Application.StartupPath + "\\Resources\\BlueGolemDead.mp3"; }
+            if (BlueGolemDead == "Default")
+            {
+                BlueGolemDead = Application.StartupPath + "\\Resources\\BlueGolemDead.mp3";
+            }
             BlueGolemWarning = source.Configs["Sounds"].Get("BlueGolemWarning");
-            if (BlueGolemWarning == "Default") { BlueGolemWarning = Application.StartupPath + "\\Resources\\BlueGolemWarning.mp3"; }
+            if (BlueGolemWarning == "Default")
+            {
+                BlueGolemWarning = Application.StartupPath + "\\Resources\\BlueGolemWarning.mp3";
+            }
             BlueGolemAlive = source.Configs["Sounds"].Get("BlueGolemAlive");
-            if (BlueGolemAlive == "Default") { BlueGolemAlive = Application.StartupPath + "\\Resources\\BlueGolemAlive.mp3"; }
+            if (BlueGolemAlive == "Default")
+            {
+                BlueGolemAlive = Application.StartupPath + "\\Resources\\BlueGolemAlive.mp3";
+            }
 
             BlueLizardDead = source.Configs["Sounds"].Get("BlueLizardDead");
-            if (BlueLizardDead == "Default") { BlueLizardDead = Application.StartupPath + "\\Resources\\BlueLizardDead.mp3"; }
+            if (BlueLizardDead == "Default")
+            {
+                BlueLizardDead = Application.StartupPath + "\\Resources\\BlueLizardDead.mp3";
+            }
             BlueLizardWarning = source.Configs["Sounds"].Get("BlueLizardWarning");
-            if (BlueLizardWarning == "Default") { BlueLizardWarning = Application.StartupPath + "\\Resources\\BlueLizardWarning.mp3"; }
+            if (BlueLizardWarning == "Default")
+            {
+                BlueLizardWarning = Application.StartupPath + "\\Resources\\BlueLizardWarning.mp3";
+            }
             BlueLizardAlive = source.Configs["Sounds"].Get("BlueLizardAlive");
-            if (BlueLizardAlive == "Default") { BlueLizardAlive = Application.StartupPath + "\\Resources\\BlueLizardAlive.mp3"; }
+            if (BlueLizardAlive == "Default")
+            {
+                BlueLizardAlive = Application.StartupPath + "\\Resources\\BlueLizardAlive.mp3";
+            }
 
             //Prevent Unhandled Exception incase of rogue packet reception...
             NetworkComms.IgnoreUnknownPacketTypes = true;
@@ -242,8 +329,8 @@ namespace JungleTimers
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("version", VersionCheck);
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("Connection", AddToConnectionList);
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("Disconnection", RemoveFromConnectionList);
-            
-            
+
+
             // Keyboard Hook Initialize...
             m_KeyboardHookManager.KeyUp += m_KeyboardHookManager_KeyUp;
             m_KeyboardHookManager.Enabled = true;
@@ -286,10 +373,10 @@ namespace JungleTimers
             b6.ProgressChanged += new ProgressChangedEventHandler(b6_ProgressChanged);
             b6.RunWorkerCompleted += new RunWorkerCompletedEventHandler(b6_RunWorkerCompleted);
             b6.WorkerSupportsCancellation = true;
-                        
+
             button1.Focus();
         }
-        
+
         public Form1()
         {
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -302,9 +389,7 @@ namespace JungleTimers
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             this.SetStyle(ControlStyles.ResizeRedraw, true);
             InitializeComponent();
-            this.button8_speaker.MouseLeave += new System.EventHandler(this.button8_speaker_MouseLeave);
-            this.button8_speaker.MouseEnter += new System.EventHandler(this.button8_speaker_MouseEnter);            
-            
+
             // test animation...           
             /* foreach (Control X in this.Controls)
             {
@@ -314,20 +399,9 @@ namespace JungleTimers
             } */
         }
 
-        void button8_speaker_MouseEnter(object sender, EventArgs e)
-        {
-            this.button8_speaker.BackgroundImage = ((System.Drawing.Image)(Properties.Resources.speakerTURNOFF));            
-        }
+        #endregion
 
-        void button8_speaker_MouseLeave(object sender, EventArgs e)
-        {
-            this.button8_speaker.BackgroundImage = ((System.Drawing.Image)(Properties.Resources.speaker));            
-        }
-
-        void button8_speaker_MouseLeaveWhileOff(object sender, EventArgs e)
-        {
-            this.button8_speaker.BackgroundImage = ((System.Drawing.Image)(Properties.Resources.speakerOFF));
-        }
+        #region Hotkey methods...
 
         // Disable Hotkeys if the Server/IP Textbox has focus...
         private void OnFocus(object sender, EventArgs e)
@@ -341,8 +415,7 @@ namespace JungleTimers
             m_KeyboardHookManager.Enabled = true;
         }
 
-        // HOTKEY ASSIGNMENT...
-        void m_KeyboardHookManager_KeyUp(object sender, KeyEventArgs e)
+        private void m_KeyboardHookManager_KeyUp(object sender, KeyEventArgs e)
         {
             Trace.WriteLine("Key: " + e.KeyData.ToString());
             if (e.KeyData.ToString() == Hotkey1) // note: old code for keys directly was (e.KeyCode == Keys.NumPad2).
@@ -371,13 +444,17 @@ namespace JungleTimers
             }
         }
 
+        #endregion
+
+        #region Connection Handler methods...
+
         private void RefreshClientPanel()
         {
             // A new connection has happened, so clear then re-Populate client list in ClientPanel...
-            this.Invoke((MethodInvoker)delegate { flowLayoutPanel1_clients.Controls.Clear(); });            
-                        
-            this.Invoke((MethodInvoker)delegate
-            { 
+            this.Invoke((MethodInvoker) delegate { flowLayoutPanel1_clients.Controls.Clear(); });
+
+            this.Invoke((MethodInvoker) delegate
+            {
                 foreach (var item in ConnectionsList.Distinct())
                 {
                     // System.Windows.Forms.ToolTip ToolTip1 = new System.Windows.Forms.ToolTip();                    
@@ -388,10 +465,10 @@ namespace JungleTimers
                     ToolTip tt = new ToolTip();
                     Label lbl = new Label();
                     lbl.Text = ipaddr;
-                    lbl.ForeColor = Color.Lime;                    
+                    lbl.ForeColor = Color.Lime;
                     tt.SetToolTip(lbl, name);
                     flowLayoutPanel1_clients.Controls.Add(lbl);
-                }                
+                }
             });
 
         }
@@ -407,15 +484,19 @@ namespace JungleTimers
 
         private void RemoveFromConnectionList(PacketHeader header, Connection connection, string Disconnection)
         {
-            ConnectionsList.RemoveWhere(element => element.Contains(Disconnection));            
-            
+            ConnectionsList.RemoveWhere(element => element.Contains(Disconnection));
+
             // And refresh the list of clients shown in Client Panel...
             RefreshClientPanel();
         }
 
+        #endregion
+
+        #region mcisendstring/Playsong methods...
+
         // MP3 Finished return actions...(incomplete, need to figure out how to implement other song alias status checking (i.e. PlaySong2's media2 alias)...        
         protected override void DefWndProc(ref Message m)
-       {
+        {
             base.DefWndProc(ref m);
             if (m.Msg == MM_MCINOTIFY)
             {
@@ -425,14 +506,15 @@ namespace JungleTimers
 
         // PlaySong starts alias media, via Cross-thread safe invoke delegate if needed...
         public delegate void delegatePlaySong(string file);
+
         public void PlaySong(string file)
-        {   
+        {
             if (this.InvokeRequired)
             {
                 this.Invoke(new delegatePlaySong(PlaySong), file);
             }
             else
-            {                
+            {
                 mciSendString("close media", null, 0, IntPtr.Zero);
                 SongBusy = true;
                 mciSendString("open \"" + file + "\" type mpegvideo alias media", null, 0, IntPtr.Zero);
@@ -442,6 +524,7 @@ namespace JungleTimers
 
         // PlaySong2 starts alias media2...
         public delegate void delegatePlaySong2(string file);
+
         public void PlaySong2(string file)
         {
             if (this.InvokeRequired)
@@ -459,6 +542,7 @@ namespace JungleTimers
 
         // PlaySong3 starts alias media3...
         public delegate void delegatePlaySong3(string file);
+
         public void PlaySong3(string file)
         {
             if (this.InvokeRequired)
@@ -476,6 +560,7 @@ namespace JungleTimers
 
         // PlaySong4 starts alias media4...
         public delegate void delegatePlaySong4(string file);
+
         public void PlaySong4(string file)
         {
             if (this.InvokeRequired)
@@ -493,6 +578,7 @@ namespace JungleTimers
 
         // PlaySong5 starts alias media5...
         public delegate void delegatePlaySong5(string file);
+
         public void PlaySong5(string file)
         {
             if (this.InvokeRequired)
@@ -510,6 +596,7 @@ namespace JungleTimers
 
         // PlaySong6 starts alias media6...
         public delegate void delegatePlaySong6(string file);
+
         public void PlaySong6(string file)
         {
             if (this.InvokeRequired)
@@ -527,6 +614,7 @@ namespace JungleTimers
 
         // PlaySong7 starts alias media7...
         public delegate void delegatePlaySong7(string file);
+
         public void PlaySong7(string file)
         {
             if (this.InvokeRequired)
@@ -542,12 +630,32 @@ namespace JungleTimers
             }
         }
 
+        #endregion
+
+        #region Button Events...
+
         // BUTTON CLICK EVENTS -
+
+        private void button8_speaker_MouseEnter(object sender, EventArgs e)
+        {
+            this.button8_speaker.BackgroundImage = ((System.Drawing.Image) (Properties.Resources.speakerTURNOFF));
+        }
+
+        private void button8_speaker_MouseLeave(object sender, EventArgs e)
+        {
+            this.button8_speaker.BackgroundImage = ((System.Drawing.Image) (Properties.Resources.speaker));
+        }
+
+        private void button8_speaker_MouseLeaveWhileOff(object sender, EventArgs e)
+        {
+            this.button8_speaker.BackgroundImage = ((System.Drawing.Image) (Properties.Resources.speakerOFF));
+        }
+
         private void button1_Click(object sender, EventArgs e)
-        {                       
+        {
             // Start the Timer if it isn't already going, using Client/Server mechanism if connected...
             // note: button7connect.Text reads "connect" prior to connecting, and reads "disconnect" once connection has been established.
-            
+
             /* Spam Control Timer, works but blocks all button interaction for too long, better method will be to add anti-spam control to client preferences for incoming messages from a given client with option for each client to ignore audio portion or option for server to kick or ban.
             if (timer1.Enabled == false */
             {
@@ -556,26 +664,26 @@ namespace JungleTimers
                     foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b1");
                 }
 
-                // ...or using local mechanism if not connected...
+                    // ...or using local mechanism if not connected...
                 else if (b1.IsBusy != true && button7connect.Text != "disconnect")
                 {
                     b1.RunWorkerAsync();
                 }
 
-                // Otherwise cancel Timer using Client/Server mechanism if connected...
+                    // Otherwise cancel Timer using Client/Server mechanism if connected...
                 else if (b1.IsBusy != false && button7connect.Text != "connect")
                 {
                     foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Message", "b1STOP");
                 }
 
-                // ...or using local mechanism if not connected...
+                    // ...or using local mechanism if not connected...
                 else if (b1.IsBusy == true && button7connect.Text != "disconnect")
                 {
                     b1.CancelAsync();
                 }
                 // timer1.Enabled = true;
-            }            
-        }          
+            }
+        }
 
         private void button2_Click(object sender, EventArgs e)
         {
@@ -598,7 +706,7 @@ namespace JungleTimers
                     b2.CancelAsync();
                 }
                 // timer1.Enabled = true;
-            }        
+            }
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -621,7 +729,7 @@ namespace JungleTimers
                 {
                     b3.CancelAsync();
                 }
-               // timer1.Enabled = true;
+                // timer1.Enabled = true;
             }
         }
 
@@ -697,6 +805,34 @@ namespace JungleTimers
             }
         }
 
+        // Background Music Volume Control...
+        private void button8_Click(object sender, EventArgs e)
+        {
+            switch (Song7Busy)
+            {
+                case true:
+                    mciSendString("pause media7", null, 0, IntPtr.Zero);
+                    source.Configs["UserPrefs"].Set("PlayBGM", "false");
+                    Song7Busy = false;
+                    this.button8_speaker.BackgroundImage = ((System.Drawing.Image) (Properties.Resources.speakerOFF));
+                    this.button8_speaker.MouseLeave += new System.EventHandler(this.button8_speaker_MouseLeaveWhileOff);
+                    this.button8_speaker.MouseEnter += new System.EventHandler(this.button8_speaker_MouseLeave);
+                    break;
+                case false:
+                    if (backgroundhasplayed == false)
+                    {
+                        PlaySong7(BackgroundMusic);
+                    }
+                    mciSendString("resume media7", null, 0, IntPtr.Zero);
+                    source.Configs["UserPrefs"].Set("PlayBGM", "true");
+                    Song7Busy = true;
+                    this.button8_speaker.BackgroundImage = ((System.Drawing.Image) (Properties.Resources.speaker));
+                    this.button8_speaker.MouseLeave += new System.EventHandler(this.button8_speaker_MouseLeave);
+                    this.button8_speaker.MouseEnter += new System.EventHandler(this.button8_speaker_MouseEnter);
+                    break;
+            }
+        }
+
         // CONNECT/DISCONNECT BUTTON -
         public void button7connect_Click(object sender, EventArgs e)
         {
@@ -709,10 +845,10 @@ namespace JungleTimers
                     ConnectionsList.Clear();
                     RefreshClientPanel();
                     button7connect.Text = ConnectButtonState;
-                    this.Invoke((MethodInvoker)delegate { button7connect.ForeColor = Color.Lime; });
-                    this.Invoke((MethodInvoker)delegate { comboHostAddressBox.Visible = true; });
-                    this.Invoke((MethodInvoker)delegate { label_Clients.Visible = false; });
-                    this.Invoke((MethodInvoker)delegate { label_hostnameorip.Visible = true; }); 
+                    this.Invoke((MethodInvoker) delegate { button7connect.ForeColor = Color.Lime; });
+                    this.Invoke((MethodInvoker) delegate { comboHostAddressBox.Visible = true; });
+                    this.Invoke((MethodInvoker) delegate { label_Clients.Visible = false; });
+                    this.Invoke((MethodInvoker) delegate { label_hostnameorip.Visible = true; });
                     // statusled.Image = Properties.Resources.reddot;
                 }
                 catch (DPSBase.ConnectionSetupException)
@@ -731,7 +867,7 @@ namespace JungleTimers
                     validAddress = ipaddr.ToString();
                 }
 
-                // Else is host or invalid IP...
+                    // Else is host or invalid IP...
                 else
                 {
                     IPAddress[] currentIPHostEntry;
@@ -754,7 +890,8 @@ namespace JungleTimers
                 {
                     if (NetworkComms.TotalNumConnections() > 0)
                     {
-                        foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Connection", UserName);
+                        foreach (var item in NetworkComms.GetExistingConnection())
+                            item.SendObject("Connection", UserName);
                     }
                     else
                     {
@@ -774,22 +911,22 @@ namespace JungleTimers
             proc.Arguments = " /c ping " + validAddress;
             System.Diagnostics.Process.Start(proc); 
             ...*/
-            
-        }       
+
+        }
 
         // Get Server Connection Response...
         public void Connected(PacketHeader header, Connection connection, string message)
         {
             // Set Form elements to Connected state...            
             SetText(button7connect, "disconnect");
-            this.Invoke((MethodInvoker)delegate { button7connect.ForeColor = Color.Red; });
-            this.Invoke((MethodInvoker)delegate { label_Clients.Visible = true; });             
-            this.Invoke((MethodInvoker)delegate { comboHostAddressBox.Visible = false; });
-            this.Invoke((MethodInvoker)delegate { label_hostnameorip.Visible = false; });
+            this.Invoke((MethodInvoker) delegate { button7connect.ForeColor = Color.Red; });
+            this.Invoke((MethodInvoker) delegate { label_Clients.Visible = true; });
+            this.Invoke((MethodInvoker) delegate { comboHostAddressBox.Visible = false; });
+            this.Invoke((MethodInvoker) delegate { label_hostnameorip.Visible = false; });
             // statusled.Image = Properties.Resources.greendot;
 
             // Report our version to server to check for update...
-            foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("version", versionIs);            
+            foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("version", versionIs);
         }
 
         // Get version response from server and prompt user for update if needed...
@@ -797,26 +934,33 @@ namespace JungleTimers
         {
             if (version == versionIs)
             {
-                MessageBox.Show("Jungle Timers is up to date (v" + version +").", "Version Check");
+                MessageBox.Show("Jungle Timers is up to date (v" + version + ").", "Version Check");
             }
             else
             {
-                DialogResult result1 = MessageBox.Show("An updated installation package (" + version + ") is available, Download now?", "Version Check", MessageBoxButtons.YesNo);
+                DialogResult result1 =
+                    MessageBox.Show("An updated installation package (" + version + ") is available, Download now?",
+                        "Version Check", MessageBoxButtons.YesNo);
                 if (result1 == DialogResult.Yes)
                 {
-                    FormCloseForUpdate = true;                    
-                    
+                    FormCloseForUpdate = true;
+
                     /* Old download method...
                      * Process.Start("https://www.dropbox.com/s/76harst0u0g2iuq/JungleTimers.exe?dl=1"); */
+                    NetworkComms.Shutdown();
 
-                    Process.Start("Update_Downloader.exe");                    
-                                     
+                    Process.Start("Update_Downloader.exe");
+
                     this.Close();
                     if (this.InvokeRequired)
-                        this.Invoke(new MethodInvoker(delegate { this.Close(); }), null);                                     
+                        this.Invoke(new MethodInvoker(delegate { this.Close(); }), null);
                 }
-            }            
+            }
         }
+
+        #endregion
+
+        #region Delegates to avoid crossthread errors...
 
         // Delegate to allow me to set the Button text without cross-thread errors...
         private void SetText(Control ctrl, string text)
@@ -829,51 +973,54 @@ namespace JungleTimers
             {
                 ctrl.Text = text;
             }
-        }               
+        }
 
         // Delegate to allow me to set Button Enabled Status without cross-thread errors...
-        void SetButton(Control ctrl, bool status)
+        private void SetButton(Control ctrl, bool status)
         {
             if (ctrl.InvokeRequired)
             {
-                ctrl.BeginInvoke(new SetButtonStatus(SetButton), ctrl, status);                
+                ctrl.BeginInvoke(new SetButtonStatus(SetButton), ctrl, status);
             }
             else
             {
                 ctrl.Enabled = status;
             }
-            
         }
+
+        #endregion
+
+        #region Timer Control (background workers)...
 
         // BEGIN TIMERS...        
         private void TimerControl(PacketHeader packetHeader, Connection connection, string message)
-        {            
+        {
             if (message.ToString() == "b1")
             {
                 b1_SongHasPlayed = false;
-                b1.RunWorkerAsync();                
+                b1.RunWorkerAsync();
             }
-            else if(message.ToString() == "b2")
+            else if (message.ToString() == "b2")
             {
                 b2_SongHasPlayed = false;
                 b2.RunWorkerAsync();
             }
-            else if(message.ToString() == "b3")
+            else if (message.ToString() == "b3")
             {
                 b3_SongHasPlayed = false;
                 b3.RunWorkerAsync();
             }
-            else if(message.ToString() == "b4")
+            else if (message.ToString() == "b4")
             {
                 b4_SongHasPlayed = false;
                 b4.RunWorkerAsync();
             }
-            else if(message.ToString() == "b5")
+            else if (message.ToString() == "b5")
             {
                 b5_SongHasPlayed = false;
                 b5.RunWorkerAsync();
             }
-            else if(message.ToString() == "b6")
+            else if (message.ToString() == "b6")
             {
                 b6_SongHasPlayed = false;
                 b6.RunWorkerAsync();
@@ -881,7 +1028,7 @@ namespace JungleTimers
             else if (message.ToString() == "b1STOP")
             {
                 b1_SongHasPlayed = false;
-                b1.CancelAsync();           
+                b1.CancelAsync();
             }
             else if (message.ToString() == "b2STOP")
             {
@@ -909,12 +1056,12 @@ namespace JungleTimers
                 b6.CancelAsync();
             }
         }
-        
+
         // BACKGROUND WORKER TIMERS -
-        void b1_DoWork(object sender, DoWorkEventArgs b1)
-        {            
+        private void b1_DoWork(object sender, DoWorkEventArgs b1)
+        {
             BackgroundWorker worker = sender as BackgroundWorker;
-            button1.Image = Properties.Resources.redbutton_bw;                        
+            button1.Image = Properties.Resources.redbutton_bw;
             PlaySong(PurpleLizardDead);
             for (int a = 299; a > -1; a--)
             {
@@ -924,16 +1071,16 @@ namespace JungleTimers
                     {
                         PlaySong(PurpleLizardWarning);
                     }
-                    Thread.Sleep(1000);                    
+                    Thread.Sleep(1000);
                     worker.ReportProgress(a);
                 }
             }
         }
 
-        void b2_DoWork(object sender, DoWorkEventArgs b2)
-        {            
+        private void b2_DoWork(object sender, DoWorkEventArgs b2)
+        {
             BackgroundWorker worker = sender as BackgroundWorker;
-            button2.Image = Properties.Resources.bluebutton_bw;                        
+            button2.Image = Properties.Resources.bluebutton_bw;
             PlaySong2(PurpleGolemDead);
             for (int b = 299; b > -1; b--)
             {
@@ -949,7 +1096,7 @@ namespace JungleTimers
             }
         }
 
-        void b3_DoWork(object sender, DoWorkEventArgs b3)
+        private void b3_DoWork(object sender, DoWorkEventArgs b3)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
             button3.Image = Properties.Resources.bluebutton_bw;
@@ -968,7 +1115,7 @@ namespace JungleTimers
             }
         }
 
-        void b4_DoWork(object sender, DoWorkEventArgs b4)
+        private void b4_DoWork(object sender, DoWorkEventArgs b4)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
             button4.Image = Properties.Resources.redbutton_bw;
@@ -987,7 +1134,7 @@ namespace JungleTimers
             }
         }
 
-        void b5_DoWork(object sender, DoWorkEventArgs b5)
+        private void b5_DoWork(object sender, DoWorkEventArgs b5)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
             button5.Image = Properties.Resources.baronbutton_bw;
@@ -1006,8 +1153,8 @@ namespace JungleTimers
             }
         }
 
-        void b6_DoWork(object sender, DoWorkEventArgs b6)
-        {            
+        private void b6_DoWork(object sender, DoWorkEventArgs b6)
+        {
             BackgroundWorker worker = sender as BackgroundWorker;
             button6.Image = Properties.Resources.dragonbutton_bw;
             PlaySong6(DragonDead);
@@ -1025,7 +1172,7 @@ namespace JungleTimers
             }
         }
 
-        void b7_DoWork(object sender, DoWorkEventArgs b7)
+        private void b7_DoWork(object sender, DoWorkEventArgs b7)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
             // button7.Image = Properties.Resources.dragonbutton_bw;
@@ -1044,58 +1191,56 @@ namespace JungleTimers
             }
         }
 
-
-
         // BACKGROUND WORKER TIMERS PROGRESS - 
-        void b1_ProgressChanged(object sender, ProgressChangedEventArgs b1)
+        private void b1_ProgressChanged(object sender, ProgressChangedEventArgs b1)
         {
             SetText(button1, b1.ProgressPercentage.ToString());
         }
 
-        void b2_ProgressChanged(object sender, ProgressChangedEventArgs b2)
+        private void b2_ProgressChanged(object sender, ProgressChangedEventArgs b2)
         {
             SetText(button2, b2.ProgressPercentage.ToString());
         }
 
-        void b3_ProgressChanged(object sender, ProgressChangedEventArgs b3)
+        private void b3_ProgressChanged(object sender, ProgressChangedEventArgs b3)
         {
             SetText(button3, b3.ProgressPercentage.ToString());
         }
 
-        void b4_ProgressChanged(object sender, ProgressChangedEventArgs b4)
+        private void b4_ProgressChanged(object sender, ProgressChangedEventArgs b4)
         {
             SetText(button4, b4.ProgressPercentage.ToString());
         }
 
-        void b5_ProgressChanged(object sender, ProgressChangedEventArgs b5)
+        private void b5_ProgressChanged(object sender, ProgressChangedEventArgs b5)
         {
             SetText(button5, b5.ProgressPercentage.ToString());
         }
 
-        void b6_ProgressChanged(object sender, ProgressChangedEventArgs b6)
+        private void b6_ProgressChanged(object sender, ProgressChangedEventArgs b6)
         {
-            SetText(button6, b6.ProgressPercentage.ToString()); 
+            SetText(button6, b6.ProgressPercentage.ToString());
         }
 
 
-        // BACKGROUND WORKER TIMERS COMPLETE -
-        void b1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs b1)
+        // BACKGROUND WORKER TIMERS COMPLETION -
+        private void b1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs b1)
         {
-            PlaySong(PurpleLizardAlive);            
+            PlaySong(PurpleLizardAlive);
             SetText(button1, "");
             button1.Image = Properties.Resources.redbutton;
             SetText(button1, "");
         }
 
-        void b2_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs b2)
+        private void b2_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs b2)
         {
             PlaySong2(PurpleGolemAlive);
             SetText(button2, "");
-            button2.Image = Properties.Resources.bluebutton;            
+            button2.Image = Properties.Resources.bluebutton;
             SetText(button2, "");
         }
 
-        void b3_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs b3)
+        private void b3_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs b3)
         {
             PlaySong3(BlueGolemAlive);
             SetText(button3, "");
@@ -1103,7 +1248,7 @@ namespace JungleTimers
             SetText(button3, "");
         }
 
-        void b4_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs b4)
+        private void b4_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs b4)
         {
             PlaySong4(BlueLizardAlive);
             SetText(button4, "");
@@ -1111,7 +1256,7 @@ namespace JungleTimers
             SetText(button4, "");
         }
 
-        void b5_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs b5)
+        private void b5_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs b5)
         {
             PlaySong5(BaronAlive);
             SetText(button5, "");
@@ -1119,7 +1264,7 @@ namespace JungleTimers
             SetText(button5, "");
         }
 
-        void b6_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs b6)
+        private void b6_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs b6)
         {
             PlaySong6(DragonAlive);
             SetText(button6, "");
@@ -1127,34 +1272,17 @@ namespace JungleTimers
             SetText(button6, "");
         }
 
-        // Background Music Volume Control...
-        private void button8_Click(object sender, EventArgs e)
-        {
-            if (Song7Busy == true)
-            {
-                // mciSendString("close media7", null, 0, IntPtr.Zero);
-                mciSendString("pause media7", null, 0, IntPtr.Zero);
-                Song7Busy = false;
-                this.button8_speaker.BackgroundImage = ((System.Drawing.Image)(Properties.Resources.speakerOFF));
-                this.button8_speaker.MouseLeave += new System.EventHandler(this.button8_speaker_MouseLeaveWhileOff);
-                this.button8_speaker.MouseEnter += new System.EventHandler(this.button8_speaker_MouseLeave);
-            }
-            else
-            {
-                // PlaySong7(BackgroundMusic);
-                mciSendString("resume media7", null, 0, IntPtr.Zero);
-                Song7Busy = true;
-                this.button8_speaker.BackgroundImage = ((System.Drawing.Image)(Properties.Resources.speaker));
-                this.button8_speaker.MouseLeave += new System.EventHandler(this.button8_speaker_MouseLeave);
-                this.button8_speaker.MouseEnter += new System.EventHandler(this.button8_speaker_MouseEnter);  
-            }            
-        }
+        #endregion
+
+        #region form closing actions...
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             base.OnFormClosing(e);
+            source.Save();
             foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Disconnection", "Bye!");
-            
+            NetworkComms.Shutdown();
+
             // Animate window on closing...(doesn't work with ex.style override)       
             AnimateWindow(this.Handle, 1000, AnimateWindowFlags.AW_BLEND | AnimateWindowFlags.AW_HIDE);
 
@@ -1174,13 +1302,17 @@ namespace JungleTimers
 
         // Cleanup on Close...
         public static void OnApplicationExit(object sender, EventArgs e)
-        {            
+        {
             NetworkComms.Shutdown();
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
             //System.Diagnostics.Process.GetCurrentProcess().Kill();
         }
+
+        #endregion
+
+        #region other form controls events and misc garbage...
 
         public void comboHostAddressBox_TextChanged(object sender, EventArgs e)
         {
@@ -1190,7 +1322,7 @@ namespace JungleTimers
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Form2 frm = new Form2(this);
-            frm.ShowDialog();            
+            frm.ShowDialog();
             Form1_Load(null, null);
         }
 
@@ -1203,7 +1335,7 @@ namespace JungleTimers
         private void buttonTest_Click(object sender, EventArgs e)
         {
             foreach (var item in ConnectionsList)
-            MessageBox.Show(item);
+                MessageBox.Show(item);
 
             // if (flowLayoutPanel1_clients.Visible == false) { flowLayoutPanel1_clients.Visible = true; }
             // else { flowLayoutPanel1_clients.Visible = false; }
@@ -1235,6 +1367,21 @@ namespace JungleTimers
             Process.Start(e.Link.LinkData as string);
         }
 
+        private void button_ServerG1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button_ServerGO_Click(object sender, EventArgs e)
+        {
+            if (ServerStarted == false)
+            {
+                process.Start();
+                ServerStarted = true;
+                button_ServerGO.Visible = false;
+            }
+        }
+
         /* Dynamic Button (for above dynamic panel code)...
         void newButton_Click(object sender, EventArgs e)
         {
@@ -1244,7 +1391,7 @@ namespace JungleTimers
             this.panel1.Controls.Remove(button);
         } */
 
-        /* Spam Control Timer, works but blocks all button interaction for too long...
+            /* Spam Control Timer, works but blocks all button interaction for too long...
          * Better method will be to add anti-spam control to client preferences for incoming messages from a given client,
          * with option for each client to ignore audio portion or option for server to kick or ban.
         private void timer1_Tick_1(object sender, EventArgs e)
@@ -1260,6 +1407,6 @@ namespace JungleTimers
             }                    
         }*/
 
-    }
-    
+            #endregion
+        }
 }

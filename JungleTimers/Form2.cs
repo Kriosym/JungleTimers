@@ -22,7 +22,7 @@ namespace JungleTimers
 {
     public partial class Form2 : Form
     {
-        IConfigSource source = new IniConfigSource("JTconfig.ini");
+        public IConfigSource source = new IniConfigSource("JTconfig.ini");
         public Form2()
         {
             
@@ -31,7 +31,6 @@ namespace JungleTimers
 
         public Form2(Form callingForm)
         {
-            this.StartPosition = FormStartPosition.CenterScreen;
             mainForm = callingForm as Form1;
             InitializeComponent();
             Form2_Load(null, null);
@@ -65,6 +64,7 @@ namespace JungleTimers
                 // Load Sound Options...
                 radioButton1_Dies.Checked = true;
                 textBox_WarningSeconds.Text = source.Configs["Sounds"].Get("WarningSeconds");
+                textBox_BGM.Text = source.Configs["Sounds"].Get("BackgroundMusic");
 
                 // Load UserName...
                 textBox_UserName.Text = source.Configs["UserPrefs"].Get("UserName");
@@ -122,6 +122,7 @@ namespace JungleTimers
                 source.Configs["Sounds"].Set("BlueLizardAlive", textBox_BlueLizardSounds.Text);                
             } 
 
+            source.Configs["Sounds"].Set("BackgroundMusic", textBox_BGM.Text);
             source.Save();
             this.Close();
         }
@@ -130,6 +131,13 @@ namespace JungleTimers
         {
            
         }
+
+        private void button_BGM(object sender, EventArgs e)
+        {
+            DialogResult result = openFileDialog1.ShowDialog();
+            if (result == DialogResult.OK) // Test result.
+            { textBox_BGM.Text = openFileDialog1.FileName; source.Configs["Sounds"].Set("BackgroundMusic", openFileDialog1.FileName); }
+        } 
 
         private void button_PurpleLizardSounds_Click(object sender, EventArgs e)
         {
@@ -253,6 +261,6 @@ namespace JungleTimers
             {                
                 textBox_WarningSeconds.Clear();                
             }
-        } 
+        }
     }
 }
