@@ -76,6 +76,9 @@
       <HintPath>..\..\..\..\Desktop\Share\c#\Animator\Animator\bin\Debug\Animator.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="GlassButton">
+      <HintPath>..\Vendors\GlassButton.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="MouseKeyboardActivityMonitor">
       <HintPath>..\Vendors\MouseKeyboardActivityMonitor.dll</HintPath>
@@ -84,7 +87,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Vendors\NetworkCommsDotNetComplete.dll</HintPath>
     </Reference>
-    <Reference Include="Nini">
+    <Reference Include="Nini, Version=1.1.0.0, Culture=neutral, PublicKeyToken=691faec150a7fa7b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Vendors\Nini.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -116,7 +120,13 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="var.cs" />
+    <EmbeddedResource Include="Resources\TEHBARON.png" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -134,46 +144,28 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Content Include="Nini.dll" />
+    <EmbeddedResource Include="Resources\BW_PurpleAncientGolem.png" />
+    <EmbeddedResource Include="Resources\BW_BlueAncientGolem.png" />
+    <EmbeddedResource Include="Resources\BlueAncientGolem.png" />
+    <EmbeddedResource Include="Resources\BW_BlueElderLizard.png" />
+    <EmbeddedResource Include="Resources\BW_PurpleElderLizard.png" />
+    <EmbeddedResource Include="Resources\BlueElderLizard.png" />
+    <EmbeddedResource Include="Resources\BW_baronnashor.png" />
+    <EmbeddedResource Include="Resources\BW_TEHBARON.png" />
+    <EmbeddedResource Include="Resources\BW_Dragon.png" />
+    <EmbeddedResource Include="Resources\Dragon.png" />
     <Content Include="Resources\JTconfig.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\baronbutton.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\bluebutton.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\redbutton.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\bluebutton_bw.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\redbutton_bw.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\baronbutton_bw.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\dragonbutton_bw.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\dragonbutton.jpg" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\rengar.jpg" />
@@ -202,7 +194,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Animator.dll" />
     <Content Include="lolicon.ico" />
     <Content Include="Resources\BaronAlive.mp3">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -236,6 +227,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <EmbeddedResource Include="Resources\Purple Jungle.png" />
+    <EmbeddedResource Include="Resources\PurpleAncientGolem.png" />
+    <EmbeddedResource Include="Resources\PurpleElderLizard.png" />
     <Content Include="Resources\PurpleGolemAlive.mp3">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

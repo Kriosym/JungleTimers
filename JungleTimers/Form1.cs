@@ -20,13 +20,14 @@ using System.Resources;
 using System.IO;
 using Nini.Config;
 using RemoteProcedureCalls;
+using Glass;
 
 namespace JungleTimers
 {
     public partial class Form1 : Form
     {
         // !! SET CODE REVISION !! 
-        public static string versionIs = "1.6a";
+        public static string versionIs = "1.6b";
 
         #region JungleTimers Init/Load area...
 
@@ -845,7 +846,10 @@ namespace JungleTimers
                     ConnectionsList.Clear();
                     RefreshClientPanel();
                     button7connect.Text = ConnectButtonState;
-                    this.Invoke((MethodInvoker) delegate { button7connect.ForeColor = Color.Lime; });
+                    this.button7connect.ForeColor = Color.Lime;
+                    this.button7connect.GlowColor = Color.Lime;
+                    this.button7connect.ShineColor = Color.Lime;
+                    this.Invoke((MethodInvoker) delegate { button_ServerGO.Visible = true; });
                     this.Invoke((MethodInvoker) delegate { comboHostAddressBox.Visible = true; });
                     this.Invoke((MethodInvoker) delegate { label_Clients.Visible = false; });
                     this.Invoke((MethodInvoker) delegate { label_hostnameorip.Visible = true; });
@@ -917,9 +921,12 @@ namespace JungleTimers
         // Get Server Connection Response...
         public void Connected(PacketHeader header, Connection connection, string message)
         {
-            // Set Form elements to Connected state...            
+            // Set Form elements to Connected state...
+            this.button7connect.ForeColor = Color.Red;
+            this.button7connect.GlowColor = Color.Red;
+            this.button7connect.ShineColor = Color.Red;
             SetText(button7connect, "disconnect");
-            this.Invoke((MethodInvoker) delegate { button7connect.ForeColor = Color.Red; });
+            this.Invoke((MethodInvoker)delegate { button_ServerGO.Visible = false; });
             this.Invoke((MethodInvoker) delegate { label_Clients.Visible = true; });
             this.Invoke((MethodInvoker) delegate { comboHostAddressBox.Visible = false; });
             this.Invoke((MethodInvoker) delegate { label_hostnameorip.Visible = false; });
@@ -947,13 +954,10 @@ namespace JungleTimers
 
                     /* Old download method...
                      * Process.Start("https://www.dropbox.com/s/76harst0u0g2iuq/JungleTimers.exe?dl=1"); */
-                    NetworkComms.Shutdown();
-
                     Process.Start("Update_Downloader.exe");
-
-                    this.Close();
-                    if (this.InvokeRequired)
-                        this.Invoke(new MethodInvoker(delegate { this.Close(); }), null);
+                    foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Disconnection", "Bye!");
+                    this.Invoke(new MethodInvoker(delegate { this.Close(); }), null);
+                    NetworkComms.Shutdown();
                 }
             }
         }
@@ -1061,7 +1065,7 @@ namespace JungleTimers
         private void b1_DoWork(object sender, DoWorkEventArgs b1)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
-            button1.Image = Properties.Resources.redbutton_bw;
+            button1.Image = Properties.Resources.BW_PurpleElderLizard;
             PlaySong(PurpleLizardDead);
             for (int a = 299; a > -1; a--)
             {
@@ -1080,7 +1084,7 @@ namespace JungleTimers
         private void b2_DoWork(object sender, DoWorkEventArgs b2)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
-            button2.Image = Properties.Resources.bluebutton_bw;
+            button2.Image = Properties.Resources.BW_PurpleAncientGolem;
             PlaySong2(PurpleGolemDead);
             for (int b = 299; b > -1; b--)
             {
@@ -1099,7 +1103,7 @@ namespace JungleTimers
         private void b3_DoWork(object sender, DoWorkEventArgs b3)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
-            button3.Image = Properties.Resources.bluebutton_bw;
+            button3.Image = Properties.Resources.BW_BlueAncientGolem;
             PlaySong3(BlueGolemDead);
             for (int c = 299; c > -1; c--)
             {
@@ -1118,7 +1122,7 @@ namespace JungleTimers
         private void b4_DoWork(object sender, DoWorkEventArgs b4)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
-            button4.Image = Properties.Resources.redbutton_bw;
+            button4.Image = Properties.Resources.BW_BlueElderLizard;
             PlaySong4(BlueLizardDead);
             for (int d = 299; d > -1; d--)
             {
@@ -1137,7 +1141,7 @@ namespace JungleTimers
         private void b5_DoWork(object sender, DoWorkEventArgs b5)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
-            button5.Image = Properties.Resources.baronbutton_bw;
+            button5.Image = Properties.Resources.BW_TEHBARON;
             PlaySong5(BaronDead);
             for (int e = 419; e > -1; e--)
             {
@@ -1156,7 +1160,7 @@ namespace JungleTimers
         private void b6_DoWork(object sender, DoWorkEventArgs b6)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
-            button6.Image = Properties.Resources.dragonbutton_bw;
+            button6.Image = Properties.Resources.BW_Dragon;
             PlaySong6(DragonDead);
             for (int f = 359; f > -1; f--)
             {
@@ -1168,25 +1172,6 @@ namespace JungleTimers
                     }
                     Thread.Sleep(1000);
                     worker.ReportProgress(f);
-                }
-            }
-        }
-
-        private void b7_DoWork(object sender, DoWorkEventArgs b7)
-        {
-            BackgroundWorker worker = sender as BackgroundWorker;
-            // button7.Image = Properties.Resources.dragonbutton_bw;
-            PlaySong6(DragonDead);
-            for (int g = 359; g > -1; g--)
-            {
-                if (worker.CancellationPending != true)
-                {
-                    if (g == WarningSeconds)
-                    {
-                        PlaySong(BackgroundMusic);
-                    }
-                    Thread.Sleep(1000);
-                    worker.ReportProgress(g);
                 }
             }
         }
@@ -1228,7 +1213,7 @@ namespace JungleTimers
         {
             PlaySong(PurpleLizardAlive);
             SetText(button1, "");
-            button1.Image = Properties.Resources.redbutton;
+            button1.Image = Properties.Resources.PurpleElderLizard;
             SetText(button1, "");
         }
 
@@ -1236,7 +1221,7 @@ namespace JungleTimers
         {
             PlaySong2(PurpleGolemAlive);
             SetText(button2, "");
-            button2.Image = Properties.Resources.bluebutton;
+            button2.Image = Properties.Resources.PurpleAncientGolem;
             SetText(button2, "");
         }
 
@@ -1244,7 +1229,7 @@ namespace JungleTimers
         {
             PlaySong3(BlueGolemAlive);
             SetText(button3, "");
-            button3.Image = Properties.Resources.bluebutton;
+            button3.Image = Properties.Resources.BlueAncientGolem;
             SetText(button3, "");
         }
 
@@ -1252,7 +1237,7 @@ namespace JungleTimers
         {
             PlaySong4(BlueLizardAlive);
             SetText(button4, "");
-            button4.Image = Properties.Resources.redbutton;
+            button4.Image = Properties.Resources.BlueElderLizard;
             SetText(button4, "");
         }
 
@@ -1260,7 +1245,7 @@ namespace JungleTimers
         {
             PlaySong5(BaronAlive);
             SetText(button5, "");
-            button5.Image = Properties.Resources.baronbutton;
+            button5.Image = Properties.Resources.TEHBARON;
             SetText(button5, "");
         }
 
@@ -1268,7 +1253,7 @@ namespace JungleTimers
         {
             PlaySong6(DragonAlive);
             SetText(button6, "");
-            button6.Image = Properties.Resources.dragonbutton;
+            button6.Image = Properties.Resources.Dragon;
             SetText(button6, "");
         }
 

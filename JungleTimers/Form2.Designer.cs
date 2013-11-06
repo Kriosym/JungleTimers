@@ -548,6 +548,7 @@
             // 
             // Form2
             // 
+            this.AcceptButton = this.button1_save;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DarkGray;
@@ -558,10 +559,16 @@
             this.Controls.Add(this.groupBox_HotKeys);
             this.Controls.Add(this.button1_save);
             this.ForeColor = System.Drawing.Color.Black;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Form2";
+            this.ShowInTaskbar = false;
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Options";
+            this.TopMost = true;
             this.groupBox_HotKeys.ResumeLayout(false);
             this.groupBox_Sounds.ResumeLayout(false);
             this.groupBox_Sounds.PerformLayout();

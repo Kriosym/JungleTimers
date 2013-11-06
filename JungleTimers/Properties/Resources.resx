@@ -118,26 +118,35 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Blue Jungle" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Blue Jungle.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="redbutton_bw" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\redbutton_bw.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="TEHBARON" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TEHBARON.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="rengar" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\rengar.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="bluebutton_bw" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\bluebutton_bw.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="PurpleElderLizard" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PurpleElderLizard.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="baronbutton_bw" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\baronbutton_bw.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="BlueAncientGolem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BlueAncientGolem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="bluebutton" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\bluebutton.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="BW_TEHBARON" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BW_TEHBARON.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="redbutton" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\redbutton.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="PurpleAncientGolem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PurpleAncientGolem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Blue_Jungle" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Blue Jungle.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="BlueElderLizard" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BlueElderLizard.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="BW_BlueAncientGolem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BW_BlueAncientGolem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="speaker" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\speaker.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="speakerOFF" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\speakerOFF.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -148,22 +157,25 @@
   <data name="greendot" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\greendot.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Purple Jungle" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="BW_PurpleAncientGolem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BW_PurpleAncientGolem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Purple_Jungle" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Purple Jungle.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="dragonbutton_bw" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\dragonbutton_bw.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="BW_PurpleElderLizard" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BW_PurpleElderLizard.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="dragonbutton" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\dragonbutton.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="baronbutton" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\baronbutton.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="speaker" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\speaker.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="BW_BlueElderLizard" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BW_BlueElderLizard.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="speakerTURNOFF" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\speakerTURNOFF.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="BW_Dragon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BW_Dragon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Dragon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Dragon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

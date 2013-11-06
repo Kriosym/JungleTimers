@@ -63,29 +63,9 @@ namespace JungleTimers.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap baronbutton {
-            get {
-                object obj = ResourceManager.GetObject("baronbutton", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap baronbutton_bw {
-            get {
-                object obj = ResourceManager.GetObject("baronbutton_bw", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap Blue_Jungle {
             get {
-                object obj = ResourceManager.GetObject("Blue Jungle", resourceCulture);
+                object obj = ResourceManager.GetObject("Blue_Jungle", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -93,9 +73,9 @@ namespace JungleTimers.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap bluebutton {
+        internal static System.Drawing.Bitmap BlueAncientGolem {
             get {
-                object obj = ResourceManager.GetObject("bluebutton", resourceCulture);
+                object obj = ResourceManager.GetObject("BlueAncientGolem", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -103,9 +83,9 @@ namespace JungleTimers.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap bluebutton_bw {
+        internal static System.Drawing.Bitmap BlueElderLizard {
             get {
-                object obj = ResourceManager.GetObject("bluebutton_bw", resourceCulture);
+                object obj = ResourceManager.GetObject("BlueElderLizard", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -113,9 +93,9 @@ namespace JungleTimers.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap dragonbutton {
+        internal static System.Drawing.Bitmap BW_BlueAncientGolem {
             get {
-                object obj = ResourceManager.GetObject("dragonbutton", resourceCulture);
+                object obj = ResourceManager.GetObject("BW_BlueAncientGolem", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -123,9 +103,59 @@ namespace JungleTimers.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap dragonbutton_bw {
+        internal static System.Drawing.Bitmap BW_BlueElderLizard {
             get {
-                object obj = ResourceManager.GetObject("dragonbutton_bw", resourceCulture);
+                object obj = ResourceManager.GetObject("BW_BlueElderLizard", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap BW_Dragon {
+            get {
+                object obj = ResourceManager.GetObject("BW_Dragon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap BW_PurpleAncientGolem {
+            get {
+                object obj = ResourceManager.GetObject("BW_PurpleAncientGolem", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap BW_PurpleElderLizard {
+            get {
+                object obj = ResourceManager.GetObject("BW_PurpleElderLizard", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap BW_TEHBARON {
+            get {
+                object obj = ResourceManager.GetObject("BW_TEHBARON", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Dragon {
+            get {
+                object obj = ResourceManager.GetObject("Dragon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -145,7 +175,7 @@ namespace JungleTimers.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap Purple_Jungle {
             get {
-                object obj = ResourceManager.GetObject("Purple Jungle", resourceCulture);
+                object obj = ResourceManager.GetObject("Purple_Jungle", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -153,9 +183,9 @@ namespace JungleTimers.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap redbutton {
+        internal static System.Drawing.Bitmap PurpleAncientGolem {
             get {
-                object obj = ResourceManager.GetObject("redbutton", resourceCulture);
+                object obj = ResourceManager.GetObject("PurpleAncientGolem", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -163,9 +193,9 @@ namespace JungleTimers.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap redbutton_bw {
+        internal static System.Drawing.Bitmap PurpleElderLizard {
             get {
-                object obj = ResourceManager.GetObject("redbutton_bw", resourceCulture);
+                object obj = ResourceManager.GetObject("PurpleElderLizard", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -216,6 +246,16 @@ namespace JungleTimers.Properties {
         internal static System.Drawing.Bitmap speakerTURNOFF {
             get {
                 object obj = ResourceManager.GetObject("speakerTURNOFF", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap TEHBARON {
+            get {
+                object obj = ResourceManager.GetObject("TEHBARON", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
