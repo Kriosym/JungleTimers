@@ -67,11 +67,11 @@ namespace JungleTimers
             // 
             this.baronlabel.AutoSize = true;
             this.baronlabel.BackColor = System.Drawing.Color.Transparent;
-            this.baronlabel.Font = new System.Drawing.Font("Arnprior", 14F);
+            this.baronlabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
             this.baronlabel.ForeColor = System.Drawing.Color.Lime;
             this.baronlabel.Location = new System.Drawing.Point(21, 166);
             this.baronlabel.Name = "baronlabel";
-            this.baronlabel.Size = new System.Drawing.Size(82, 27);
+            this.baronlabel.Size = new System.Drawing.Size(77, 24);
             this.baronlabel.TabIndex = 10;
             this.baronlabel.Text = "BARON";
             // 
@@ -79,11 +79,11 @@ namespace JungleTimers
             // 
             this.dragonlabel.AutoSize = true;
             this.dragonlabel.BackColor = System.Drawing.Color.Transparent;
-            this.dragonlabel.Font = new System.Drawing.Font("Arnprior", 14F);
+            this.dragonlabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
             this.dragonlabel.ForeColor = System.Drawing.Color.Yellow;
             this.dragonlabel.Location = new System.Drawing.Point(131, 166);
             this.dragonlabel.Name = "dragonlabel";
-            this.dragonlabel.Size = new System.Drawing.Size(95, 27);
+            this.dragonlabel.Size = new System.Drawing.Size(92, 24);
             this.dragonlabel.TabIndex = 11;
             this.dragonlabel.Text = "DRAGON";
             // 
@@ -256,7 +256,7 @@ namespace JungleTimers
             this.linkLabel1.LinkColor = System.Drawing.Color.Lime;
             this.linkLabel1.Location = new System.Drawing.Point(358, 7);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(37, 13);
+            this.linkLabel1.Size = new System.Drawing.Size(31, 12);
             this.linkLabel1.TabIndex = 22;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "Skype";
@@ -281,7 +281,7 @@ namespace JungleTimers
             // button2
             // 
             this.button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F);
+            this.button2.Font = new System.Drawing.Font("Quartz", 21F);
             this.button2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.button2.GlowColor = System.Drawing.Color.Blue;
             this.button2.Image = global::JungleTimers.Properties.Resources.PurpleAncientGolem;
@@ -296,7 +296,7 @@ namespace JungleTimers
             // 
             // button3
             // 
-            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F);
+            this.button3.Font = new System.Drawing.Font("Quartz", 21F);
             this.button3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.button3.GlowColor = System.Drawing.Color.Blue;
             this.button3.Image = global::JungleTimers.Properties.Resources.BlueAncientGolem;
@@ -311,7 +311,7 @@ namespace JungleTimers
             // 
             // button4
             // 
-            this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F);
+            this.button4.Font = new System.Drawing.Font("Quartz", 21F);
             this.button4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.button4.GlowColor = System.Drawing.Color.Red;
             this.button4.Image = global::JungleTimers.Properties.Resources.BlueElderLizard;
@@ -327,7 +327,7 @@ namespace JungleTimers
             // button1
             // 
             this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F);
+            this.button1.Font = new System.Drawing.Font("Quartz", 21F);
             this.button1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.button1.GlowColor = System.Drawing.Color.Red;
             this.button1.Image = global::JungleTimers.Properties.Resources.PurpleElderLizard;
@@ -342,7 +342,7 @@ namespace JungleTimers
             // 
             // button5
             // 
-            this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F);
+            this.button5.Font = new System.Drawing.Font("Quartz", 21F);
             this.button5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.button5.GlowColor = System.Drawing.Color.Lime;
             this.button5.Image = global::JungleTimers.Properties.Resources.TEHBARON;
@@ -357,7 +357,7 @@ namespace JungleTimers
             // 
             // button6
             // 
-            this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F);
+            this.button6.Font = new System.Drawing.Font("Quartz", 21F);
             this.button6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.button6.GlowColor = System.Drawing.Color.Gold;
             this.button6.Image = global::JungleTimers.Properties.Resources.Dragon;
@@ -399,6 +399,7 @@ namespace JungleTimers
             this.Controls.Add(this.button6);
             this.Controls.Add(this.button5);
             this.DoubleBuffered = true;
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;

@@ -1179,32 +1179,45 @@ namespace JungleTimers
         // BACKGROUND WORKER TIMERS PROGRESS - 
         private void b1_ProgressChanged(object sender, ProgressChangedEventArgs b1)
         {
-            SetText(button1, b1.ProgressPercentage.ToString());
+            TimeSpan b1t = TimeSpan.FromSeconds(b1.ProgressPercentage);
+            string b1TimeFormatted = string.Format("{1:D2}:{2:D2}", b1t.Hours, b1t.Minutes, b1t.Seconds, b1t.Milliseconds);
+            SetText(button1, b1TimeFormatted.ToString());
+            // this.CaptureInterface.DisplayInGameText(b1TimeFormatted.ToString());
         }
 
         private void b2_ProgressChanged(object sender, ProgressChangedEventArgs b2)
         {
-            SetText(button2, b2.ProgressPercentage.ToString());
+            TimeSpan b2t = TimeSpan.FromSeconds(b2.ProgressPercentage);
+            string b2TimeFormatted = string.Format("{1:D2}:{2:D2}", b2t.Hours, b2t.Minutes, b2t.Seconds, b2t.Milliseconds);
+            SetText(button2, b2TimeFormatted.ToString());
         }
 
         private void b3_ProgressChanged(object sender, ProgressChangedEventArgs b3)
         {
-            SetText(button3, b3.ProgressPercentage.ToString());
+            TimeSpan b3t = TimeSpan.FromSeconds(b3.ProgressPercentage);
+            string b3TimeFormatted = string.Format("{1:D2}:{2:D2}", b3t.Hours, b3t.Minutes, b3t.Seconds, b3t.Milliseconds);
+            SetText(button3, b3TimeFormatted.ToString());
         }
 
         private void b4_ProgressChanged(object sender, ProgressChangedEventArgs b4)
         {
-            SetText(button4, b4.ProgressPercentage.ToString());
+            TimeSpan b4t = TimeSpan.FromSeconds(b4.ProgressPercentage);
+            string b4TimeFormatted = string.Format("{1:D2}:{2:D2}", b4t.Hours, b4t.Minutes, b4t.Seconds, b4t.Milliseconds);
+            SetText(button4, b4TimeFormatted.ToString());
         }
 
         private void b5_ProgressChanged(object sender, ProgressChangedEventArgs b5)
         {
-            SetText(button5, b5.ProgressPercentage.ToString());
+            TimeSpan b5t = TimeSpan.FromSeconds(b5.ProgressPercentage);
+            string b5TimeFormatted = string.Format("{1:D2}:{2:D2}", b5t.Hours, b5t.Minutes, b5t.Seconds, b5t.Milliseconds);
+            SetText(button5, b5TimeFormatted.ToString());
         }
 
         private void b6_ProgressChanged(object sender, ProgressChangedEventArgs b6)
         {
-            SetText(button6, b6.ProgressPercentage.ToString());
+            TimeSpan b6t = TimeSpan.FromSeconds(b6.ProgressPercentage);
+            string b6TimeFormatted = string.Format("{1:D2}:{2:D2}", b6t.Hours, b6t.Minutes, b6t.Seconds, b6t.Milliseconds);
+            SetText(button6, b6TimeFormatted.ToString());
         }
 
 
