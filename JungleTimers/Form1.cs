@@ -33,8 +33,10 @@ namespace JungleTimers
 
         // various other declarations...
         ServerApplicationEmbed_attempt5 S5F = new ServerApplicationEmbed_attempt5();
+        IPHostEntry clienthosts;
+        string localIP;
+        int definedPort = 11000;
         
-
         public bool FormCloseForUpdate;
         public bool backgroundhasplayed = false;
         public static HashSet<string> ConnectionsList = new HashSet<string>();
@@ -180,6 +182,8 @@ namespace JungleTimers
 
             // Server Application Process Stuff...
             process.StartInfo = startInfo;
+            clienthosts = Dns.GetHostEntry(Dns.GetHostName());
+
             // startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
             startInfo.FileName = "ServerApplication.exe";
             startInfo.Arguments = "system(erase /q)";
@@ -844,19 +848,18 @@ namespace JungleTimers
             {
                 try
                 {
-                    foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Disconnection", "Bye!");
-                    NetworkComms.CloseAllConnections();
+                    button7connect.ForeColor = Color.Lime;
+                    button7connect.GlowColor = Color.Lime;
+                    button7connect.ShineColor = Color.Lime;
+                    Invoke((MethodInvoker)delegate { comboHostAddressBox.Visible = true; });
+                    Invoke((MethodInvoker)delegate { label_Clients.Visible = false; });
+                    Invoke((MethodInvoker)delegate { label_hostnameorip.Visible = true; });
+                    // if (ServerStarted) { foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("CloseServer"); }
+                    foreach (var item in NetworkComms.GetExistingConnection()) { item.SendObject("Disconnection", "Bye!"); }
                     ConnectionsList.Clear();
                     RefreshClientPanel();
                     button7connect.Text = ConnectButtonState;
-                    this.button7connect.ForeColor = Color.Lime;
-                    this.button7connect.GlowColor = Color.Lime;
-                    this.button7connect.ShineColor = Color.Lime;
-                    this.Invoke((MethodInvoker) delegate { button_ServerGO.Visible = true; });
-                    this.Invoke((MethodInvoker) delegate { comboHostAddressBox.Visible = true; });
-                    this.Invoke((MethodInvoker) delegate { label_Clients.Visible = false; });
-                    this.Invoke((MethodInvoker) delegate { label_hostnameorip.Visible = true; });
-                    // statusled.Image = Properties.Resources.reddot;
+                    if (ServerStarted) { Invoke((MethodInvoker)delegate { button_ServerGO.Text = "Server GO!"; ServerStarted = false; }); }
                 }
                 
                 catch (DPSBase.ConnectionSetupException)
@@ -896,15 +899,15 @@ namespace JungleTimers
                 // Now that we have the IP and Port, connect to the Server...
                 try
                 {
-                    if (NetworkComms.TotalNumConnections() > 0)
+                    /*if (NetworkComms.TotalNumConnections() > 0)
                     {
                         foreach (var item in NetworkComms.GetExistingConnection())
                             item.SendObject("Connection", UserName);
                     }
                     else
-                    {
+                    {*/
                         NetworkComms.SendObject("Connection", validAddress, serverPort, UserName);
-                    }
+                    //}
                 }
                 catch (DPSBase.ConnectionSetupException)
                 {
@@ -929,11 +932,11 @@ namespace JungleTimers
             this.button7connect.ForeColor = Color.Red;
             this.button7connect.GlowColor = Color.Red;
             this.button7connect.ShineColor = Color.Red;
+            this.Invoke((MethodInvoker)delegate { label_Clients.Visible = true; });
+            this.Invoke((MethodInvoker)delegate { comboHostAddressBox.Visible = false; });
+            this.Invoke((MethodInvoker)delegate { label_hostnameorip.Visible = false; });
             SetText(button7connect, "disconnect");
-            this.Invoke((MethodInvoker)delegate { button_ServerGO.Visible = false; });
-            this.Invoke((MethodInvoker) delegate { label_Clients.Visible = true; });
-            this.Invoke((MethodInvoker) delegate { comboHostAddressBox.Visible = false; });
-            this.Invoke((MethodInvoker) delegate { label_hostnameorip.Visible = false; });
+
             // statusled.Image = Properties.Resources.greendot;
 
             // Report our version to server to check for update...
@@ -960,8 +963,7 @@ namespace JungleTimers
                      * Process.Start("https://www.dropbox.com/s/76harst0u0g2iuq/JungleTimers.exe?dl=1"); */
                     Process.Start("Update_Downloader.exe");
                     foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Disconnection", "Bye!");
-                    this.Invoke(new MethodInvoker(delegate { this.Close(); }), null);
-                    NetworkComms.Shutdown();
+                    Application.Exit();
                 }
             }
         }
@@ -1282,8 +1284,8 @@ namespace JungleTimers
         {
             base.OnFormClosing(e);
             source.Save();
-            foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Disconnection", "Bye!");
-            NetworkComms.Shutdown();
+            //foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Disconnection", "Bye!");
+            //NetworkComms.Shutdown();
 
             // Animate window on closing...(doesn't work with ex.style override)       
             AnimateWindow(this.Handle, 1000, AnimateWindowFlags.AW_BLEND | AnimateWindowFlags.AW_HIDE);
@@ -1305,10 +1307,10 @@ namespace JungleTimers
         // Cleanup on Close...
         public static void OnApplicationExit(object sender, EventArgs e)
         {
+            foreach (var item in NetworkComms.GetExistingConnection()) { item.SendObject("Disconnection", "Bye!"); }
             NetworkComms.Shutdown();
             GC.Collect();
             GC.WaitForPendingFinalizers();
-
             //System.Diagnostics.Process.GetCurrentProcess().Kill();
         }
 
@@ -1336,8 +1338,20 @@ namespace JungleTimers
         // Test Button...
         private void buttonTest_Click(object sender, EventArgs e)
         {
-            foreach (var item in ConnectionsList)
-                MessageBox.Show(item);
+            //force server shutdown...
+            /* foreach (IPAddress ip in clienthosts.AddressList)
+            {
+                if (ip.AddressFamily.ToString() == "InterNetwork")
+                {
+                    localIP = ip.ToString();
+                    NetworkComms.SendObject("CloseServer", localIP, definedPort, UserName);
+                }
+            }*/
+            
+            S5F.Close();
+
+            //foreach (var item in ConnectionsList)
+            //MessageBox.Show(item);
 
             // if (flowLayoutPanel1_clients.Visible == false) { flowLayoutPanel1_clients.Visible = true; }
             // else { flowLayoutPanel1_clients.Visible = false; }
@@ -1378,28 +1392,46 @@ namespace JungleTimers
         {
             // ServerApplicationEMBEDCONSOLE_Form4 S4F = new ServerApplicationEMBEDCONSOLE_Form4();
             // ServerApplicationForm3 S3F = new ServerApplicationForm3();
-            S5F.Owner = this;
-            S5F.Location = new Point(this.PointToScreen(Point.Empty).X + this.Width, this.PointToScreen(Point.Empty).Y);
-            if (ServerStarted == false)
+            
+            if (ServerStarted == false && button_ServerGO.Text == "Server GO!")
             {
-                button_ServerGO.Visible = false;
+                S5F = new ServerApplicationEmbed_attempt5();
+                S5F.Owner = this;
+                S5F.Location = new Point(this.PointToScreen(Point.Empty).X + this.Width - 3, this.PointToScreen(Point.Empty).Y);
+                button_ServerGO.Text = "Hide";
                 ServerStarted = true;
                 S5F.Show();
-                //S4F.Show();
-                //S3F.Show();
+                
+                //this.Invoke((MethodInvoker)delegate { comboHostAddressBox.Text = "127.0.0.1"; });
+                
             }
-
-            /*if (ServerStarted == false)
+            else if (ServerStarted == true && button_ServerGO.Text == "Hide")
             {
-                process.Start();
-                ServerStarted = true;
-                button_ServerGO.Visible = false;
-            }*/
+                S5F.WindowState = FormWindowState.Minimized;
+                button_ServerGO.Text = "Show";
+            }
+            else if (ServerStarted == true && button_ServerGO.Text == "Show")
+            {
+                S5F.WindowState = FormWindowState.Normal;
+                button_ServerGO.Text = "Hide";
+            }
+        }
+
+        private void ServerCleanup()
+        {
+            foreach (IPAddress ip in clienthosts.AddressList)
+            {
+                if (ip.AddressFamily.ToString() == "InterNetwork")
+                {
+                    localIP = ip.ToString();
+                    NetworkComms.SendObject("CloseServer", localIP, definedPort, UserName);
+                }
+            }
         }
 
         private void Form1_HasMoved(object sender, EventArgs e)
         {
-            S5F.Location = new Point(this.PointToScreen(Point.Empty).X + this.Width, this.PointToScreen(Point.Empty).Y);
+            S5F.Location = new Point(this.PointToScreen(Point.Empty).X + this.Width - 8, this.PointToScreen(Point.Empty).Y);
         }
 
         /* Dynamic Button (for above dynamic panel code)...

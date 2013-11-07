@@ -27,5 +27,10 @@ namespace JungleTimers
             
         }
 
+        private void FormClose(object sender, FormClosingEventArgs e)
+        {
+            consoleControl1.StopProcess();
+        }
+
     }
 }

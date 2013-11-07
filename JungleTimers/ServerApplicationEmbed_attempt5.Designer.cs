@@ -34,29 +34,37 @@
             // 
             // consoleControl1
             // 
+            this.consoleControl1.AutoScroll = true;
+            this.consoleControl1.CausesValidation = false;
+            this.consoleControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.consoleControl1.IsInputEnabled = true;
-            this.consoleControl1.Location = new System.Drawing.Point(-3, -5);
+            this.consoleControl1.Location = new System.Drawing.Point(0, 0);
+            this.consoleControl1.Margin = new System.Windows.Forms.Padding(0);
             this.consoleControl1.Name = "consoleControl1";
             this.consoleControl1.SendKeyboardCommandsToProcess = false;
             this.consoleControl1.ShowDiagnostics = false;
-            this.consoleControl1.Size = new System.Drawing.Size(790, 538);
+            this.consoleControl1.Size = new System.Drawing.Size(375, 446);
             this.consoleControl1.TabIndex = 0;
             this.consoleControl1.Load += new System.EventHandler(this.consoleControl1_Load);
             // 
             // ServerApplicationEmbed_attempt5
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
             this.BackColor = System.Drawing.Color.Gainsboro;
-            this.ClientSize = new System.Drawing.Size(759, 446);
+            this.CausesValidation = false;
+            this.ClientSize = new System.Drawing.Size(375, 446);
             this.Controls.Add(this.consoleControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "ServerApplicationEmbed_attempt5";
+            this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "JT Server Module";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormClose);
             this.Load += new System.EventHandler(this.ServerApplicationEmbed_attempt5_Load);
             this.ResumeLayout(false);
 

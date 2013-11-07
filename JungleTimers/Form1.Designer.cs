@@ -203,7 +203,6 @@ namespace JungleTimers
             this.buttonTest.TabIndex = 17;
             this.buttonTest.TabStop = false;
             this.buttonTest.Text = "buttonTest";
-            this.buttonTest.Visible = false;
             this.buttonTest.Click += new System.EventHandler(this.buttonTest_Click);
             // 
             // pictureBox1
@@ -281,7 +280,7 @@ namespace JungleTimers
             // button2
             // 
             this.button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.button2.Font = new System.Drawing.Font("Quartz", 21F);
+            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 21F);
             this.button2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.button2.GlowColor = System.Drawing.Color.Blue;
             this.button2.Image = global::JungleTimers.Properties.Resources.PurpleAncientGolem;
@@ -296,7 +295,7 @@ namespace JungleTimers
             // 
             // button3
             // 
-            this.button3.Font = new System.Drawing.Font("Quartz", 21F);
+            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 21F);
             this.button3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.button3.GlowColor = System.Drawing.Color.Blue;
             this.button3.Image = global::JungleTimers.Properties.Resources.BlueAncientGolem;
@@ -311,7 +310,7 @@ namespace JungleTimers
             // 
             // button4
             // 
-            this.button4.Font = new System.Drawing.Font("Quartz", 21F);
+            this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 21F);
             this.button4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.button4.GlowColor = System.Drawing.Color.Red;
             this.button4.Image = global::JungleTimers.Properties.Resources.BlueElderLizard;
@@ -327,7 +326,7 @@ namespace JungleTimers
             // button1
             // 
             this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.button1.Font = new System.Drawing.Font("Quartz", 21F);
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 21F);
             this.button1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.button1.GlowColor = System.Drawing.Color.Red;
             this.button1.Image = global::JungleTimers.Properties.Resources.PurpleElderLizard;
@@ -342,7 +341,7 @@ namespace JungleTimers
             // 
             // button5
             // 
-            this.button5.Font = new System.Drawing.Font("Quartz", 21F);
+            this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 21F);
             this.button5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.button5.GlowColor = System.Drawing.Color.Lime;
             this.button5.Image = global::JungleTimers.Properties.Resources.TEHBARON;
@@ -357,7 +356,7 @@ namespace JungleTimers
             // 
             // button6
             // 
-            this.button6.Font = new System.Drawing.Font("Quartz", 21F);
+            this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 21F);
             this.button6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.button6.GlowColor = System.Drawing.Color.Gold;
             this.button6.Image = global::JungleTimers.Properties.Resources.Dragon;

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
+using System.Xml;
 using NetworkCommsDotNet;
 using System.Net;
 
@@ -44,7 +45,7 @@ namespace ServerApplication
             Console.Title = "Jungle Timers Server by Kriosym";
             ConsoleKeyInfo cki;
             IPHostEntry host;
-            string localIP = "?";
+            string localIP;
             host = Dns.GetHostEntry(Dns.GetHostName());
             // Old Method for incoming Connection List...  
             // ConnectionFilePath = @"c:\temp\JTConnectionList.txt";
@@ -58,6 +59,7 @@ namespace ServerApplication
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("Disconnection", RemoveFromConnectionList);
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("Message", PrintIncomingMessage);
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("version", VersionCheck);
+            // NetworkComms.AppendGlobalIncomingPacketHandler<string>("CloseServer", CloseServer);
 
             /* Oiginal method 1 to Start listening for incoming connections using all IP's and random port number between 10000-65535...
             TCPConnection.StartListening(true);
@@ -95,22 +97,43 @@ namespace ServerApplication
                 }
             }
             Console.Write("TCP port " + definedPort);
-            Console.Title = "Jungle Timers Server listening on " + localIP + ":" + definedPort;
-        }
+            // Console.Title = "Jungle Timers Server listening on " + localIP + ":" + definedPort;
+
+            while (true)
+            {
+                Console.WriteLine("\nx to close:");
+                string line = Console.ReadLine();
+                if (line == "x" || line == "X")
+                {
+                    Console.WriteLine("\nGoodbye!");
+                    NetworkComms.Shutdown();
+                    Environment.Exit(-1);
+                    break;
+                }
+            }
 
 
-        // Options Menu...
-            // Console.TreatControlCAsInput = true;            
-            /*Console.WriteLine("\n\nMENU\n======================================");
+            /* Force close server.
+         private static void CloseServer(PacketHeader packetHeader, Connection connection, string incomingObject)
+        {
+            Console.WriteLine("\n\nGoodbye!");
+            NetworkComms.Shutdown();
+            Environment.Exit(-1);
+        }*/
+
+
+            /* Options Menu...
+            Console.TreatControlCAsInput = true;            
+            Console.WriteLine("\n\nMENU\n======================================");
             Console.WriteLine("x - Close Connections and Exit");
             Console.WriteLine("i - Re-Display Menu");
             Console.WriteLine("======================================");
-            Console.Write("Enter Selection: ");
+            Console.Write("Enter Selection: "); */
 
-            bool exitnow = false;
+            /*bool exitnow = false;
             do
             {
-                cki = Console.ReadKey();
+                cki = Console.Read();
                 string choice = cki.Key.ToString();                
                 try
                 {
@@ -132,8 +155,9 @@ namespace ServerApplication
                         ServerInfo();
                         continue;
                 }
-            } while (!exitnow);
-        }*/
+            } while (!exitnow);*/
+
+        }
 
         // Receive incoming initial Connection messages from Clients...
         public static void AddToConnectionList(PacketHeader header, Connection connection, string Connection)
