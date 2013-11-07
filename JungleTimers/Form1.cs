@@ -32,6 +32,9 @@ namespace JungleTimers
         #region JungleTimers Init/Load area...
 
         // various other declarations...
+        ServerApplicationEmbed_attempt5 S5F = new ServerApplicationEmbed_attempt5();
+        
+
         public bool FormCloseForUpdate;
         public bool backgroundhasplayed = false;
         public static HashSet<string> ConnectionsList = new HashSet<string>();
@@ -855,6 +858,7 @@ namespace JungleTimers
                     this.Invoke((MethodInvoker) delegate { label_hostnameorip.Visible = true; });
                     // statusled.Image = Properties.Resources.reddot;
                 }
+                
                 catch (DPSBase.ConnectionSetupException)
                 {
                     return;
@@ -1372,12 +1376,30 @@ namespace JungleTimers
 
         private void button_ServerGO_Click(object sender, EventArgs e)
         {
+            // ServerApplicationEMBEDCONSOLE_Form4 S4F = new ServerApplicationEMBEDCONSOLE_Form4();
+            // ServerApplicationForm3 S3F = new ServerApplicationForm3();
+            S5F.Owner = this;
+            S5F.Location = new Point(this.PointToScreen(Point.Empty).X + this.Width, this.PointToScreen(Point.Empty).Y);
             if (ServerStarted == false)
+            {
+                button_ServerGO.Visible = false;
+                ServerStarted = true;
+                S5F.Show();
+                //S4F.Show();
+                //S3F.Show();
+            }
+
+            /*if (ServerStarted == false)
             {
                 process.Start();
                 ServerStarted = true;
                 button_ServerGO.Visible = false;
-            }
+            }*/
+        }
+
+        private void Form1_HasMoved(object sender, EventArgs e)
+        {
+            S5F.Location = new Point(this.PointToScreen(Point.Empty).X + this.Width, this.PointToScreen(Point.Empty).Y);
         }
 
         /* Dynamic Button (for above dynamic panel code)...

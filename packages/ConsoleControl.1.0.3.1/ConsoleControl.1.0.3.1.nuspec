@@ -12,6 +12,5 @@
     <description>The ConsoleControl is a WinForms control that you can drop into a Form to run an external process in a C# application.</description>
     <releaseNotes />
     <copyright>Dave Kerr 2013</copyright>
-    <language />
   </metadata>
 </package>

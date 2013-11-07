@@ -41,7 +41,7 @@ namespace ServerApplication
 
         public static void Main(string[] args)
         {
-            Console.Title = "Jungle Timers Server by Kriosym (enter i to Re-Display Menu)";
+            Console.Title = "Jungle Timers Server by Kriosym";
             ConsoleKeyInfo cki;
             IPHostEntry host;
             string localIP = "?";
@@ -52,7 +52,7 @@ namespace ServerApplication
 
             // Prevent unhandled Exceptions from rogue packet type receives...
             NetworkComms.IgnoreUnknownPacketTypes = true;
-            
+
             // Trigger the methods when packets are received from Clients...
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("Connection", AddToConnectionList);
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("Disconnection", RemoveFromConnectionList);
@@ -95,12 +95,13 @@ namespace ServerApplication
                 }
             }
             Console.Write("TCP port " + definedPort);
-            Console.Title = "Jungle Timers Server listening on " + localIP + ":" + definedPort + " | (enter i to Re-Display Menu)";
+            Console.Title = "Jungle Timers Server listening on " + localIP + ":" + definedPort;
+        }
 
-            
-            // Options Menu...
-            Console.TreatControlCAsInput = true;            
-            Console.WriteLine("\n\nMENU\n======================================");
+
+        // Options Menu...
+            // Console.TreatControlCAsInput = true;            
+            /*Console.WriteLine("\n\nMENU\n======================================");
             Console.WriteLine("x - Close Connections and Exit");
             Console.WriteLine("i - Re-Display Menu");
             Console.WriteLine("======================================");
@@ -132,7 +133,7 @@ namespace ServerApplication
                         continue;
                 }
             } while (!exitnow);
-        }
+        }*/
 
         // Receive incoming initial Connection messages from Clients...
         public static void AddToConnectionList(PacketHeader header, Connection connection, string Connection)

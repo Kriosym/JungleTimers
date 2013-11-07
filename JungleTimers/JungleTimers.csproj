@@ -76,6 +76,13 @@
       <HintPath>..\..\..\..\Desktop\Share\c#\Animator\Animator\bin\Debug\Animator.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ConsoleControl">
+      <HintPath>..\packages\ConsoleControl.1.0.3.1\lib\net40\ConsoleControl.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ConsoleControlAPI">
+      <HintPath>..\packages\ConsoleControl.1.0.3.1\lib\net40\ConsoleControlAPI.dll</HintPath>
+    </Reference>
     <Reference Include="GlassButton">
       <HintPath>..\Vendors\GlassButton.dll</HintPath>
     </Reference>
@@ -125,6 +132,24 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ServerApplicationEMBEDCONSOLE_Form4.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ServerApplicationEMBEDCONSOLE_Form4.Designer.cs">
+      <DependentUpon>ServerApplicationEMBEDCONSOLE_Form4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ServerApplicationEmbed_attempt5.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ServerApplicationEmbed_attempt5.Designer.cs">
+      <DependentUpon>ServerApplicationEmbed_attempt5.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ServerApplicationForm3.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ServerApplicationForm3.Designer.cs">
+      <DependentUpon>ServerApplicationForm3.cs</DependentUpon>
+    </Compile>
     <Compile Include="var.cs" />
     <EmbeddedResource Include="Resources\TEHBARON.png" />
     <EmbeddedResource Include="Form1.resx">
@@ -137,6 +162,15 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ServerApplicationEMBEDCONSOLE_Form4.resx">
+      <DependentUpon>ServerApplicationEMBEDCONSOLE_Form4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ServerApplicationEmbed_attempt5.resx">
+      <DependentUpon>ServerApplicationEmbed_attempt5.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ServerApplicationForm3.resx">
+      <DependentUpon>ServerApplicationForm3.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="JungleTimers_TemporaryKey.pfx" />
     <None Include="packages.config" />
