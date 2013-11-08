@@ -99,7 +99,7 @@ namespace ServerApplication
             Console.Write("TCP port " + definedPort);
             // Console.Title = "Jungle Timers Server listening on " + localIP + ":" + definedPort;
 
-            while (true)
+            /* while (true)
             {
                 Console.WriteLine("\nx to close:");
                 string line = Console.ReadLine();
@@ -110,7 +110,7 @@ namespace ServerApplication
                     Environment.Exit(-1);
                     break;
                 }
-            }
+            }*/
 
 
             /* Force close server.

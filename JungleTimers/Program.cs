@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -16,8 +17,15 @@ namespace JungleTimers
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.ApplicationExit += new EventHandler(Form1.OnApplicationExit);
-            Application.Run(new Form1());
+            Application.ApplicationExit += Form1.OnApplicationExit;
+            try
+            {
+                Application.Run(new Form1());
+            }
+            catch (InvalidOperationException exception)
+            {
+                Trace.WriteLine(exception);
+            }
         }
     }
 }

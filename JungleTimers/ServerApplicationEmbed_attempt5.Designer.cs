@@ -45,7 +45,6 @@
             this.consoleControl1.ShowDiagnostics = false;
             this.consoleControl1.Size = new System.Drawing.Size(375, 446);
             this.consoleControl1.TabIndex = 0;
-            this.consoleControl1.Load += new System.EventHandler(this.consoleControl1_Load);
             // 
             // ServerApplicationEmbed_attempt5
             // 
@@ -64,7 +63,6 @@
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "JT Server Module";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormClose);
             this.Load += new System.EventHandler(this.ServerApplicationEmbed_attempt5_Load);
             this.ResumeLayout(false);
 

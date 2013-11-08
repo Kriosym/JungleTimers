@@ -22,15 +22,18 @@ namespace JungleTimers
             consoleControl1.StartProcess("ServerApplication.exe", null);
         }
 
-        private void consoleControl1_Load(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void FormClose(object sender, FormClosingEventArgs e)
+        protected override void OnHandleDestroyed(EventArgs e)
         {
             consoleControl1.StopProcess();
+
+            base.OnHandleDestroyed(e);
         }
 
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            
+
+            base.OnFormClosing(e);
+        }
     }
 }

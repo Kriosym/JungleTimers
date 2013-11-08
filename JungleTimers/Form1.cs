@@ -1282,15 +1282,12 @@ namespace JungleTimers
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            base.OnFormClosing(e);
             source.Save();
             //foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Disconnection", "Bye!");
             //NetworkComms.Shutdown();
 
             // Animate window on closing...(doesn't work with ex.style override)       
             AnimateWindow(this.Handle, 1000, AnimateWindowFlags.AW_BLEND | AnimateWindowFlags.AW_HIDE);
-
-            if (e.CloseReason == CloseReason.WindowsShutDown) return;
 
             /* Confirm user wants to close, or not...
              * note: not sure why I put this code here over 5 months ago, could have been to avoid some bug, leaving commented out incase I need it in the future.
@@ -1302,12 +1299,19 @@ namespace JungleTimers
                     finally { } } }
             else if (button7connect.Text == "Disconect" && FormCloseForUpdate == true)
             { foreach (var item in NetworkComms.GetExistingConnection()) item.SendObject("Disconnection", "Bye!"); } */
+
+            S5F.Close();
+
+            base.OnFormClosing(e);
         }
 
         // Cleanup on Close...
         public static void OnApplicationExit(object sender, EventArgs e)
         {
-            foreach (var item in NetworkComms.GetExistingConnection()) { item.SendObject("Disconnection", "Bye!"); }
+            foreach (var item in NetworkComms.GetExistingConnection())
+            {
+                item.SendObject("Disconnection", "Bye!");
+            }
             NetworkComms.Shutdown();
             GC.Collect();
             GC.WaitForPendingFinalizers();

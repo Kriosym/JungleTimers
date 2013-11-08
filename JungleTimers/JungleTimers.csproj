@@ -76,13 +76,6 @@
       <HintPath>..\..\..\..\Desktop\Share\c#\Animator\Animator\bin\Debug\Animator.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ConsoleControl">
-      <HintPath>..\packages\ConsoleControl.1.0.3.1\lib\net40\ConsoleControl.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="ConsoleControlAPI">
-      <HintPath>..\packages\ConsoleControl.1.0.3.1\lib\net40\ConsoleControlAPI.dll</HintPath>
-    </Reference>
     <Reference Include="GlassButton">
       <HintPath>..\Vendors\GlassButton.dll</HintPath>
     </Reference>
@@ -173,7 +166,6 @@
       <DependentUpon>ServerApplicationForm3.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="JungleTimers_TemporaryKey.pfx" />
-    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -278,6 +270,12 @@
     <Content Include="Resources\PurpleLizardDead.mp3">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ConsoleControl\ConsoleControl.csproj">
+      <Project>{737CC7F2-EC7C-4800-B7EB-72637E892C42}</Project>
+      <Name>ConsoleControl</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
