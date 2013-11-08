@@ -203,6 +203,7 @@ namespace JungleTimers
             this.buttonTest.TabIndex = 17;
             this.buttonTest.TabStop = false;
             this.buttonTest.Text = "buttonTest";
+            this.buttonTest.Visible = false;
             this.buttonTest.Click += new System.EventHandler(this.buttonTest_Click);
             // 
             // pictureBox1

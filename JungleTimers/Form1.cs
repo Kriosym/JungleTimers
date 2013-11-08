@@ -27,7 +27,7 @@ namespace JungleTimers
     public partial class Form1 : Form
     {
         // !! SET CODE REVISION !! 
-        public static string versionIs = "1.6b";
+        public static string versionIs = "1.7b";
 
         #region JungleTimers Init/Load area...
 
@@ -859,6 +859,7 @@ namespace JungleTimers
                     ConnectionsList.Clear();
                     RefreshClientPanel();
                     button7connect.Text = ConnectButtonState;
+                    S5F.Close();
                     if (ServerStarted) { Invoke((MethodInvoker)delegate { button_ServerGO.Text = "Server GO!"; ServerStarted = false; }); }
                 }
                 

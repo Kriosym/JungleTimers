@@ -26,7 +26,7 @@ namespace ServerApplication
         public static int definedPort = 11000;
         
         // Set Latest available version of Client Software...
-        public static string LatestClientVersion = "1.6b";
+        public static string LatestClientVersion = "1.7b";
 
 
         private static void ServerInfo()
